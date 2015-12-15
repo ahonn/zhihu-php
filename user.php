@@ -3,10 +3,11 @@
  * @Author: Ahonn
  * @Date:   2015-12-14 19:25:21
  * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-14 21:52:03
+ * @Last Modified time: 2015-12-15 19:57:54
  */
 
 require_once 'lib/simple_html_dom.php';
+require_once 'request.php';
 
 class User
 {
@@ -16,7 +17,7 @@ class User
 
 	function __construct($user_url, $user_id = null)
 	{
-		if (substr($user_url, 0, 28) !== "http://www.zhihu.com/people/") {
+		if (substr($user_url, 0, 29) !== "https://www.zhihu.com/people/") {
 			throw new Exception($user_url.": it isn't a user url !");
 		} 
 		else {
@@ -34,9 +35,9 @@ class User
 	public function parser()
 	{
 		if ($this->dom == null) {
-			$html = new simple_html_dom();
-			$html->load_file($this->user_url);
-			$this->dom = $html;
+			$r = Request::get($this->user_url);
+
+			$this->dom = str_get_html($r);
 		}
 	}
 
@@ -58,7 +59,7 @@ class User
 	}
 
 	/**
-	 * 获取用户关注人数
+	 * 获取关注数
 	 * @return [string] [关注人数]
 	 */
 	public function get_followees_num()
@@ -69,7 +70,7 @@ class User
 	}
 
 	/**
-	 * 获取用户关注者人数
+	 * 获取粉丝数
 	 * @return [string] [关注者人数]
 	 */
 	public function get_followers_num()
@@ -135,5 +136,127 @@ class User
 		return $collections_num;
 	}
 
+	/**
+	 * 获取关注列表
+	 * @return [array] [关注列表]
+	 */
+	public function get_followees()
+	{
+		$followees_num = $this->get_followees_num();
+		if ($followees_num == 0) {
+			return;
+		}
+		else {
+			$followee_url = $this->user_url.'/followees';
+			$r = Request::get($followee_url);
+			
+			$dom = str_get_html($r);
+
+			for ($i = 0; $i < $followees_num / 20; $i++) { 
+				if ($i == 0) {
+					for ($j = 0; $j < min($followees_num, 20); $j++) { 
+						$user_url_list[$j] = $dom->find('a.zg-link', $j);
+						$followees_list[] = new User($user_url_list[$j]->href, $user_url_list[$j]->title);
+					}
+				}
+				else {
+					$post_url = "https://www.zhihu.com/node/ProfileFolloweesListV2";
+					$_xsrf = $dom->find('input[name=_xsrf]',0)->value;
+		  
+					$json = $dom->find('div.zh-general-list', 0)->attr['data-init'];
+					$params = json_decode(html_entity_decode($json))->params;
+					$params->offset = $i * 20;
+					$params = json_encode($params);
+
+					$data = array(
+						'_xsrf' => $_xsrf,
+						'method' => 'next',
+						'params' => $params
+					);
+
+					$r = Request::post($post_url, $data, array("Referer: {$followee_url}" ));
+					$r = json_decode($r)->msg;
+
+					for ($j = 0; $j < min($followees_num - $i * 20, 20); $j++) { 
+						$dom = str_get_html($r[$j]);
+						$user_url_list[$j] = $dom->find('a.zg-link', 0);
+						$followees_list[] = new User($user_url_list[$j]->href, $user_url_list[$j]->title);						
+					}
+				}
+			}
+			return $followees_list;
+		}
+	}
+
+
+	/**
+	 * 获取粉丝列表
+	 * @return [array] [粉丝列表]
+	 */
+	public function get_followers()
+	{
+		$followers_num = $this->get_followers_num();
+		if ($followers_num == 0) {
+			return;
+		}
+		else {
+			$follower_url = $this->user_url.'/followers';
+			$r = Request::get($follower_url);
+			
+			$dom = str_get_html($r);
+
+			for ($i = 0; $i < $followers_num / 20; $i++) { 
+				if ($i == 0) {
+					for ($j = 0; $j < min($followers_num, 20); $j++) { 
+						$user_list[$j] = $dom->find('a.zg-link', $j);
+						$followers_list[] = new User($user_list[$j]->href, $user_list[$j]->title);
+					}
+				}
+				else {
+					$post_url = "https://www.zhihu.com/node/ProfilefollowersListV2";
+					$_xsrf = $dom->find('input[name=_xsrf]',0)->value;
+		  
+					$json = $dom->find('div.zh-general-list', 0)->attr['data-init'];
+					$params = json_decode(html_entity_decode($json))->params;
+					$params->offset = $i * 20;
+					$params = json_encode($params);
+
+					$data = array(
+						'_xsrf' => $_xsrf,
+						'method' => 'next',
+						'params' => $params
+					);
+
+					$r = Request::post($post_url, $data, array("Referer: {$follower_url}" ));
+					$r = json_decode($r)->msg;
+
+					for ($j = 0; $j < min($followers_num - $i * 20, 20); $j++) { 
+						$dom = str_get_html($r[$j]);
+						$user_list[$j] = $dom->find('a.zg-link', 0);
+						$followers_list[] = new User($user_list[$j]->href, $user_list[$j]->title);						
+					}
+				}
+			}
+			return $followers_list;
+		}
+	}
+
+
+	public function get_asks()
+	{
+		# TODO 
+	}
+
+
+	public function get_answers()
+	{
+		# TODO
+	}
+
+
+	public function get_collections()
+	{
+		# TODO
+	}
 }
 
