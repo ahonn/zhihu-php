@@ -3,7 +3,7 @@
  * @Author: Ahonn
  * @Date:   2015-12-14 19:25:21
  * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-16 20:30:19
+ * @Last Modified time: 2015-12-17 16:41:41
  */
 
 require_once 'lib/simple_html_dom.php';
@@ -244,8 +244,10 @@ class User
 			
 			$dom = str_get_html($r);
 
+			$post_url = "https://www.zhihu.com/node/ProfileFollowersListV2";
 			$_xsrf = $dom->find('input[name=_xsrf]',0)->value;
 		  	$json = $dom->find('div.zh-general-list', 0)->attr['data-init'];
+		  	
 			for ($i = 0; $i < $followers_num / 20; $i++) { 
 				if ($i == 0) {
 					for ($j = 0; $j < min($followers_num, 20); $j++) { 
@@ -254,8 +256,6 @@ class User
 					}
 				}
 				else {
-					$post_url = "https://www.zhihu.com/node/ProfileFollowersListV2";
-					
 					$params = json_decode(html_entity_decode($json))->params;
 					$params->offset = $i * 20;
 					$params = json_encode($params);

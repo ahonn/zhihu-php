@@ -3,7 +3,7 @@
  * @Author: Ahonn
  * @Date:   2015-12-14 19:41:32
  * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-16 20:57:40
+ * @Last Modified time: 2015-12-17 17:44:54
  */
 require_once 'request.php';
 require_once 'user.php';
@@ -57,7 +57,7 @@ $user = new User($user_url);
 
 ///////////////////////////////////////////////////
 
-$question_url = 'https://www.zhihu.com/question/30993476';
+$question_url = 'https://www.zhihu.com/question/38568101';
 $question = new Question($question_url);
 
 // $title = $question->get_title();
@@ -79,5 +79,8 @@ $question = new Question($question_url);
 // $topic_list = $question->get_topics();
 // var_dump($topic_list);
 
-$answer_list = $question->get_answers();
-// var_dump($answer_list);
+// $answer = $question->get_answers(3, false);
+// var_dump($answer);
+
+$times = $question->get_visit_times();
+var_dump($times);
