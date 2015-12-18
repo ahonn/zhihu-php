@@ -3,19 +3,16 @@
  * @Author: Ahonn
  * @Date:   2015-12-14 19:41:32
  * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-17 17:44:54
+ * @Last Modified time: 2015-12-18 15:08:27
  */
-require_once 'request.php';
-require_once 'user.php';
-require_once 'question.php';
-require_once 'answer.php';
+require_once 'zhihu.php';
 
 /**
  * 	Test User 
  */
 
-$user_url = "https://www.zhihu.com/people/ahonn";
-$user = new User($user_url);
+// $user_url = "https://www.zhihu.com/people/ahonn";
+// $user = new User($user_url);
 
 // $user_id = $user->get_user_id();
 // var_dump($user_id);
@@ -57,8 +54,12 @@ $user = new User($user_url);
 
 ///////////////////////////////////////////////////
 
-$question_url = 'https://www.zhihu.com/question/38568101';
-$question = new Question($question_url);
+/**
+ * Test Question
+ */
+
+// $question_url = 'https://www.zhihu.com/question/38568101';
+// $question = new Question($question_url);
 
 // $title = $question->get_title();
 // var_dump($title);
@@ -82,5 +83,32 @@ $question = new Question($question_url);
 // $answer = $question->get_answers(3, false);
 // var_dump($answer);
 
-$times = $question->get_visit_times();
-var_dump($times);
+// $times = $question->get_visit_times();
+// var_dump($times);
+
+////////////////////////////////////////////
+
+/**
+ *  Test Answer
+ */
+
+// $answer_url = 'https://www.zhihu.com/question/35533041/answer/63371123';
+// $answer = new Answer($answer_url);
+
+// $question = $answer->get_question();
+// var_dump($question);
+
+// $author = $answer->get_author();
+// var_dump($author);
+
+// $upvote = $answer->get_upvote();
+// var_dump($upvote);
+
+// $content = $answer->get_content();
+// var_dump($content);
+
+// $visit_times = $answer->get_visit_times();
+// var_dump($visit_times);
+
+///////////////////////////////////////////////
+

@@ -3,13 +3,10 @@
  * @Author: Ahonn
  * @Date:   2015-12-15 20:19:28
  * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-17 17:55:12
+ * @Last Modified time: 2015-12-18 13:55:12
  */
 
-require_once 'lib/simple_html_dom.php';
-require_once 'request.php';
-
-class Question
+class Question 
 {
 	private $question_url;
 	private $title;
@@ -17,7 +14,7 @@ class Question
 
 	function __construct($question_url, $title=null)
 	{
-		if (substr($question_url, 0, 31) !== "https://www.zhihu.com/question/") {
+		if (substr($question_url, 0, 31) !== QUESTION_PREFIX_URL) {
 			throw new Exception($question_url.": it isn't a question url !");
 		} 
 		else {
@@ -135,7 +132,7 @@ class Question
 			return null;
 		}
 		else {
-			$post_url = 'http://www.zhihu.com/node/QuestionAnswerListV2';
+			$post_url = ANSWERS_LIST_URL;
 			$_xsrf = $this->dom->find('input[name=_xsrf]', 0)->value;
 		  	$json = $this->dom->find('div#zh-question-answer-wrap', 0)->attr['data-init'];
 
@@ -147,7 +144,7 @@ class Question
 						$author_link = $this->dom->find('div.zm-item-answer-author-info', $j);
 						if (@!empty($author_link->find('a.author-link', 0))) {
 							$author_id = $author_link->find('a.author-link', 0)->plaintext;
-							$author_url = 'https://www.zhihu.com'.$author_link->find('a.author-link', 0)->href;
+							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
 						}
 						else {
 							$author_id = $author_link->find('span', 0)->plaintext;
@@ -190,7 +187,7 @@ class Question
 						$author_link = $dom->find('div.zm-item-answer-author-info', 0);
 						if (@!empty($author_link->find('a.author-link', 0))) {
 							$author_id = $author_link->find('a.author-link', 0)->plaintext;
-							$author_url = 'https://www.zhihu.com'.$author_link->find('a.author-link', 0)->href;
+							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
 						}
 						else {
 							$author_id = $author_link->find('span', 0)->plaintext;

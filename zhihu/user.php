@@ -3,13 +3,10 @@
  * @Author: Ahonn
  * @Date:   2015-12-14 19:25:21
  * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-17 16:41:41
+ * @Last Modified time: 2015-12-18 13:50:04
  */
 
-require_once 'lib/simple_html_dom.php';
-require_once 'request.php';
-
-class User
+class User 
 {
 	private $user_url;
 	private $user_id;
@@ -20,7 +17,7 @@ class User
 		if (empty($user_url)) {
 			$this->user_id = '匿名用户';
 		}
-		elseif (substr($user_url, 0, 29) !== "https://www.zhihu.com/people/") {
+		elseif (substr($user_url, 0, 29) !== USER_PREFIX_URL) {
 			throw new Exception($user_url.": it isn't a user url !");
 		} 
 		else {
@@ -201,7 +198,7 @@ class User
 					}
 				}
 				else {
-					$post_url = "https://www.zhihu.com/node/ProfileFolloweesListV2";
+					$post_url = FOLLOWEES_LIST_URL;
 			
 					$params = json_decode(html_entity_decode($json))->params;
 					$params->offset = $i * 20;
@@ -244,7 +241,7 @@ class User
 			
 			$dom = str_get_html($r);
 
-			$post_url = "https://www.zhihu.com/node/ProfileFollowersListV2";
+			$post_url = FOLLOWERS_LIST_URL;
 			$_xsrf = $dom->find('input[name=_xsrf]',0)->value;
 		  	$json = $dom->find('div.zh-general-list', 0)->attr['data-init'];
 		  	
@@ -299,13 +296,13 @@ class User
 			}
 			else {
 				for ($i = 0; $i < $asks_num /20; $i++) { 
-					$ask_url = $this->user_url.'/asks?page='.($i+1);
+					$ask_url = $this->user_url.ASKS_SUFFIX_URL.($i+1);
 					$r = Request::get($ask_url);
 					$dom = str_get_html($r);
 					for ($j = 0; $j < min($asks_num - $i * 20, 20); $j++) { 
 						$question_link = $dom->find('a.question_link', $j);
 						
-					 	$question_url = 'https://www.zhihu.com'.$question_link->href;
+					 	$question_url = ZHIHU_URL.$question_link->href;
 					 	$title = $question_link->plaintext;
 					 	$asks[] = new Question($question_url, $title);
 					} 
@@ -332,14 +329,14 @@ class User
 			}
 			else {
 				for ($i = 0; $i < $answers_num / 20; $i++) { 
-					$answer_url = $this->user_url.'/answers?page='.($i+1);
+					$answer_url = $this->user_url.ANSWERS_SUFFIX_URL.($i+1);
 					$r = Request::get($answer_url);
 					$dom = str_get_html($r);
 					for ($j = 0; $j < min($answers_num - $i * 20, 20); $j++) { 
 						$question_link = $dom->find('a.question_link', $j);
 
 						$answer_url = $question_link->href;
-						$question_url = 'https://www.zhihu.com'.substr($answer_url, 0, 18);
+						$question_url = ZHIHU_URL.substr($answer_url, 0, 18);
 						$title = $question_link->plaintext;
 
 						$question = new Question($question_url, $title);
