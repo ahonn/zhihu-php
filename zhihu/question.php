@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: Ahonn
- * @Date:   2015-12-15 20:19:28
- * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-18 13:55:12
- */
 
 class Question 
 {
@@ -220,7 +214,7 @@ class Question
 	public function get_visit_times()
 	{
 		$this->parser();
-		$times = (int)$this->dom->find('div.zm-side-section', 1)->find('strong', 0)->plaintext;
+		$times = (int)$this->dom->find('div.zg-gray-normal strong', 0)->plaintext;
 		return $times;
 	}
 }

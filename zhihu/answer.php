@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: Ahonn
- * @Date:   2015-12-15 22:41:53
- * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-18 13:42:20
- */
 
 class Answer
 {
@@ -15,7 +9,7 @@ class Answer
 	private $content;
 	private $dom;
 
-	function __construct($answer_url, $question=null, $author=null, $upvote=null, $content=null)
+	function __construct($answer_url, Question $question=null, User $author=null, $upvote=null, $content=null)
 	{
 		$this->answer_url = $answer_url;
 		if ( ! empty($question)) {

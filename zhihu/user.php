@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: Ahonn
- * @Date:   2015-12-14 19:25:21
- * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-18 13:50:04
- */
 
 class User 
 {

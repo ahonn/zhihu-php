@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: Ahonn
- * @Date:   2015-12-18 13:21:10
- * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-18 15:08:17
- */
 
 require_once 'lib/simple_html_dom.php';
 require_once 'lib/request.php';
