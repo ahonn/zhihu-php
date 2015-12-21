@@ -10,8 +10,7 @@ class Question
 	{
 		if (substr($question_url, 0, 31) !== QUESTION_PREFIX_URL) {
 			throw new Exception($question_url.": it isn't a question url !");
-		} 
-		else {
+		} else {
 			$this->question_url = $question_url;
 			if ( ! empty($title)) {
 				$this->title = $title;
@@ -41,8 +40,7 @@ class Question
 	{
 		if ( ! empty($this->title)) {
 			return $this->title;
-		}
-		else {
+		} else {
 			$this->parser();
 			$title = $this->dom->find('h2.zm-item-title', 0)->plaintext;
 			$this->title = $title;
@@ -124,8 +122,7 @@ class Question
 
 		if ($answers_num == 0) {
 			return null;
-		}
-		else {
+		} else {
 			$post_url = ANSWERS_LIST_URL;
 			$_xsrf = $this->dom->find('input[name=_xsrf]', 0)->value;
 		  	$json = $this->dom->find('div#zh-question-answer-wrap', 0)->attr['data-init'];
@@ -139,8 +136,7 @@ class Question
 						if (@!empty($author_link->find('a.author-link', 0))) {
 							$author_id = $author_link->find('a.author-link', 0)->plaintext;
 							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
-						}
-						else {
+						} else {
 							$author_id = $author_link->find('span', 0)->plaintext;
 							$author_url = null;
 						}
@@ -149,16 +145,14 @@ class Question
 						$upvote_link = $this->dom->find('button.up', $j);
 						if (@!empty($upvote_link->find('span.count', 0))) {
 							$upvote = $upvote_link->find('span.count', 0)->plaintext;
-						}
-						else {
+						} else {
 							$upvote = $this->dom->find('div.zm-item-vote')->plaintext;
 						}
 
 						$content = $this->dom->find('div.zm-item-answer', $j)->find('div.zm-editable-content', 0)->plaintext;
 						$answer[] = new Answer($answer_url, $this, $author, $upvote, $content);
 					}
-				}
-				else {
+				} else {
 					$params = json_decode(html_entity_decode($json))->params;
 					$params->offset = $i * 50;
 					$params = json_encode($params);
@@ -182,8 +176,7 @@ class Question
 						if (@!empty($author_link->find('a.author-link', 0))) {
 							$author_id = $author_link->find('a.author-link', 0)->plaintext;
 							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
-						}
-						else {
+						} else {
 							$author_id = $author_link->find('span', 0)->plaintext;
 							$author_url = null;
 						}
@@ -192,8 +185,7 @@ class Question
 						$upvote_link = $dom->find('button.up', 0);
 						if (@!empty($upvote_link->find('span.count', 0))) {
 							$upvote = $upvote_link->find('span.count', 0)->plaintext;
-						}
-						else {
+						} else {
 							$upvote = $dom->find('div.zm-item-vote')->plaintext;
 						}
 

@@ -46,8 +46,7 @@ class Answer
 	{
 		if( ! empty($this->question)) {
 			$question = $this->question;
-		}
-		else {
+		} else {
 			$this->parser();
 			$question_link = $this->dom->find('div#zh-question-title a',0);
 			$question_url = ZHIHU_URL.$question_link->href;
@@ -65,16 +64,14 @@ class Answer
 	{
 		if ( ! empty($this->author)) {
 			$author = $this->author();
-		}
-		else {
+		} else {
 			$this->parser();
 			$author_link = $this->dom->find('h2.zm-list-content-title', 0);
 
 			$author_id = $author_link->plaintext;
 			if ($author_id != '匿名用户') {
 				$author_url = $author_link->find('a', 0)->href;
-			}
-			else {
+			} else {
 				$author_url = null;
 			}
 			$author = new User($author_url, $author_id);
@@ -91,15 +88,13 @@ class Answer
 	{
 		if ( ! empty($this->upvote)) {
 			$upvote = $this->upvote;
-		}
-		else {
+		} else {
 			$this->parser();
 			$upvote_link = $this->dom->find('div#zh-question-answer-wrap', 0);
 
 			if (@empty($upvote_link->find('button.up span', 0))) {
 				$upvote = (int)$this->dom->find('div.zm-item-vote a', 0)->plaintext;
-			}
-			else {
+			} else {
 				$upvote = (int)$upvote_link->find('button.up span', 0)->plaintext;
 			}
 			return $upvote;
@@ -114,8 +109,7 @@ class Answer
 	{
 		if ( ! empty($this->content)) {
 			$content = $this->content;
-		}
-		else {
+		} else {
 			$this->parser();
 			$content = $this->dom->find('div#zh-question-answer-wrap div.zm-editable-content', 0)->plaintext;
 		}

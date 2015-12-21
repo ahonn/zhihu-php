@@ -58,7 +58,10 @@ function test_user($user_url)
 	// 获取用户回答列表
 	$answer = $user->get_answers();
 	var_dump($answer);
-
+	
+	// 获取用户信息
+	$about = $user->get_about();
+	var_dump($about);
 }
 
 
@@ -146,5 +149,5 @@ $question_url = 'https://www.zhihu.com/question/19550396';
 $answer_url = 'https://www.zhihu.com/question/19550393/answer/12202130';
 
 test_user($user_url);
-test_question($question_url);
-test_answer($answer_url);
+// test_question($question_url);
+// test_answer($answer_url);
