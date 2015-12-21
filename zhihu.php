@@ -1,7 +1,7 @@
 <?php
 
-require_once 'lib/simple_html_dom.php';
-require_once 'lib/request.php';
+require_once 'libraries/simple_html_dom.php';
+require_once 'libraries/request.php';
 require_once 'zhihu/user.php';
 require_once 'zhihu/question.php';
 require_once 'zhihu/answer.php';
