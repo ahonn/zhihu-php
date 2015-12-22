@@ -62,6 +62,18 @@ function test_user($user_url)
 	// 获取用户信息
 	$about = $user->get_about();
 	var_dump($about);
+	
+	// 获取用户关注话题数
+	$topics_num = $user->get_topics_num();
+	var_dump($topics_num);
+	
+	// 获取用户关注话题列表
+	$topic_list = $user->get_topics();
+	var_dump($topic_list);
+	
+	// 获取用户头像URL
+	$avatar = $user->get_avatar();
+	var_dump($avatar);
 }
 
 

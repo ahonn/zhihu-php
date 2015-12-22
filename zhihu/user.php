@@ -66,6 +66,19 @@ class User
 		}
 	}
 
+
+	/**
+	 * 获取用户头像
+	 * @return [string] [用户头像url]
+	 */
+	public function get_avatar()
+	{
+		$this->parser();
+		$avatar = $this->dom->find('div.zm-profile-header-avatar-container img', 0)->srcset;
+		$avatar = str_replace("_xl", "", explode(' ', $avatar, 2)[0]);
+		return $avatar;
+	}
+
 	/**
 	 * 获取用户居住地
 	 * @return [string] [用户居住地]
@@ -226,6 +239,7 @@ class User
 		return $description;
 	}
 
+
 	/**
 	 * 获取用户信息
 	 * @return [string] [用户信息]
@@ -234,6 +248,7 @@ class User
 	{
 		$about = array(
 			'user_id'	=>	$this->get_user_id(),
+			'avatar'	=>	$this->get_avatar(),
 			'location'	=>	$this->get_location(),
 			'business'	=>	$this->get_business(),
 			'gender'	=>	$this->get_gender(),
@@ -243,7 +258,6 @@ class User
 			'major'	=>	$this->get_major(),
 			'description'	=>	$this->get_description()
 		);
-
 		return $about;
 	}
 
@@ -355,6 +369,71 @@ class User
 	}
 
 	/**
+	 * 获取用户关注话题数
+	 * @return [int] [用户关注话题数]
+	 */
+	public function get_topics_num()
+	{
+		if (empty($this->user_url)) {
+			return -1;
+		} else {
+			$this->parser();
+			$topics_num = $this->dom->find('div.zm-profile-side-section strong', 1)->plaintext;
+			$topics_num = (int)explode(' ', $topics_num, 2)[0];
+			return $topics_num;
+		}
+	}
+
+
+	/**
+	 * 获取用户关注的话题列表
+	 * @return [array] [话题列表]
+	 */
+	public function get_topics()
+	{
+		$topics_num = $this->get_topics_num();
+		if ($topics_num == 0) {
+			return;
+		} else {
+			$topics_url = $this->user_url.'/topics';
+			$r = Request::get($topics_url);
+			$dom = str_get_html($r);
+
+			$_xsrf = $dom->find('input[name=_xsrf]', 0)->attr['value'];
+			for ($i = 0; $i < $topics_num / 20; $i++) { 
+				if ($i == 0) {
+					for ($j = 0; $j < min($topics_num, 20); $j++) { 
+						$topics_url_list[$j] =  $dom->find('div.zm-profile-section-main', $j);
+
+						$topic_url = ZHIHU_URL.$topics_url_list[$j]->find('a', 1)->href;
+						$topic_id = $topics_url_list[$j]->find('a strong', 0)->plaintext;
+						$topics_list[] = new Topic($topic_url, $topic_id);
+					}
+				} else {
+					$data = array(
+						'start' => 0,
+						'offset' => $i * 20,
+						'_xsrf' => $_xsrf
+					);
+
+					$r = Request::post($topics_url, $data, array("Referer: {$topics_url}"));
+					$r = json_decode($r)->msg;
+
+					$dom = str_get_html($r[1]);
+					for ($j = 0; $j < min(($topics_num - $i * 20), 20); $j++) { 
+						$topics_url_list[$j] = $dom->find('div.zm-profile-section-main', $j);		
+
+						$topic_url = ZHIHU_URL.$topics_url_list[$j]->find('a', 1)->href;
+						$topic_id = $topics_url_list[$j]->find('a strong', 0)->plaintext;
+						$topics_list[] = new Topic($topic_url, $topic_id);			
+					}
+				}
+			}
+			return $topics_list;
+		}
+	}
+
+	/**
 	 * 获取用户关注列表
 	 * @return [array] [关注列表]
 	 */
@@ -391,7 +470,7 @@ class User
 						'params' => $params
 					);
 
-					$r = Request::post($post_url, $data, array("Referer: {$followee_url}" ));
+					$r = Request::post($post_url, $data, array("Referer: {$followee_url}"));
 					$r = json_decode($r)->msg;
 
 					for ($j = 0; $j < min($followees_num - $i * 20, 20); $j++) { 
