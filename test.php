@@ -152,7 +152,30 @@ function test_answer($answer_url)
 	var_dump($visit_times);
 }
 
+function test_topics($topics_url)
+{
+	$topics = new Topic($topics_url);
 
+	// 获取话题描述
+	$description = $topics->get_description();
+	var_dump($description);
+
+	// 获取话题关注人数
+	$followers_num = $topics->get_followers();
+	var_dump($followers_num);
+
+	// 获取父话题
+	$parent = $topics->get_parent();
+	var_dump($parent);
+
+	// 获取子话题
+	$children = $topics->get_children();
+	var_dump($children);
+
+	// 获取最佳回答者
+	$answerer = $topics->get_answerer();
+	var_dump($answerer);
+}
 
 $user_url = 'https://www.zhihu.com/people/ahonn';
 
@@ -160,6 +183,9 @@ $question_url = 'https://www.zhihu.com/question/19550396';
 
 $answer_url = 'https://www.zhihu.com/question/19550393/answer/12202130';
 
-test_user($user_url);
+$topics_url = 'https://www.zhihu.com/topic/19552330';
+
+// test_user($user_url);
 // test_question($question_url);
 // test_answer($answer_url);
+test_topics($topics_url);
