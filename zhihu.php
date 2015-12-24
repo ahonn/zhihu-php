@@ -1,7 +1,7 @@
 <?php
 
-require_once 'libraries/simple_html_dom.php';
-require_once 'libraries/request.php';
+require_once 'lib/simple_html_dom.php';
+require_once 'lib/request.php';
 require_once 'zhihu/user.php';
 require_once 'zhihu/question.php';
 require_once 'zhihu/answer.php';
@@ -16,10 +16,14 @@ define('ZHIHU_URL', 'https://www.zhihu.com');
 define('USER_PREFIX_URL', 'https://www.zhihu.com/people/');
 define('QUESTION_PREFIX_URL', 'https://www.zhihu.com/question/');
 define('TOPICS_PREFIX_URL', 'https://www.zhihu.com/topic/');
+define('FOLLOWEES_SUFFIX_URL', '/followees');
+define('FOLLOWERS_SUFFIX_URL', '/followers');
+
 
 
 define('ASKS_SUFFIX_URL', '/asks?page=');
 define('ANSWERS_SUFFIX_URL', '/answers?page=');
+define('TOPICS_SUFFIX_URL', '/topics');
 
 
 define('FOLLOWEES_LIST_URL', 'https://www.zhihu.com/node/ProfileFolloweesListV2');

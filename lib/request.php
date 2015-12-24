@@ -3,7 +3,7 @@
  * @Author: Ahonn
  * @Date:   2015-12-15 09:04:11
  * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-18 15:07:03
+ * @Last Modified time: 2015-12-24 17:49:52
  */
 
 date_default_timezone_set('PRC');
@@ -48,7 +48,7 @@ class Request
 	 * @param  array  $data [post数据]
 	 * @return [string]       [请求内容]
 	 */
-	public static function post($url, $data = array(), $header = array())
+	public static function post($url, array $data, $header=array())
 	{
 		$header = array_merge(self::$header, $header);
 
@@ -68,4 +68,5 @@ class Request
 		curl_close($ch);
 		return $result;
 	}
+
 }

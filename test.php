@@ -38,7 +38,7 @@ function test_user($user_url)
 	// 获取用户问题回答数
 	$answer_num = $user->get_answers_num();
 	var_dump($answer_num);
-	
+
 	// 获取用户收藏数
 	$collection_num = $user->get_collections_num();
 	var_dump($collection_num);
@@ -122,6 +122,10 @@ function test_question($question_url)
 	$times = $question->get_visit_times();
 	var_dump($times);
 
+	// 获取关注该问题的用户
+	$followers_list = $question->get_followers(30);
+	var_dump($followers_list);
+
 }
 
 
@@ -179,13 +183,13 @@ function test_topics($topics_url)
 
 $user_url = 'https://www.zhihu.com/people/ahonn';
 
-$question_url = 'https://www.zhihu.com/question/19550396';
+$question_url = 'https://www.zhihu.com/question/38813693';
 
 $answer_url = 'https://www.zhihu.com/question/19550393/answer/12202130';
 
 $topics_url = 'https://www.zhihu.com/topic/19552330';
 
 // test_user($user_url);
-// test_question($question_url);
+test_question($question_url);
 // test_answer($answer_url);
-test_topics($topics_url);
+// test_topics($topics_url);

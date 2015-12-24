@@ -86,17 +86,6 @@ class Question
 	}
 
 	/**
-	 * 获取问题关注数
-	 * @return [int] [关注数]
-	 */
-	public function get_followers_num()
-	{
-		$this->parser();
-		$followers_num = (int)$this->dom->find('div.zg-gray-normal strong', 0)->plaintext;
-		return $followers_num;
-	}
-
-	/**
 	 * 获取话题分类
 	 * @return [array] [话题分类]
 	 */
@@ -109,6 +98,74 @@ class Question
 		return $topic_list;
 	}
 
+
+	/**
+	 * 获取问题关注数
+	 * @return [int] [关注数]
+	 */
+	public function get_followers_num()
+	{
+		$this->parser();
+		$followers_num = (int)$this->dom->find('div.zg-gray-normal strong', 0)->plaintext;
+		return $followers_num;
+	}
+
+	public function get_followers($top=null)
+	{
+		$followers_num = $this->get_followers_num(); 
+		if ( ! empty($top) && $top <= $followers_num) {
+			$followers_num = $top; 
+		}
+
+		if ($followers_num == 0) {
+			return null;
+		} else {
+			$follwers_url = $this->question_url.FOLLOWERS_SUFFIX_URL;
+			$r = Request::get($follwers_url);
+			$dom = str_get_html($r);
+
+			$_xsrf = $dom->find('input[name=_xsrf]',0)->value;
+			for ($i = 0; $i < $followers_num / 20; $i++) { 
+				if ($i == 0) {
+					for ($j = 0; $j < min($followers_num, 20); $j++) { 
+						$follower_link = $dom->find('div.zm-profile-card h2 a', $j);
+						$user_url = $follower_link->href;
+						$user_id = $follower_link->plaintext;
+						$followers_list[] = new User($user_url, $user_id);
+
+					}
+				} else {
+					$data = array(
+						'start' => 0,
+						'offset' => $i * 20,
+						'_xsrf' =>$_xsrf
+					);
+
+					$r = Request::post($follwers_url, $data, array("Referer: {$follwers_url}"));
+					$r = json_decode($r)->msg;
+					$dom = str_get_html($r[1]);
+
+					for ($j = 0; $j < min(($followers_num - $i * 20), 20); $j++) { 
+						$follower_link = $dom->find('div.zm-profile-card h2', $j);
+
+						$user_url = null;
+						if ( ! empty($follower_link->find('a', 0))) {
+							$user_url = $follower_link->find('a', 0)->href;
+						}
+						$user_id = $follower_link->plaintext;
+						$followers_list[] = new User($user_url, $user_id);
+
+						if ( ! empty($top) && ($i * 20 + $j) >= $top) {
+							break 2;
+						}
+					}
+				}
+			}
+			return $followers_list;
+		}
+	}
+
+
 	/**
 	 * 获取回答
 	 * @param  [int]  $top  [答案排行]
@@ -117,8 +174,10 @@ class Question
 	 */
 	public function get_answers($top=null, $list=true)
 	{
-		$this->get_title();
-		$answers_num = empty($top)? $this->get_answers_num(): $top; 
+		$answer_num = $this->get_answers_num(); 
+		if ( ! empty($top) && $top <= $answer_num) {
+			$answer_num = $top; 
+		}
 
 		if ($answers_num == 0) {
 			return null;

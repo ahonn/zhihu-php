@@ -395,7 +395,7 @@ class User
 		if ($topics_num == 0) {
 			return;
 		} else {
-			$topics_url = $this->user_url.'/topics';
+			$topics_url = $this->user_url.TOPICS_PREFIX_URL;
 			$r = Request::get($topics_url);
 			$dom = str_get_html($r);
 
@@ -403,10 +403,10 @@ class User
 			for ($i = 0; $i < $topics_num / 20; $i++) { 
 				if ($i == 0) {
 					for ($j = 0; $j < min($topics_num, 20); $j++) { 
-						$topics_url_list[$j] =  $dom->find('div.zm-profile-section-main', $j);
+						$topics_link =  $dom->find('div.zm-profile-section-main', $j);
 
-						$topic_url = ZHIHU_URL.$topics_url_list[$j]->find('a', 1)->href;
-						$topic_id = $topics_url_list[$j]->find('a strong', 0)->plaintext;
+						$topic_url = ZHIHU_URL.$topics_link->find('a', 1)->href;
+						$topic_id = $topics_link->find('a strong', 0)->plaintext;
 						$topics_list[] = new Topic($topic_url, $topic_id);
 					}
 				} else {
@@ -421,10 +421,10 @@ class User
 
 					$dom = str_get_html($r[1]);
 					for ($j = 0; $j < min(($topics_num - $i * 20), 20); $j++) { 
-						$topics_url_list[$j] = $dom->find('div.zm-profile-section-main', $j);		
+						$topics_link = $dom->find('div.zm-profile-section-main', $j);		
 
-						$topic_url = ZHIHU_URL.$topics_url_list[$j]->find('a', 1)->href;
-						$topic_id = $topics_url_list[$j]->find('a strong', 0)->plaintext;
+						$topic_url = ZHIHU_URL.$topics_link->find('a', 1)->href;
+						$topic_id = $topics_link->find('a strong', 0)->plaintext;
 						$topics_list[] = new Topic($topic_url, $topic_id);			
 					}
 				}
@@ -443,7 +443,7 @@ class User
 		if ($followees_num == 0) {
 			return;
 		} else {
-			$followee_url = $this->user_url.'/followees';
+			$followee_url = $this->user_url.FOLLOWEES_SUFFIX_URL;
 			$r = Request::get($followee_url);
 			
 			$dom = str_get_html($r);
@@ -496,7 +496,7 @@ class User
 		if ($followers_num == 0) {
 			return;
 		} else {
-			$follower_url = $this->user_url.'/followers';
+			$follower_url = $this->user_url.FOLLOWERS_SUFFIX_URL;
 			$r = Request::get($follower_url);
 			
 			$dom = str_get_html($r);
