@@ -3,17 +3,17 @@
 class Question 
 {
 	private $question_url;
-	private $title;
+	private $question_title;
 	private $dom;
 
-	function __construct($question_url, $title=null)
+	function __construct($question_url, $question_title=null)
 	{
 		if (substr($question_url, 0, 31) !== QUESTION_PREFIX_URL) {
 			throw new Exception($question_url.": it isn't a question url !");
 		} else {
 			$this->question_url = $question_url;
-			if ( ! empty($title)) {
-				$this->title = $title;
+			if ( ! empty($question_title)) {
+				$this->question_title = $question_title;
 			}
 		}	
 	}
@@ -36,15 +36,15 @@ class Question
 	 * 获取问题标题
 	 * @return [string] [标题]
 	 */
-	public function get_title()
+	public function get_question_title()
 	{
-		if ( ! empty($this->title)) {
-			return $this->title;
+		if ( ! empty($this->question_title)) {
+			return $this->question_title;
 		} else {
 			$this->parser();
-			$title = $this->dom->find('h2.zm-item-title', 0)->plaintext;
-			$this->title = $title;
-			return $title;
+			$question_title = $this->dom->find('h2.zm-item-question_title', 0)->plaintext;
+			$this->question_title = $question_title;
+			return $question_title;
 		}
 	}
 

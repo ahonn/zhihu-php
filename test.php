@@ -181,6 +181,24 @@ function test_topics($topics_url)
 	var_dump($answerer);
 }
 
+function test_collection($collection_url)
+{
+	$collection = new Collection($collection_url);
+
+	// 获取收藏夹名称
+	$title = $collection->get_title();
+	var_dump($title);
+
+	// 获取收藏夹简介
+	$description = $collection->get_description();
+	var_dump($description);
+
+	// 获取收藏夹建立者
+	$author = $collection->get_author();
+	var_dump($author);
+
+}
+
 $user_url = 'https://www.zhihu.com/people/ahonn';
 
 $question_url = 'https://www.zhihu.com/question/38813693';
@@ -189,7 +207,10 @@ $answer_url = 'https://www.zhihu.com/question/19550393/answer/12202130';
 
 $topics_url = 'https://www.zhihu.com/topic/19552330';
 
+$collection_url = 'https://www.zhihu.com/collection/19650606';
+
 // test_user($user_url);
-test_question($question_url);
+// test_question($question_url);
 // test_answer($answer_url);
 // test_topics($topics_url);
+test_collection($collection_url);
