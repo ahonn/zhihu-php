@@ -179,6 +179,18 @@ function test_topics($topics_url)
 	// 获取最佳回答者
 	$answerer = $topics->get_answerer();
 	var_dump($answerer);
+
+	// 获取该话题下的热门问题
+	$hot_question = $topics->get_hot_question();
+	var_dump($hot_question);
+	
+	获取该话题下排名靠前的问题
+	$top_question = $topics->get_top_question();
+	var_dump($top_question);
+
+	// 获取该话题下最新的问题
+	$new_question = $topics->get_new_question();
+	var_dump($new_question);
 }
 
 function test_collection($collection_url)
@@ -213,4 +225,4 @@ $collection_url = 'https://www.zhihu.com/collection/19650606';
 // test_question($question_url);
 // test_answer($answer_url);
 // test_topics($topics_url);
-test_collection($collection_url);
+// test_collection($collection_url);

@@ -7,7 +7,6 @@ class Answer
 	private $author;
 	private $upvote;
 	private $content;
-	private $dom;
 
 	function __construct($answer_url, Question $question=null, User $author=null, $upvote=null, $content=null)
 	{
@@ -32,7 +31,7 @@ class Answer
 	 */
 	public function parser()
 	{
-		if (empty($this->dom)) {
+		if (empty($this->dom) || isset($this->dom)) {
 			$r = Request::get($this->answer_url);
 			$this->dom = str_get_html($r);
 		}
@@ -93,11 +92,11 @@ class Answer
 			$upvote_link = $this->dom->find('div#zh-question-answer-wrap', 0);
 
 			if (@empty($upvote_link->find('button.up span', 0))) {
-				$upvote = (int)$this->dom->find('div.zm-item-vote a', 0)->plaintext;
+				$upvote = $this->dom->find('div.zm-item-vote a', 0)->plaintext;
 			} else {
-				$upvote = (int)$upvote_link->find('button.up span', 0)->plaintext;
+				$upvote = $upvote_link->find('button.up span', 0)->plaintext;
 			}
-			return $upvote;
+			return (int)$upvote;
 		}
 	}
 

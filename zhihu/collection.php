@@ -4,7 +4,6 @@ class Collection
 {
 	private $collection_url;
 	private $collection_title;
-	private $dom;
 
 	function __construct($collection_url, $collection_title=null)
 	{
@@ -18,14 +17,22 @@ class Collection
 		}	
 	}
 	
+	/**
+	 * 解析收藏主页
+	 * @return [object] [simple html dom 对象]
+	 */
 	public function parser()
 	{
-		if (empty($this->dom)) {
+		if (empty($this->dom) || isset($this->dom)) {
 			$r = Request::get($this->collection_url);
 			$this->dom = str_get_html($r);
 		}
 	}
 
+	/**
+	 * 获取收藏夹名称
+	 * @return [string] [收藏夹名称]
+	 */
 	public function get_title()
 	{
 		if( ! empty($this->title)) {
@@ -37,6 +44,10 @@ class Collection
 		return $title;
 	}
 
+	/**
+	 * 获取收藏夹描述
+	 * @return [string] [收藏夹描述]
+	 */
 	public function get_description()
 	{
 		$this->parser();
@@ -44,6 +55,10 @@ class Collection
 		return $description;
 	}
 
+	/**
+	 * 获取收藏夹创建者
+	 * @return [object] [创建者]
+	 */
 	public function get_author()
 	{
 		$this->parser();

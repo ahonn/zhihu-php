@@ -4,7 +4,6 @@ class Topic
 {
 	private $topics_url;
 	private $topics_id;
-	private $dom;
 
 	function __construct($topics_url, $topics_id=null)
 	{
@@ -24,7 +23,7 @@ class Topic
 	 */
 	public function parser()
 	{
-		if (empty($this->dom)) {
+		if (empty($this->dom) || isset($this->dom)) {
 			$r = Request::get($this->topics_url);
 
 			$this->dom = str_get_html($r);
@@ -104,11 +103,68 @@ class Topic
 		$this->parser();
 		for ($i = 0; ! empty($this->dom->find('div.zm-topic-side-person-item', $i)) ; $i++) { 
 			$answerer_link = $this->dom->find('div.zm-topic-side-person-item', $i)->find('a', 1);
-
 			$answerer_url = ZHIHU_URL.$answerer_link->href;
 			$answerer_id = $answerer_link->plaintext;
 			$answerer_list[] = new User($answerer_url, $answerer_id);
 		}
 		return $answerer_list;
+	}
+
+	/**
+	 * 获取该话题下的热门问题
+	 * @return [array] [热门问题列表]
+	 */
+	public function get_hot_question()
+	{
+		$hot_question_url = $this->topics_url.TOPICS_HOT_SUFFIX_URL;
+		$r = Request::get($hot_question_url);
+		$dom = str_get_html($r);
+
+		for ($i = 0; ! empty($dom->find('div.first-combine', $i)); $i++) { 
+			$question_link = $dom->find('div.first-combine', $i)->find('h2 a.question_link', 0);
+			$question_url = ZHIHU_URL.$question_link->href;
+			$question_title = $question_link->plaintext;
+			$question_list[] = new Question($question_url, $question_title);
+		}
+		return $question_list;
+	}
+
+	/**
+	 * 获取该话题下排名靠前的话题
+	 * @return [array] [排名靠前的话题]
+	 */
+	public function get_top_question()
+	{
+		$top_question_url = $this->topics_url.TOPICS_TOP_SUFFIX_URL;
+		$r = Request::get($top_question_url);
+		$dom = str_get_html($r);
+
+		for ($i = 0; ! empty($dom->find('div.feed-item', $i)); $i++) { 
+			$question_link = $dom->find('div.feed-item', $i)->find('h2 a.question_link', 0);
+			$question_url = ZHIHU_URL.$question_link->href;
+			$question_title = $question_link->plaintext;
+			$question_list[] = new Question($question_url, $question_title);
+		}
+		return $question_list;
+	}
+
+
+	/**
+	 * 获取该话题下最新的问题
+	 * @return [array] [最新的问题]
+	 */
+	public function get_new_question()
+	{
+		$new_question_url = $this->topics_url.TOPICS_NEW_SUFFIX_URL;
+		$r = Request::get($new_question_url);
+		$dom = str_get_html($r);
+
+		for ($i = 0; ! empty($dom->find('div.feed-item', $i)); $i++) { 
+			$question_link = $dom->find('div.feed-item', $i)->find('h2 a.question_link', 0);
+			$question_url = ZHIHU_URL.$question_link->href;
+			$question_title = $question_link->plaintext;
+			$question_list[] = new Question($question_url, $question_title);
+		}
+		return $question_list;
 	}
 }

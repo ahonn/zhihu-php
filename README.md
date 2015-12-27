@@ -32,9 +32,3 @@ $answer = $question->get_answer(5, false);
 echo $answer;
 
 ```
-
-## 文档
-- [User 获取用户信息](https://github.com/ahonn/zhihu-php/tree/master/doc/zhihu-user-help.md)
-- [Question 获取问题信息](#)
-- [Answer 获取答案信息](#)
-- [Topic 获取话题信息](#)

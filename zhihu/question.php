@@ -4,7 +4,6 @@ class Question
 {
 	private $question_url;
 	private $question_title;
-	private $dom;
 
 	function __construct($question_url, $question_title=null)
 	{
@@ -25,7 +24,7 @@ class Question
 	 */
 	public function parser()
 	{
-		if (empty($this->dom)) {
+		if (empty($this->dom) || isset($this->dom)) {
 			$r = Request::get($this->question_url);
 
 			$this->dom = str_get_html($r);
@@ -36,13 +35,13 @@ class Question
 	 * 获取问题标题
 	 * @return [string] [标题]
 	 */
-	public function get_question_title()
+	public function get_title()
 	{
 		if ( ! empty($this->question_title)) {
 			return $this->question_title;
 		} else {
 			$this->parser();
-			$question_title = $this->dom->find('h2.zm-item-question_title', 0)->plaintext;
+			$question_title = $this->dom->find('h2.zm-item-title', 0)->plaintext;
 			$this->question_title = $question_title;
 			return $question_title;
 		}
@@ -77,9 +76,9 @@ class Question
 	public function get_answers_num()
 	{
 		$this->parser();
-		$answers_num = (int)@$this->dom->find('h3#zh-question-answer-num', 0)->attr['data-num'];
-
-		if (empty($answers_num)) {
+		if ( ! empty($this->dom->find('h3#zh-question-answer-num', 0))) {
+			$answers_num = (int)$this->dom->find('h3#zh-question-answer-num', 0)->attr['data-num'];
+		} else {
 			$answers_num = 0;
 		}
 		return $answers_num;
@@ -106,8 +105,8 @@ class Question
 	public function get_followers_num()
 	{
 		$this->parser();
-		$followers_num = (int)$this->dom->find('div.zg-gray-normal strong', 0)->plaintext;
-		return $followers_num;
+		$followers_num = $this->dom->find('div.zg-gray-normal strong', 0)->plaintext;
+		return (int)$followers_num;
 	}
 
 	public function get_followers($top=null)
@@ -174,9 +173,9 @@ class Question
 	 */
 	public function get_answers($top=null, $list=true)
 	{
-		$answer_num = $this->get_answers_num(); 
-		if ( ! empty($top) && $top <= $answer_num) {
-			$answer_num = $top; 
+		$answers_num = $this->get_answers_num(); 
+		if ( ! empty($top) && $top <= $answers_num) {
+			$answers_num = $top; 
 		}
 
 		if ($answers_num == 0) {
@@ -192,7 +191,7 @@ class Question
 						$answer_url = $this->dom->find('a.answer-date-link', $j)->href;
 
 						$author_link = $this->dom->find('div.zm-item-answer-author-info', $j);
-						if (@!empty($author_link->find('a.author-link', 0))) {
+						if (!empty($author_link->find('a.author-link', 0))) {
 							$author_id = $author_link->find('a.author-link', 0)->plaintext;
 							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
 						} else {
@@ -202,7 +201,7 @@ class Question
 						$author = new User($author_url, $author_id);
 
 						$upvote_link = $this->dom->find('button.up', $j);
-						if (@!empty($upvote_link->find('span.count', 0))) {
+						if (!empty($upvote_link->find('span.count', 0))) {
 							$upvote = $upvote_link->find('span.count', 0)->plaintext;
 						} else {
 							$upvote = $this->dom->find('div.zm-item-vote')->plaintext;
@@ -232,7 +231,7 @@ class Question
 						$answer_url = $dom->find('a.answer-date-link', 0)->href;
 
 						$author_link = $dom->find('div.zm-item-answer-author-info', 0);
-						if (@!empty($author_link->find('a.author-link', 0))) {
+						if (!empty($author_link->find('a.author-link', 0))) {
 							$author_id = $author_link->find('a.author-link', 0)->plaintext;
 							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
 						} else {
@@ -242,7 +241,7 @@ class Question
 						$author = new User($author_url, $author_id);
 
 						$upvote_link = $dom->find('button.up', 0);
-						if (@!empty($upvote_link->find('span.count', 0))) {
+						if (!empty($upvote_link->find('span.count', 0))) {
 							$upvote = $upvote_link->find('span.count', 0)->plaintext;
 						} else {
 							$upvote = $dom->find('div.zm-item-vote')->plaintext;

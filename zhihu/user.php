@@ -4,7 +4,6 @@ class User
 {
 	private $user_url;
 	private $user_id;
-	private $dom;
 
 	function __construct($user_url, $user_id=null)
 	{
@@ -26,7 +25,7 @@ class User
 	 */
 	public function parser()
 	{
-		if (empty($this->dom)) {
+		if (empty($this->dom) || isset($this->dom)) {
 			$r = Request::get($this->user_url);
 
 			$this->dom = str_get_html($r);
@@ -272,8 +271,8 @@ class User
 			return -1;
 		} else {
 			$this->parser();
-			$followees_num = (int)$this->dom->find('div.zm-profile-side-following strong', 0)->plaintext;
-			return $followees_num;
+			$followees_num = $this->dom->find('div.zm-profile-side-following strong', 0)->plaintext;
+			return (int)$followees_num;
 		}	
 	}
 
@@ -287,8 +286,8 @@ class User
 			return -1;
 		} else {
 			$this->parser();
-			$followers_num = (int)$this->dom->find('div.zm-profile-side-following strong', 1)->plaintext;
-			return $followers_num;
+			$followers_num = $this->dom->find('div.zm-profile-side-following strong', 1)->plaintext;
+			return (int)$followers_num;
 		}
 	}
 
@@ -302,8 +301,8 @@ class User
 			return -1;
 		} else {
 			$this->parser();
-			$agree_num = (int)$this->dom->find('div.zm-profile-header-info-list strong', 0)->plaintext;
-			return $agree_num;
+			$agree_num = $this->dom->find('div.zm-profile-header-info-list strong', 0)->plaintext;
+			return (int)$agree_num;
 		}
 	}
 
@@ -318,8 +317,8 @@ class User
 			return -1;
 		} else {
 			$this->parser();
-			$thanks_num = (int)$this->dom->find('div.zm-profile-header-info-list strong', 1)->plaintext;
-			return $thanks_num;
+			$thanks_num = $this->dom->find('div.zm-profile-header-info-list strong', 1)->plaintext;
+			return (int)$thanks_num;
 		}
 	}
 
@@ -333,8 +332,8 @@ class User
 			return -1;
 		} else {
 			$this->parser();
-			$asks_num = (int)$this->dom->find('span.num', 0)->plaintext;
-			return $asks_num;
+			$asks_num = $this->dom->find('span.num', 0)->plaintext;
+			return (int)$asks_num;
 		}
 	}
 
@@ -348,8 +347,8 @@ class User
 			return -1;
 		} else {
 			$this->parser();
-			$answers_num = (int)$this->dom->find('span.num', 1)->plaintext;
-			return $answers_num;
+			$answers_num = $this->dom->find('span.num', 1)->plaintext;
+			return (int)$answers_num;
 		}
 	}
 
@@ -363,8 +362,8 @@ class User
 			return -1;
 		} else {
 			$this->parser();
-			$collections_num = (int)$this->dom->find('span.num', 3)->plaintext;
-			return $collections_num;
+			$collections_num = $this->dom->find('span.num', 3)->plaintext;
+			return (int)$collections_num;
 		}
 	}
 
@@ -379,8 +378,8 @@ class User
 		} else {
 			$this->parser();
 			$topics_num = $this->dom->find('div.zm-profile-side-section strong', 1)->plaintext;
-			$topics_num = (int)explode(' ', $topics_num, 2)[0];
-			return $topics_num;
+			$topics_num = explode(' ', $topics_num, 2)[0];
+			return (int)$topics_num;
 		}
 	}
 

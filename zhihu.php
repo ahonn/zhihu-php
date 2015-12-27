@@ -21,13 +21,12 @@ define('COLLECTION_PREFIX_URL', 'https://www.zhihu.com/collection/');
 
 define('FOLLOWEES_SUFFIX_URL', '/followees');
 define('FOLLOWERS_SUFFIX_URL', '/followers');
-
-
-
 define('ASKS_SUFFIX_URL', '/asks?page=');
 define('ANSWERS_SUFFIX_URL', '/answers?page=');
 define('TOPICS_SUFFIX_URL', '/topics');
-
+define('TOPICS_HOT_SUFFIX_URL', '/hot');
+define('TOPICS_TOP_SUFFIX_URL', '/top-answers');
+define('TOPICS_NEW_SUFFIX_URL', '/questions');
 
 define('FOLLOWEES_LIST_URL', 'https://www.zhihu.com/node/ProfileFolloweesListV2');
 define('FOLLOWERS_LIST_URL', 'https://www.zhihu.com/node/ProfileFollowersListV2');
