@@ -44,21 +44,33 @@ function test_user($user_url)
 	var_dump($collection_num);
 	
 	// 获取用户关注列表
-	$followees = $user->get_followees();
-	var_dump($followees);
+	$followees_list = $user->get_followees();
+	foreach ($followees_list as $followees) {
+		var_dump($followees);
+	}
 	
 	// 获取用户粉丝列表
-	$followers = $user->get_followers();
-	var_dump($followers);
+	$followers_list = $user->get_followers();
+	foreach ($followers_list as $followers) {
+		var_dump($followers);
+	}
 	
 	// 获取用户提问列表
-	$asks = $user->get_asks();
-	var_dump($asks);
+	$asks_list = $user->get_asks();
+	foreach ($asks_list as $asks) {
+		var_dump($asks);
+	}
 	
 	// 获取用户回答列表
-	$answer = $user->get_answers();
-	var_dump($answer);
+	$answer_list = $user->get_answers();
+	foreach ($answer_list as $answer) {
+		var_dump($answer);
+	}
 	
+	// 获取用户头像URL
+	$avatar = $user->get_avatar();
+	var_dump($avatar);
+
 	// 获取用户信息
 	$about = $user->get_about();
 	var_dump($about);
@@ -69,11 +81,10 @@ function test_user($user_url)
 	
 	// 获取用户关注话题列表
 	$topic_list = $user->get_topics();
-	var_dump($topic_list);
+	foreach ($topic_list as $topic) {
+		var_dump($topic);
+	}
 	
-	// 获取用户头像URL
-	$avatar = $user->get_avatar();
-	var_dump($avatar);
 }
 
 
@@ -110,21 +121,25 @@ function test_question($question_url)
 	$topic_list = $question->get_topics();
 	var_dump($topic_list);
 
-	// 获取排名第三的回答
-	$answer = $question->get_answers(3, false);
+	// 获取关注该问题的用户
+	$followers_list = $question->get_followers();
+	foreach ($followers_list as $followers) {
+		var_dump($followers);
+	}
+	
+	// 获取问题的回答
+	$answer_list = $question->get_answers();
+	foreach ($answer_list as $answer) {
+		var_dump($answer);
+	}
+
+	// 获取该问题排名Top n的答案
+	$answer = $question->get_top_answer(1);
 	var_dump($answer);
-
-	// 获取排名前三的回答
-	$answer_list = $question->get_answers(3);
-	var_dump($answer_list);
-
+	
 	// 获取问题被浏览数
 	$times = $question->get_visit_times();
 	var_dump($times);
-
-	// 获取关注该问题的用户
-	$followers_list = $question->get_followers(30);
-	var_dump($followers_list);
 
 }
 
@@ -184,7 +199,7 @@ function test_topics($topics_url)
 	$hot_question = $topics->get_hot_question();
 	var_dump($hot_question);
 	
-	获取该话题下排名靠前的问题
+	// 获ge取该话题下排名靠前的问题
 	$top_question = $topics->get_top_question();
 	var_dump($top_question);
 
@@ -209,8 +224,15 @@ function test_collection($collection_url)
 	$author = $collection->get_author();
 	var_dump($author);
 
+	$answer_list = $collection->get_answers();
+	foreach ($answer_list as $answer) {
+		var_dump($answer);
+	}
+
 }
 
+$time = new Time();
+$time->star();
 $user_url = 'https://www.zhihu.com/people/ahonn';
 
 $question_url = 'https://www.zhihu.com/question/38813693';
@@ -226,3 +248,10 @@ $collection_url = 'https://www.zhihu.com/collection/19650606';
 // test_answer($answer_url);
 // test_topics($topics_url);
 // test_collection($collection_url);
+
+
+
+
+
+$time->stop();
+echo $time->spent();

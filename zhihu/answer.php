@@ -27,7 +27,7 @@ class Answer
 
 	/**
 	 * 解析user_url为simple html dom对象
-	 * @return [Object] [simple html dom 对象]
+	 * @return object simple html dom 对象
 	 */
 	public function parser()
 	{
@@ -39,7 +39,7 @@ class Answer
 
 	/**
 	 * 获取答案所在问题
-	 * @return [object] [问题对象]
+	 * @return object Question对象
 	 */
 	public function get_question()
 	{
@@ -57,7 +57,7 @@ class Answer
 
 	/**
 	 * 获取回答作者
-	 * @return [object] [用户对象]
+	 * @return object User对象
 	 */
 	public function get_author()
 	{
@@ -81,7 +81,7 @@ class Answer
 
 	/**
 	 * 获取回答赞同数
-	 * @return [int] [赞同数]
+	 * @return integer 赞同数
 	 */
 	public function get_upvote()
 	{
@@ -102,7 +102,7 @@ class Answer
 
 	/**
 	 * 获取答案内容
-	 * @return [string] [答案内容]
+	 * @return string 答案内容
 	 */
 	public function get_content()
 	{
@@ -117,7 +117,7 @@ class Answer
 
 	/**
 	 * 获取问题被浏览次数
-	 * @return [int] [浏览数]
+	 * @return integer 浏览数
 	 */
 	public function get_visit_times()
 	{

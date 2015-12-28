@@ -19,7 +19,7 @@ class Topic
 
 	/**
 	 * 解析话题主页
-	 * @return [object] [simple html dom 对象]
+	 * @return object simple html dom 对象
 	 */
 	public function parser()
 	{
@@ -32,7 +32,7 @@ class Topic
 
 	/**
 	 * 获取话题描述
-	 * @return [string] [话题描述]
+	 * @return string 话题描述
 	 */
 	public function get_description()
 	{
@@ -44,7 +44,7 @@ class Topic
 
 	/**
 	 * 获取关注该话题的人数
-	 * @return [int] [话题关注人数]
+	 * @return integer 话题关注人数
 	 */
 	public function get_followers()
 	{
@@ -55,7 +55,7 @@ class Topic
 
 	/**
 	 * 获取该话题的父话题
-	 * @return [object] [父话题列表]
+	 * @return array 父话题列表
 	 */
 	public function get_parent()
 	{
@@ -72,10 +72,9 @@ class Topic
 
 	/**
 	 * 获取该话题的子话题
-	 * @param  string $value [description]
-	 * @return [type]        [description]
+	 * @return array 子话题列表
 	 */
-	public function get_children($value='')
+	public function get_children()
 	{
 		$children_num = $this->dom->find('a.zm-topic-side-title-link', 0)->plaintext;
 		$children_num = (int)explode(' ', $children_num, 3)[1];
@@ -96,7 +95,7 @@ class Topic
 
 	/**
 	 * 获取该话题下的最佳回答者
-	 * @return [object array] [最佳回答者列表]
+	 * @return array 最佳回答者列表
 	 */
 	public function get_answerer()
 	{
@@ -112,7 +111,7 @@ class Topic
 
 	/**
 	 * 获取该话题下的热门问题
-	 * @return [array] [热门问题列表]
+	 * @return array 热门问题列表
 	 */
 	public function get_hot_question()
 	{
@@ -130,8 +129,8 @@ class Topic
 	}
 
 	/**
-	 * 获取该话题下排名靠前的话题
-	 * @return [array] [排名靠前的话题]
+	 * 获取该话题下精华问题
+	 * @return array 精华问题列表
 	 */
 	public function get_top_question()
 	{
@@ -151,7 +150,7 @@ class Topic
 
 	/**
 	 * 获取该话题下最新的问题
-	 * @return [array] [最新的问题]
+	 * @return array 最新的问题
 	 */
 	public function get_new_question()
 	{

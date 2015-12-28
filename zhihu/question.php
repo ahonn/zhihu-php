@@ -20,7 +20,7 @@ class Question
 
 	/**
 	 * 解析user_url为simple html dom对象
-	 * @return [Object] [simple html dom 对象]
+	 * @return object simple html dom 对象
 	 */
 	public function parser()
 	{
@@ -33,7 +33,7 @@ class Question
 
 	/**
 	 * 获取问题标题
-	 * @return [string] [标题]
+	 * @return string 标题
 	 */
 	public function get_title()
 	{
@@ -49,7 +49,7 @@ class Question
 
 	/**
 	 * 获取问题描述
-	 * @return [string] [问题描述]
+	 * @return string 问题描述
 	 */
 	public function get_detail_str()
 	{
@@ -60,7 +60,7 @@ class Question
 
 	/**
 	 * 获取问题描述
-	 * @return [html] [问题描述]
+	 * @return string 问题描述
 	 */
 	public function get_detail_html()
 	{
@@ -71,7 +71,7 @@ class Question
 
 	/**
 	 * 获取问题回答数
-	 * @return [int] [回答数]
+	 * @return integer 回答数
 	 */
 	public function get_answers_num()
 	{
@@ -84,9 +84,22 @@ class Question
 		return $answers_num;
 	}
 
+
+	/**
+	 * 获取问题关注数
+	 * @return integer 关注数
+	 */
+	public function get_followers_num()
+	{
+		$this->parser();
+		$followers_num = $this->dom->find('div.zg-gray-normal strong', 0)->plaintext;
+		return (int)$followers_num;
+	}
+
+
 	/**
 	 * 获取话题分类
-	 * @return [array] [话题分类]
+	 * @return array 话题分类
 	 */
 	public function get_topics()
 	{
@@ -99,25 +112,15 @@ class Question
 
 
 	/**
-	 * 获取问题关注数
-	 * @return [int] [关注数]
+	 * 获取问题关注者
+	 * @return Generator 关注者列表迭代器
 	 */
-	public function get_followers_num()
-	{
-		$this->parser();
-		$followers_num = $this->dom->find('div.zg-gray-normal strong', 0)->plaintext;
-		return (int)$followers_num;
-	}
-
-	public function get_followers($top=null)
+	public function get_followers()
 	{
 		$followers_num = $this->get_followers_num(); 
-		if ( ! empty($top) && $top <= $followers_num) {
-			$followers_num = $top; 
-		}
 
 		if ($followers_num == 0) {
-			return null;
+			yield null;
 		} else {
 			$follwers_url = $this->question_url.FOLLOWERS_SUFFIX_URL;
 			$r = Request::get($follwers_url);
@@ -130,7 +133,7 @@ class Question
 						$follower_link = $dom->find('div.zm-profile-card h2 a', $j);
 						$user_url = $follower_link->href;
 						$user_id = $follower_link->plaintext;
-						$followers_list[] = new User($user_url, $user_id);
+						yield new User($user_url, $user_id);
 
 					}
 				} else {
@@ -152,34 +155,25 @@ class Question
 							$user_url = $follower_link->find('a', 0)->href;
 						}
 						$user_id = $follower_link->plaintext;
-						$followers_list[] = new User($user_url, $user_id);
+						yield new User($user_url, $user_id);
 
-						if ( ! empty($top) && ($i * 20 + $j) >= $top) {
-							break 2;
-						}
 					}
 				}
 			}
-			return $followers_list;
 		}
 	}
 
 
 	/**
-	 * 获取回答
-	 * @param  [int]  $top  [答案排行]
-	 * @param  [boolean] $list [是否返回答案集]
-	 * @return [string/array]        [答案/答案集]
+	 * 获取该问题的回答
+	 * @return Generator 答案迭代器
 	 */
-	public function get_answers($top=null, $list=true)
+	public function get_answers()
 	{
 		$answers_num = $this->get_answers_num(); 
-		if ( ! empty($top) && $top <= $answers_num) {
-			$answers_num = $top; 
-		}
 
 		if ($answers_num == 0) {
-			return null;
+			yield null;
 		} else {
 			$post_url = ANSWERS_LIST_URL;
 			$_xsrf = $this->dom->find('input[name=_xsrf]', 0)->value;
@@ -188,10 +182,10 @@ class Question
 			for ($i = 0; $i < $answers_num / 50; $i++) { 
 				if($i == 0) {
 					for ($j = 0; $j < min($answers_num, 50); $j++) { 
-						$answer_url = $this->dom->find('a.answer-date-link', $j)->href;
+						$answer_url = ZHIHU_URL.$this->dom->find('a.answer-date-link', $j)->href;
 
 						$author_link = $this->dom->find('div.zm-item-answer-author-info', $j);
-						if (!empty($author_link->find('a.author-link', 0))) {
+						if ( ! empty($author_link->find('a.author-link', 0))) {
 							$author_id = $author_link->find('a.author-link', 0)->plaintext;
 							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
 						} else {
@@ -201,14 +195,14 @@ class Question
 						$author = new User($author_url, $author_id);
 
 						$upvote_link = $this->dom->find('button.up', $j);
-						if (!empty($upvote_link->find('span.count', 0))) {
+						if ( ! empty($upvote_link->find('span.count', 0))) {
 							$upvote = $upvote_link->find('span.count', 0)->plaintext;
 						} else {
 							$upvote = $this->dom->find('div.zm-item-vote')->plaintext;
 						}
 
 						$content = $this->dom->find('div.zm-item-answer', $j)->find('div.zm-editable-content', 0)->plaintext;
-						$answer[] = new Answer($answer_url, $this, $author, $upvote, $content);
+						yield new Answer($answer_url, $this, $author, $upvote, $content);
 					}
 				} else {
 					$params = json_decode(html_entity_decode($json))->params;
@@ -228,10 +222,10 @@ class Question
 					for ($j = 0; $j < min($answers_num - $i * 50, 50); $j++) { 
 						$dom = str_get_html($r[$j]);
 
-						$answer_url = $dom->find('a.answer-date-link', 0)->href;
+						$answer_url = ZHIHU_URL.$dom->find('a.answer-date-link', 0)->href;
 
 						$author_link = $dom->find('div.zm-item-answer-author-info', 0);
-						if (!empty($author_link->find('a.author-link', 0))) {
+						if ( ! empty($author_link->find('a.author-link', 0))) {
 							$author_id = $author_link->find('a.author-link', 0)->plaintext;
 							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
 						} else {
@@ -241,25 +235,46 @@ class Question
 						$author = new User($author_url, $author_id);
 
 						$upvote_link = $dom->find('button.up', 0);
-						if (!empty($upvote_link->find('span.count', 0))) {
+						if (! empty($upvote_link->find('span.count', 0))) {
 							$upvote = $upvote_link->find('span.count', 0)->plaintext;
 						} else {
 							$upvote = $dom->find('div.zm-item-vote')->plaintext;
 						}
 
 						$content = $dom->find('div.zm-item-answer', 0)->find('div.zm-editable-content', 0)->plaintext;
-						$answer[] = new Answer($answer_url, $this, $author, $upvote, $content);
+						yield new Answer($answer_url, $this, $author, $upvote, $content);
 						
 					}
 				}
 			}
-			return $list? $answer: $answer[$top-1];
+		}
+	}
+
+
+	/**
+	 * 获取问题排名Top n的回答
+	 * @param  integer $top 答案排名
+	 * @return object       Answer 对象
+	 */
+	public function get_top_answer($top=1)
+	{
+		if ($top > $this->get_answers_num()) {
+			throw new Exception("The answer does not exist !");
+		} else {
+			$num = 0;
+			$answer_list = $this->get_answers();
+			foreach ($answer_list as $answer) {
+				$num++;
+				if ($num === $top) {
+					return $answer;
+				}
+			}
 		}
 	}
 
 	/**
 	 * 获取问题浏览数
-	 * @return [int] [浏览数]
+	 * @return integer 浏览数
 	 */
 	public function get_visit_times()
 	{
