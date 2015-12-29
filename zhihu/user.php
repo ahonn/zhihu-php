@@ -352,6 +352,23 @@ class User
 		}
 	}
 
+
+	/**
+	 * 获取用户专栏文章数
+	 * @return integer 专栏文章数
+	 */
+	public function get_posts()
+	{
+		if (empty($this->user_url)) {
+			return -1;
+		} else {
+			$this->parser();
+			echo $this->dom;
+			$posts_num = $this->dom->find('span.num', 2)->plaintext;
+			return (int)$posts_num;
+		}
+	}
+
 	/**
 	 * 获取用户收藏数
 	 * @return integer 收藏数

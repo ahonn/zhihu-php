@@ -3,7 +3,7 @@
  * @Author: Ahonn
  * @Date:   2015-12-15 09:04:11
  * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-24 17:49:52
+ * @Last Modified time: 2015-12-29 16:05:14
  */
 
 date_default_timezone_set('PRC');
@@ -11,12 +11,12 @@ date_default_timezone_set('PRC');
 class Request
 {
 	private static $cookie = COOKIE;
-	
+
 	private static $header = array(
 		"Host: www.zhihu.com",
         "Accept-Encoding:gzip, deflate, sdch",
         "Accept: text/html, application/xhtml+xml, image/jxr, */*",
-        "User-Agent: Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36"
+        "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586"
 	);
 
 	/**
@@ -29,7 +29,7 @@ class Request
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, self::$header);
-		curl_setopt($ch, CURLOPT_COOKIE, self::$cookie);
+		curl_setopt($ch, CURLOPT_COOKIE, self::$cookie); 
 		curl_setopt($ch, CURLOPT_ENCODING ,'gzip');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);

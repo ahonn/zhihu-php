@@ -115,6 +115,40 @@ class Answer
 		return $content;
 	}
 
+
+	public function get_comment()
+	{
+		$this->parser();
+		$answer_id = $this->dom->find('div.zm-item-answer', 0)->attr['data-aid'];
+		$date = '?params=%7B%22answer_id%22%3A%22'.$answer_id.'%22%2C%22load_all%22%3Atrue%7D';
+		$get_url = COMMENT_LIST_URL.$date;
+
+		$r = Request::get($get_url);
+		$dom = str_get_html($r);
+		
+		for ($i = 0; ! empty($dom->find('div.zm-item-comment', $i)); $i++) { 
+			$comment_link = $dom->find('div.zm-item-comment', $i);
+			
+			$author_url = $comment_link->find('div.zm-comment-hd a', 0)->href;
+			$author_id = $comment_link->find('div.zm-comment-hd a', 0)->plaintext;
+			$author = new User($author_url, $author_id);
+
+			$content = $comment_link->find('div.zm-comment-content', 0)->plaintext;
+
+			$time = $comment_link->find('span.date', 0)->plaintext;
+
+			if ( ! empty($comment_link->find('div.zm-comment-hd a', 1))) {
+				$reply_url = $comment_link->find('div.zm-comment-hd a', 1)->href;
+				$reply_id = $comment_link->find('div.zm-comment-hd a', 1)->plaintext;
+				$reply = new User($reply_url, $reply_id);
+			} else {
+				$reply = null;
+			}
+
+			yield new Comment($author, $content, $time, $reply);
+		}
+	}
+
 	/**
 	 * 获取问题被浏览次数
 	 * @return integer 浏览数

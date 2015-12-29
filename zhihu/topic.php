@@ -76,6 +76,9 @@ class Topic
 	 */
 	public function get_children()
 	{
+		if (empty($this->dom->find('a.zm-topic-side-title-link', 0))) {
+			return null;
+		}
 		$children_num = $this->dom->find('a.zm-topic-side-title-link', 0)->plaintext;
 		$children_num = (int)explode(' ', $children_num, 3)[1];
 

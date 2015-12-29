@@ -7,9 +7,10 @@ require_once 'zhihu/question.php';
 require_once 'zhihu/answer.php';
 require_once 'zhihu/topic.php';
 require_once 'zhihu/collection.php';
+require_once 'zhihu/comment.php';
 
 // Cookie
-define('COOKIE', "your zhihu cookie");
+define('COOKIE', '');
 
 // URL
 define('ZHIHU_URL', 'https://www.zhihu.com');
@@ -30,10 +31,10 @@ define('TOPICS_TOP_SUFFIX_URL', '/top-answers');
 define('TOPICS_NEW_SUFFIX_URL', '/questions');
 define('GET_PAGE_SUFFIX_URL', '?page=');
 
-
 define('FOLLOWEES_LIST_URL', 'https://www.zhihu.com/node/ProfileFolloweesListV2');
 define('FOLLOWERS_LIST_URL', 'https://www.zhihu.com/node/ProfileFollowersListV2');
 define('ANSWERS_LIST_URL', 'http://www.zhihu.com/node/QuestionAnswerListV2');
+define('COMMENT_LIST_URL', 'https://www.zhihu.com/node/AnswerCommentBoxV2');
 
 set_time_limit(0);
 

@@ -8,9 +8,9 @@ zhihu-php 使用PHP编写，用于获取知乎上的各种信息。看了由 Pyt
 根据 URL 生成对应的对象，例如知乎用户对象 User、知乎问题对象 Question、答案对象 Answer 等等。
 
 ## 准备
-打开 `zhi.php`，将知乎的 Cookie 复制黏贴到 `COOKIE` 的常量定义中：
+打开 `zhihu.php`，将知乎的 Cookie 复制黏贴到 `COOKIE` 的常量定义中：
 ``` php
-define('COOKIE', "");
+define('COOKIE', "your cookie");
 ```
 
 ## 简单样例
