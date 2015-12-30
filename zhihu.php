@@ -19,6 +19,8 @@ define('USER_PREFIX_URL', 'https://www.zhihu.com/people/');
 define('QUESTION_PREFIX_URL', 'https://www.zhihu.com/question/');
 define('TOPICS_PREFIX_URL', 'https://www.zhihu.com/topic/');
 define('COLLECTION_PREFIX_URL', 'https://www.zhihu.com/collection/');
+define('COLUMN_PREFIX_URL', 'http://zhuanlan.zhihu.com/');
+
 
 define('FOLLOWEES_SUFFIX_URL', '/followees');
 define('FOLLOWERS_SUFFIX_URL', '/followers');

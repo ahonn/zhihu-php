@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * 知乎问题类 Question
+ */
 class Question 
 {
 	private $question_url;

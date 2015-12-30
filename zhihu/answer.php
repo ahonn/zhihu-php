@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * 知乎答案类 Answer
+ */
 class Answer
 {
 	private $answer_url;
@@ -116,6 +119,10 @@ class Answer
 	}
 
 
+	/**
+	 * 获取该答案下的评论
+	 * @return Generator 评论列表迭代器
+	 */
 	public function get_comment()
 	{
 		$this->parser();

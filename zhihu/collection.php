@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * 知乎收藏夹类 Collection
+ */
 class Collection
 {
 	private $collection_url;

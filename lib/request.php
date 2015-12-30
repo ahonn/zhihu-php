@@ -1,11 +1,8 @@
 <?php
-/**
- * @Author: Ahonn
- * @Date:   2015-12-15 09:04:11
- * @Last Modified by:   Ahonn
- * @Last Modified time: 2015-12-29 16:05:14
- */
 
+/**
+ * cURL 封装类 Request
+ */
 date_default_timezone_set('PRC');
 
 class Request
@@ -24,11 +21,13 @@ class Request
 	 * @param  [string] $url [请求url]
 	 * @return [string]      [请求内容]
 	 */
-	public static function get($url)
+	public static function get($url, $header=array())
 	{
+		$header = array_merge(self::$header, $header);
+
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, self::$header);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 		curl_setopt($ch, CURLOPT_COOKIE, self::$cookie); 
 		curl_setopt($ch, CURLOPT_ENCODING ,'gzip');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * 知乎用户类 User
+ */
 class User 
 {
 	private $user_url;
@@ -72,10 +75,14 @@ class User
 	 */
 	public function get_avatar()
 	{
-		$this->parser();
-		$avatar = $this->dom->find('div.zm-profile-header-avatar-container img', 0)->srcset;
-		$avatar = str_replace("_xl", "", explode(' ', $avatar, 2)[0]);
-		return $avatar;
+		if (empty($this->user_url)) {
+			return null;
+		} else {
+			$this->parser();
+			$avatar = $this->dom->find('div.zm-profile-header-avatar-container img', 0)->srcset;
+			$avatar = str_replace("_xl", "", explode(' ', $avatar, 2)[0]);
+			return $avatar;
+		}
 	}
 
 	/**
@@ -84,18 +91,21 @@ class User
 	 */
 	public function get_location()
 	{
-		$dom = $this->parser_about();
-
-		$location_link = $dom->find('div.item span.location', 0);
-		if ( ! empty($location_link)) {
-			$location = $location_link->plaintext;
-			if ($location == '填写居住地 ') {
+		if (empty($this->user_url)) {
+			return null;
+		} else {
+			$dom = $this->parser_about();
+			$location_link = $dom->find('div.item span.location', 0);
+			if ( ! empty($location_link)) {
+				$location = $location_link->plaintext;
+				if ($location == '填写居住地 ') {
+					$location = null;
+				}
+			} else {
 				$location = null;
 			}
-		} else {
-			$location = null;
+			return $location;
 		}
-		return $location;
 	}
 
 	/**
@@ -104,18 +114,21 @@ class User
 	 */
 	public function get_business()
 	{
-		$dom = $this->parser_about();
-
-		$business_link = $dom->find('div.item span.business', 0);
-		if ( ! empty($business_link)) {
-			$business = $business_link->plaintext;
-			if ($business == '填写行业 ') {
+		if (empty($this->user_url)) {
+			return null;
+		} else {
+			$dom = $this->parser_about();
+			$business_link = $dom->find('div.item span.business', 0);
+			if ( ! empty($business_link)) {
+				$business = $business_link->plaintext;
+				if ($business == '填写行业 ') {
+					$business = null;
+				}
+			} else {
 				$business = null;
 			}
-		} else {
-			$business = null;
+			return $business;
 		}
-		return $business;
 	}
 
 
@@ -125,15 +138,22 @@ class User
 	 */
 	public function get_gender()
 	{
-		$dom = $this->parser_about();
-
-		$gender_link = $dom->find('div.item span.gender', 0);
-		if ( ! empty($gender_link->find('i.icon-profile-male'))) {
-			$gender = 'male';
-		} elseif ( ! empty($gender_link->find('i.icon-profile-female'))) {
-			$gender = 'female';
-		}		
-		return $gender;
+		if (empty($this->user_url)) {
+			return null;
+		} else {
+			$dom = $this->parser_about();
+			if ( ! empty($dom->find('div.item span.gender', 0))) {
+				$gender_link = $dom->find('div.item span.gender', 0);
+				if ( ! empty($gender_link->find('i.icon-profile-male'))) {
+					$gender = 'male';
+				} elseif ( ! empty($gender_link->find('i.icon-profile-female'))) {
+					$gender = 'female';
+				}
+			} else {
+				$gender = null;
+			}
+			return $gender;
+		}
 	}
 
 	/**
@@ -142,18 +162,21 @@ class User
 	 */
 	public function get_employment()
 	{
-		$dom = $this->parser_about();
-
-		$employment_link = $dom->find('div.item span.employment', 0);
-		if ( ! empty($employment_link)) {
-			$employment = $employment_link->plaintext;
-			if ($employment == '填写公司信息 ') {
+		if (empty($this->user_url)) {
+			return null;
+		} else {
+			$dom = $this->parser_about();
+			$employment_link = $dom->find('div.item span.employment', 0);
+			if ( ! empty($employment_link)) {
+				$employment = $employment_link->plaintext;
+				if ($employment == '填写公司信息 ') {
+					$employment = null;
+				}
+			} else {
 				$employment = null;
 			}
-		} else {
-			$employment = null;
+			return $employment;
 		}
-		return $employment;
 	}
 
 	/**
@@ -162,18 +185,21 @@ class User
 	 */
 	public function get_position()
 	{
-		$dom = $this->parser_about();
-
-		$position_link = $dom->find('div.item span.position', 0);
-		if ( ! empty($position_link)) {
-			$position = $position_link->plaintext;
-			if ($position == '填写职位 ') {
+		if (empty($this->user_url)) {
+			return null;
+		} else {
+			$dom = $this->parser_about();
+			$position_link = $dom->find('div.item span.position', 0);
+			if ( ! empty($position_link)) {
+				$position = $position_link->plaintext;
+				if ($position == '填写职位 ') {
+					$position = null;
+				}
+			} else {
 				$position = null;
 			}
-		} else {
-			$position = null;
+			return $position;
 		}
-		return $position;
 	}
 
 
@@ -183,18 +209,21 @@ class User
 	 */
 	public function get_education()
 	{
-		$dom = $this->parser_about();
-
-		$education_link = $dom->find('div.item span.education', 0);
-		if ( ! empty($education_link)) {
-			$education = $education_link->plaintext;
-			if ($education == '填写学校信息 ') {
+		if (empty($this->user_url)) {
+			return null;
+		} else {
+			$dom = $this->parser_about();
+			$education_link = $dom->find('div.item span.education', 0);
+			if ( ! empty($education_link)) {
+				$education = $education_link->plaintext;
+				if ($education == '填写学校信息 ') {
+					$education = null;
+				}
+			} else {
 				$education = null;
 			}
-		} else {
-			$education = null;
+			return $education;
 		}
-		return $education;
 	}
 
 
@@ -204,18 +233,21 @@ class User
 	 */
 	public function get_major()
 	{
-		$dom = $this->parser_about();
-
-		$major_link = $dom->find('div.item span.education-extra', 0);
-		if ( ! empty($major_link)) {
-			$major = $major_link->plaintext;
-			if ($major == '填写专业 ') {
+		if (empty($this->user_url)) {
+			return null;
+		} else {
+			$dom = $this->parser_about();
+			$major_link = $dom->find('div.item span.education-extra', 0);
+			if ( ! empty($major_link)) {
+				$major = $major_link->plaintext;
+				if ($major == '填写专业 ') {
+					$major = null;
+				}
+			} else {
 				$major = null;
 			}
-		} else {
-			$major = null;
+			return $major;
 		}
-		return $major;
 	}
 
 	/**
@@ -224,18 +256,21 @@ class User
 	 */
 	public function get_description()
 	{
-		$dom = $this->parser_about();
-
-		$description_link = $dom->find('div.zm-profile-header-description span.description', 0);
-		if ( ! empty($description_link)) {
-			$description = trim($description_link->find('[class!=collapse]', 0)->innertext);
-			if ($description == '') {
+		if (empty($this->user_url)) {
+			return null;
+		} else {
+			$dom = $this->parser_about();
+			$description_link = $dom->find('div.zm-profile-header-description span.description', 0);
+			if ( ! empty($description_link)) {
+				$description = trim($description_link->find('[class!=collapse]', 0)->innertext);
+				if ($description == '') {
+					$description = null;
+				}
+			} else {
 				$description = null;
 			}
-		} else {
-			$description = null;
+			return $description;
 		}
-		return $description;
 	}
 
 
@@ -408,7 +443,7 @@ class User
 	public function get_topics()
 	{
 		$topics_num = $this->get_topics_num();
-		if ($topics_num == 0) {
+		if ($topics_num <= 0) {
 			yield null;
 		} else {
 			$topics_url = $this->user_url.TOPICS_SUFFIX_URL;
@@ -422,7 +457,7 @@ class User
 						$topics_link =  $dom->find('div.zm-profile-section-main', $j);
 
 						$topic_url = ZHIHU_URL.$topics_link->find('a', 1)->href;
-						$topic_id = $topics_link->find('a strong', 0)->plaintext;
+						$topic_id = $topics_link->find('a', 1)->plaintext;
 						yield new Topic($topic_url, $topic_id);
 					}
 				} else {
@@ -440,7 +475,7 @@ class User
 						$topics_link = $dom->find('div.zm-profile-section-main', $j);		
 
 						$topic_url = ZHIHU_URL.$topics_link->find('a', 1)->href;
-						$topic_id = $topics_link->find('a strong', 0)->plaintext;
+						$topic_id = $topics_link->find('a', 1)->plaintext;
 						yield new Topic($topic_url, $topic_id);			
 					}
 				}
@@ -455,7 +490,7 @@ class User
 	public function get_followees()
 	{
 		$followees_num = $this->get_followees_num();
-		if ($followees_num == 0) {
+		if ($followees_num <= 0) {
 			yield null;
 		} else {
 			$followee_url = $this->user_url.FOLLOWEES_SUFFIX_URL;
@@ -507,7 +542,7 @@ class User
 	public function get_followers()
 	{
 		$followers_num = $this->get_followers_num();
-		if ($followers_num == 0) {
+		if ($followers_num <= 0) {
 			yield;
 		} else {
 			$follower_url = $this->user_url.FOLLOWERS_SUFFIX_URL;
@@ -563,7 +598,7 @@ class User
 		} else {
 			$asks_num = $this->get_asks_num();
 
-			if ($asks_num == 0) {
+			if ($asks_num <= 0) {
 				yield null;
 			} else {
 				for ($i = 0; $i < $asks_num /20; $i++) { 
@@ -595,7 +630,7 @@ class User
 		} else {
 			$answers_num = $this->get_answers_num();
 
-			if ($answers_num == 0) {
+			if ($answers_num <= 0) {
 				yield null;
 			} else {
 				for ($i = 0; $i < $answers_num / 20; $i++) { 

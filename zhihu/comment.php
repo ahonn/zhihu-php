@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * 知乎评论类 Comment
+ */
 class Comment
 {
 	private $author;
