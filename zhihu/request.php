@@ -17,9 +17,10 @@ class Request
 	);
 
 	/**
-	 * get 方法请求
-	 * @param  [string] $url [请求url]
-	 * @return [string]      [请求内容]
+	 * 发送 get 请求
+	 * @param  string $url    请求url
+	 * @param  array  $header 头信息
+	 * @return string         返回数据
 	 */
 	public static function get($url, $header=array())
 	{
@@ -42,10 +43,11 @@ class Request
 
 
 	/**
-	 * post 方法请求
-	 * @param  [string] $url  [请求url]
-	 * @param  array  $data [post数据]
-	 * @return [string]       [请求内容]
+	 * 发送 post 请求
+	 * @param  string $url    请求url
+	 * @param  array  $data   post 数据
+	 * @param  array  $header 头信息
+	 * @return string         返回数据
 	 */
 	public static function post($url, array $data, $header=array())
 	{
