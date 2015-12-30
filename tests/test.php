@@ -3,7 +3,8 @@
 /**
  * 测试
  */
-require_once 'zhihu.php';
+require_once '../zhihu.php';
+require_once 'time.php';
 
 /**
  * 	Test User 
@@ -260,7 +261,7 @@ $collection_url = 'https://www.zhihu.com/collection/19650606';
 // test_question($question_url);
 // test_answer($answer_url);
 // test_topics($topics_url);
-// test_collection($collection_url);
+test_collection($collection_url);
 
 
 
