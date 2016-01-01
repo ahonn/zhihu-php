@@ -1,16 +1,16 @@
 # zhihu-php 知乎数据解析 by PHP
 
 ## 介绍
-zhihu-php 使用PHP编写，用于获取知乎上的各种信息。看了由 Python2.7 编写的 [zhihu-python](https://github.com/egrcc/zhihu-python) 想着自己用 PHP 写一个，于是有了这个项目。
+zhihu-php 使用PHP编写，用于获取知乎上的各种信息。
 
-**本项目需要 `PHP version >= 5.3` ，开启 `CURL` 扩展**
+**本项目需要 `PHP version >= 5.3` ，开启 `CURL` 扩展，使用 simple html dom 解析**
 
 根据 URL 生成对应的对象，例如知乎用户对象 User、知乎问题对象 Question、答案对象 Answer 等等。
 
 ## 准备
 打开 `zhihu.php`，将知乎的 Cookie 复制黏贴到 `COOKIE` 的常量定义中：
 ``` php
-define('COOKIE', "your cookie");
+const COOKIE = "your cookie");
 ```
 
 ## 简单样例
