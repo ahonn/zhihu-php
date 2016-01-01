@@ -10,7 +10,7 @@ require_once 'time.php';
 $time = new Time();
 $time->star();
 
-$answer_url = 'https://www.zhihu.com/question/23841579/answer/79001713';
+$answer_url = 'https://www.zhihu.com/question/38199129/answer/79525121';
 
 $answer = new Answer($answer_url);
 
@@ -38,6 +38,16 @@ var_dump($visit_times);
 $comment_list = $answer->get_comment();
 foreach ($comment_list as $comment) {
 	var_dump($comment);
+}
+
+// 获取答案收藏数
+$collection_num = $answer->get_collection_num();
+var_dump($collection_num);
+
+// 获取收藏该回答的收藏夹列表
+$collections = $answer->get_collection();
+foreach ($collections as $collection) {
+	var_dump($collection);
 }
 
 $time->stop();

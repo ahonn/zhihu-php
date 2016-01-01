@@ -157,6 +157,102 @@ class Answer
 	}
 
 	/**
+	 * 获取该答案被收藏数
+	 * @return num 收藏数
+	 */
+	public function get_collection_num()
+	{
+		$this->parser();
+		if ( ! empty($this->dom->find('div.zm-side-section-inner h3 a', 0))) {
+			$collection_num = (int)$this->dom->find('div.zm-side-section-inner h3 a', 0)->plaintext;
+		} else {
+			$collection_num = 0;
+		}
+		return $collection_num;
+	}
+
+
+	/**
+	 * 获取收藏该回答的收藏夹列表
+	 * @return [type] [description]
+	 */
+	public function get_collection()
+	{
+		$collection_num = $this->get_collection_num();
+		if ($collection_num == 0) {
+			yield null;
+		} else {
+			$collection_url = $this->answer_url.COLLECTION_SUFFIX_URL;
+			$r = Request::get($collection_url);
+
+			$dom = str_get_html($r);
+
+			$_xsrf = $dom->find('input[name=_xsrf]', 0)->attr['value'];
+			$json = $dom->find('div.zh-general-list', 0)->attr['data-init'];
+
+			for ($i = 0; $i < $collection_num / 20; $i++) { 
+				if ($i == 0) {
+					for ($j = 0; $j < min($collection_num, 20); $j++) { 
+						$link = $dom->find('div.zm-item', $j);
+
+						$collection_link = $link->find('h2 a', 0);
+						$collection_url = ZHIHU_URL.$collection_link->href;
+						$collection_title = $collection_link->plaintext;
+
+						if ( ! empty($link->find('div a[class!=zg-unfollow]', 0))) {
+							$author_link = $link->find('div a[class!=zg-unfollow]', 0);
+							$author_url = $author_link->href;
+							$author_id = $author_link->plaintext;
+							$collection_author = new User($author_url, $author_id);
+						} else {
+							$collection_author = null;
+						}
+						
+
+						yield new Collection($collection_url, $collection_title, $collection_author);
+					}
+				} else {
+					$post_url = COLLECTION_LIST_URL;
+
+					$params = json_decode(html_entity_decode($json))->params;
+					$params->offset = $i * 20;
+					$params = json_encode($params);
+					
+					$data = array(
+						'method' => 'next',
+						'params' => $params,
+						'_xsrf' => $_xsrf
+					);
+
+					$r = Request::post($post_url, $data, array("Referer: {$collection_url}"));
+					$r = json_decode($r)->msg;
+
+					for ($j = 0; $j < min($collection_num - $i *20, 20); $j++) { 
+						$dom = str_get_html($r[$j]);
+
+						$link = $dom->find('div.zm-item', 0);
+
+						$collection_link = $link->find('h2 a', 0);
+						$collection_url = ZHIHU_URL.$collection_link->href;
+						$collection_title = $collection_link->plaintext;
+
+						if ( ! empty($link->find('div a[class!=zg-unfollow]', 0))) {
+							$author_link = $link->find('div a[class!=zg-unfollow]', 0);
+							$author_url = $author_link->href;
+							$author_id = $author_link->plaintext;
+							$collection_author = new User($author_url, $author_id);
+						} else {
+							$collection_author = null;
+						}
+						
+						yield new Collection($collection_url, $collection_title, $collection_author);
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * 获取问题被浏览次数
 	 * @return integer 浏览数
 	 */

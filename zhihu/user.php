@@ -503,8 +503,8 @@ class User
 			for ($i = 0; $i < $followees_num / 20; $i++) { 
 				if ($i == 0) {
 					for ($j = 0; $j < min($followees_num, 20); $j++) { 
-						$user_url_list[$j] = $dom->find('a.zg-link', $j);
-						yield new User($user_url_list[$j]->href, $user_url_list[$j]->title);
+						$user_link = $dom->find('a.zg-link', $j);
+						yield new User($user_link->href, $user_link->title);
 					}
 				} else {
 					$post_url = FOLLOWEES_LIST_URL;
@@ -525,8 +525,8 @@ class User
 					for ($j = 0; $j < min($followees_num - $i * 20, 20); $j++) { 
 						$dom = str_get_html($r[$j]);
 						
-						$user_url_list[$j] = $dom->find('a.zg-link', 0);
-						yield new User($user_url_list[$j]->href, $user_url_list[$j]->title);						
+						$user_link = $dom->find('a.zg-link', 0);
+						yield new User($user_link->href, $user_link->title);						
 					}
 				}
 			}

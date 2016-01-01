@@ -7,8 +7,9 @@ class Collection
 {
 	private $collection_url;
 	private $collection_title;
+	private $author;
 
-	function __construct($collection_url, $collection_title=null)
+	function __construct($collection_url, $collection_title=null, $author=null)
 	{
 		if (substr($collection_url, 0, 33) !== COLLECTION_PREFIX_URL) {
 			throw new Exception($collection_url.": it isn't a collection url !");
@@ -16,6 +17,9 @@ class Collection
 			$this->collection_url = $collection_url;
 			if ( ! empty($collection_title)) {
 				$this->collection_title = $collection_title;
+			}
+			if ( ! empty($author)) {
+				$this->author = $author;
 			}
 		}	
 	}
@@ -64,11 +68,16 @@ class Collection
 	 */
 	public function get_author()
 	{
-		$this->parser();
-		$author_link = $this->dom->find('h2.zm-list-content-title a', 0);
-		$author_url = ZHIHU_URL.$author_link->href;
-		$author_id = $author_link->plaintext;
-		return new User($author_url, $author_id);
+		if( ! empty($this->author)) {
+			$author = $this->author;
+		} else {
+			$this->parser();
+			$author_link = $this->dom->find('h2.zm-list-content-title a', 0);
+			$author_url = ZHIHU_URL.$author_link->href;
+			$author_id = $author_link->plaintext;
+			$author =  new User($author_url, $author_id);
+		}
+		return $author;
 	}
 
 

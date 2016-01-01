@@ -14,7 +14,7 @@ function __autoload($class)
 /**
  * 设置 cookie 
  */
-const COOKIE = '';
+const COOKIE = 'q_c1=0bececc01938485b9f53fb861f1e3a09|1451374262000|1451374262000; cap_id="Yjk3OGYzMGYyZmY1NDZiZjlmN2MwNzg2ZGQxNWU1ZTY=|1451374262|26a62e5db0643bf3f527942341264fbf05f0c1af"; _za=774754b5-1e6f-4c5b-be79-08a65c9e198c; z_c0="QUFCQW4zZ3pBQUFYQUFBQVlRSlZUY0REcVZaaHhlR0t2N3NrR244VzYyZmU5cm5uQnBSUktRPT0=|1451374272|1f48597f0d2cacac441b94235bd20cbf1b6bdfd9"; _xsrf=cfa92cdf2061545910d43e57d1634b94; __utma=51854390.1679535047.1451626147.1451626147.1451629103.2; __utmb=51854390.13.8.1451629299882; __utmc=51854390; __utmz=51854390.1451626147.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmv=51854390.100-1|2=registration_date=20140722=1^3=entry_date=20140722=1';
 
 /**
  * 首页 URL
@@ -40,6 +40,11 @@ const TOPICS_PREFIX_URL = 'https://www.zhihu.com/topic/';
  * 收藏夹 URL 前缀
  */
 const COLLECTION_PREFIX_URL = 'https://www.zhihu.com/collection/';
+
+/**
+ * 收藏夹 URL 后缀
+ */
+const COLLECTION_SUFFIX_URL = '/collections';
 
 /**
  * 用户关注 URL 后缀
@@ -106,3 +111,8 @@ const ANSWERS_LIST_URL = 'http://www.zhihu.com/node/QuestionAnswerListV2';
  * 答案评论 POST URL
  */
 const COMMENT_LIST_URL = 'https://www.zhihu.com/node/AnswerCommentBoxV2';
+
+/**
+ * 答案收藏夹 POST URL
+ */
+const COLLECTION_LIST_URL = 'https://www.zhihu.com/node/AnswerFavlists';
