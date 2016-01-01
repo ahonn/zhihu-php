@@ -398,7 +398,6 @@ class User
 			return -1;
 		} else {
 			$this->parser();
-			echo $this->dom;
 			$posts_num = $this->dom->find('span.num', 2)->plaintext;
 			return (int)$posts_num;
 		}

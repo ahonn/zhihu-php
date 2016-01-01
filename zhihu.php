@@ -106,10 +106,3 @@ const ANSWERS_LIST_URL = 'http://www.zhihu.com/node/QuestionAnswerListV2';
  * 答案评论 POST URL
  */
 const COMMENT_LIST_URL = 'https://www.zhihu.com/node/AnswerCommentBoxV2';
-
-
-
-
-
-
-
