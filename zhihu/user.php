@@ -97,7 +97,7 @@ class User
 			$dom = $this->parser_about();
 			$location_link = $dom->find('div.item span.location', 0);
 			if ( ! empty($location_link)) {
-				$location = $location_link->plaintext;
+				$location = trim($location_link->plaintext);
 				if ($location == '填写居住地 ') {
 					$location = null;
 				}
@@ -120,7 +120,7 @@ class User
 			$dom = $this->parser_about();
 			$business_link = $dom->find('div.item span.business', 0);
 			if ( ! empty($business_link)) {
-				$business = $business_link->plaintext;
+				$business = trim($business_link->plaintext);
 				if ($business == '填写行业 ') {
 					$business = null;
 				}
@@ -168,7 +168,7 @@ class User
 			$dom = $this->parser_about();
 			$employment_link = $dom->find('div.item span.employment', 0);
 			if ( ! empty($employment_link)) {
-				$employment = $employment_link->plaintext;
+				$employment = trim($employment_link->plaintext);
 				if ($employment == '填写公司信息 ') {
 					$employment = null;
 				}
@@ -191,7 +191,7 @@ class User
 			$dom = $this->parser_about();
 			$position_link = $dom->find('div.item span.position', 0);
 			if ( ! empty($position_link)) {
-				$position = $position_link->plaintext;
+				$position = trim($position_link->plaintext);
 				if ($position == '填写职位 ') {
 					$position = null;
 				}
@@ -215,7 +215,7 @@ class User
 			$dom = $this->parser_about();
 			$education_link = $dom->find('div.item span.education', 0);
 			if ( ! empty($education_link)) {
-				$education = $education_link->plaintext;
+				$education = trim($education_link->plaintext);
 				if ($education == '填写学校信息 ') {
 					$education = null;
 				}
@@ -239,7 +239,7 @@ class User
 			$dom = $this->parser_about();
 			$major_link = $dom->find('div.item span.education-extra', 0);
 			if ( ! empty($major_link)) {
-				$major = $major_link->plaintext;
+				$major = trim($major_link->plaintext);
 				if ($major == '填写专业 ') {
 					$major = null;
 				}
@@ -653,4 +653,3 @@ class User
 		}
 	}
 }
-

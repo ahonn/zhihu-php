@@ -10,7 +10,7 @@ zhihu-php 使用PHP编写，用于获取知乎上的各种信息。
 ## 准备
 打开 `zhihu.php`，将知乎的 Cookie 复制黏贴到 `COOKIE` 的常量定义中：
 ``` php
-const COOKIE = "your cookie");
+const COOKIE = "your cookie";
 ```
 
 ## 简单样例
@@ -30,6 +30,9 @@ $author = $answer->get_author();
 // 获取答案答主的信息
 $about = $author->get_about();
 
-// 输出答主信息
+// 输出答主基本信息
 var_dump($about);
 ```
+
+## 文档
+- [User](https://github.com/ahonn/zhihu-php/blob/master/docs/user.md)

@@ -94,3 +94,4 @@ foreach ($answer_list as $answer) {
 
 $time->stop();
 echo "\nTime:" . $time->spent();
+
