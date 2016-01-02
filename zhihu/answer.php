@@ -34,10 +34,19 @@ class Answer
 	 */
 	public function parser()
 	{
-		if (empty($this->dom) || isset($this->dom)) {
+		if (empty($this->dom) || ! isset($this->dom)) {
 			$r = Request::get($this->answer_url);
 			$this->dom = str_get_html($r);
 		}
+	}
+
+	/**
+	 * 获取该回答的 URL
+	 * @return string 回答 URL
+	 */
+	public function get_answers_url()
+	{
+		return $this->answer_url;
 	}
 
 	/**

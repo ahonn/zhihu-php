@@ -27,11 +27,20 @@ class Question
 	 */
 	public function parser()
 	{
-		if (empty($this->dom) || isset($this->dom)) {
+		if (empty($this->dom) || ! isset($this->dom)) {
 			$r = Request::get($this->question_url);
 
 			$this->dom = str_get_html($r);
 		}
+	}
+
+	/**
+	 * 获取该问题 URL
+	 * @return string 问题 URL
+	 */		
+	public function get_question_url()
+	{
+		return $this->question_url;
 	}
 
 	/**

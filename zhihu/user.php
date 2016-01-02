@@ -28,7 +28,7 @@ class User
 	 */
 	public function parser()
 	{
-		if (empty($this->dom) || isset($this->dom)) {
+		if (empty($this->dom) || ! isset($this->dom)) {
 			$r = Request::get($this->user_url);
 
 			$this->dom = str_get_html($r);
@@ -51,6 +51,15 @@ class User
 		return $this->about_dom;
 	}
 
+
+	/**
+	 * 获取用户主页 URL
+	 * @return string 用户主页 URL
+	 */
+	public function get_url()
+	{
+		return $this->user_url;
+	}
 
 	/**
 	 * 获取用户ID

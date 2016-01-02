@@ -11,6 +11,7 @@ $time = new Time();
 $time->star();
 
 $user_url = 'https://www.zhihu.com/people/excited-vczh';
+// $user_url = 'https://www.zhihu.com/people/ahonn';
 
 $user = new User($user_url);
 
@@ -74,23 +75,23 @@ foreach ($followees_list as $followees) {
 	var_dump($followees);
 }
 	
-// 获取用户粉丝列表
-$followers_list = $user->get_followers();
-foreach ($followers_list as $followers) {
-	var_dump($followers);
-}
+// // 获取用户粉丝列表
+// $followers_list = $user->get_followers();
+// foreach ($followers_list as $followers) {
+// 	var_dump($followers);
+// }
 	
-// 获取用户提问列表
-$asks_list = $user->get_asks();
-foreach ($asks_list as $asks) {
-	var_dump($asks);
-}
+// // 获取用户提问列表
+// $asks_list = $user->get_asks();
+// foreach ($asks_list as $asks) {
+// 	var_dump($asks);
+// }
 	
-// 获取用户回答列表
-$answer_list = $user->get_answers();
-foreach ($answer_list as $answer) {
-	var_dump($answer);
-}
+// // 获取用户回答列表
+// $answer_list = $user->get_answers();
+// foreach ($answer_list as $answer) {
+// 	var_dump($answer);
+// }
 
 $time->stop();
 echo "\nTime:" . $time->spent();

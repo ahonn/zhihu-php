@@ -30,10 +30,19 @@ class Collection
 	 */
 	public function parser()
 	{
-		if (empty($this->dom) || isset($this->dom)) {
+		if (empty($this->dom) || ! isset($this->dom)) {
 			$r = Request::get($this->collection_url);
 			$this->dom = str_get_html($r);
 		}
+	}
+
+	/**
+	 * 获取该收藏夹 URl
+	 * @return string 收藏夹 URL
+	 */
+	public function get_collection_url()
+	{	
+		return $this->collection_url;
 	}
 
 	/**
