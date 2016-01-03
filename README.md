@@ -36,3 +36,10 @@ var_dump($about);
 
 ## 文档
 - [User](https://github.com/ahonn/zhihu-php/blob/master/docs/user.md)
+- [Question](https://github.com/ahonn/zhihu-php/blob/master/docs/question.md)
+
+正在完善~
+
+## 联系我
+- Email：[ahonn95@outlook.com](mailto:ahonn95@outlook.com)
+
