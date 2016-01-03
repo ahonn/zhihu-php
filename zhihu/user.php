@@ -71,7 +71,7 @@ class User
 			return $this->user_id;
 		} else {
 			$this->parser();
-			$user_id = $this->dom->find('div.title-section span.name',0)->plaintext;
+			$user_id = trim($this->dom->find('div.title-section span.name',0)->plaintext);
 			$this->user_id = $user_id;
 			return $user_id;
 		}
