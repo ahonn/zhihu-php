@@ -53,7 +53,7 @@ class Question
 			return $this->question_title;
 		} else {
 			$this->parser();
-			$question_title = $this->dom->find('h2.zm-item-title', 0)->plaintext;
+			$question_title = trim($this->dom->find('h2.zm-item-title', 0)->plaintext);
 			$this->question_title = $question_title;
 			return $question_title;
 		}
@@ -63,21 +63,10 @@ class Question
 	 * 获取问题描述
 	 * @return string 问题描述
 	 */
-	public function get_detail_str()
+	public function get_detail()
 	{
 		$this->parser();
 		$detail = $this->dom->find('div#zh-question-detail', 0)->plaintext;
-		return $detail;
-	}
-
-	/**
-	 * 获取问题描述
-	 * @return string 问题描述
-	 */
-	public function get_detail_html()
-	{
-		$this->parser();
-		$detail = $this->dom->find('div#zh-question-detail [class!=zu-edit-button]', 0)->innertext;
 		return $detail;
 	}
 
@@ -213,7 +202,7 @@ class Question
 							$upvote = $this->dom->find('div.zm-item-vote')->plaintext;
 						}
 
-						$content = $this->dom->find('div.zm-item-answer', $j)->find('div.zm-editable-content', 0)->plaintext;
+						$content = trim($this->dom->find('div.zm-item-answer', $j)->find('div.zm-editable-content', 0)->plaintext);
 						yield new Answer($answer_url, $this, $author, $upvote, $content);
 					}
 				} else {
@@ -253,7 +242,7 @@ class Question
 							$upvote = $dom->find('div.zm-item-vote')->plaintext;
 						}
 
-						$content = $dom->find('div.zm-item-answer', 0)->find('div.zm-editable-content', 0)->plaintext;
+						$content = trim($dom->find('div.zm-item-answer', 0)->find('div.zm-editable-content', 0)->plaintext);
 						yield new Answer($answer_url, $this, $author, $upvote, $content);
 						
 					}
@@ -270,7 +259,7 @@ class Question
 	 */
 	public function get_top_answer($top=1)
 	{
-		if ($top > $this->get_answers_num()) {
+		if ( ! $top || $top > $this->get_answers_num()) {
 			throw new Exception("The answer does not exist !");
 		} else {
 			$num = 0;
