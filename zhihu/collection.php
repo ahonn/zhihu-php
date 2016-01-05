@@ -5,18 +5,18 @@
  */
 class Collection
 {
-	private $collection_url;
-	private $collection_title;
+	public $url;
+	private $title;
 	private $author;
 
-	function __construct($collection_url, $collection_title=null, $author=null)
+	function __construct($url, $title=null, $author=null)
 	{
-		if (substr($collection_url, 0, 33) !== COLLECTION_PREFIX_URL) {
-			throw new Exception($collection_url.": it isn't a collection url !");
+		if (substr($url, 0, 33) !== COLLECTION_PREFIX_URL) {
+			throw new Exception($url.": it isn't a collection url !");
 		} else {
-			$this->collection_url = $collection_url;
-			if ( ! empty($collection_title)) {
-				$this->collection_title = $collection_title;
+			$this->url = $url;
+			if ( ! empty($title)) {
+				$this->title = $title;
 			}
 			if ( ! empty($author)) {
 				$this->author = $author;
@@ -31,18 +31,9 @@ class Collection
 	public function parser()
 	{
 		if (empty($this->dom) || ! isset($this->dom)) {
-			$r = Request::get($this->collection_url);
+			$r = Request::get($this->url);
 			$this->dom = str_get_html($r);
 		}
-	}
-
-	/**
-	 * 获取该收藏夹 URl
-	 * @return string 收藏夹 URL
-	 */
-	public function get_collection_url()
-	{	
-		return $this->collection_url;
 	}
 
 	/**
@@ -99,7 +90,7 @@ class Collection
 		$this->parser();
 		$max_page = (int)$this->dom->find('div.zm-invite-pager span', -2)->plaintext;
 		for ($i = 1; $i <= $max_page; $i++) { 
-			$page_url = $this->collection_url.GET_PAGE_SUFFIX_URL.$i;
+			$page_url = $this->url.GET_PAGE_SUFFIX_URL.$i;
 			$r = Request::get($page_url);
 			$dom = str_get_html($r);
 

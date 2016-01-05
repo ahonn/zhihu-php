@@ -109,11 +109,11 @@ foreach ($answers as $answer) {
  * 输出该问题下的所有答案，返回迭代器 
  * **********************************
  * object(Answer)[3737]
- *   private 'answer_url' => string 'https://www.zhihu.com/question/38813693/answer/78222103' (length=55)
+ *   private 'url' => string 'https://www.zhihu.com/question/38813693/answer/78222103' (length=55)
  *   private 'question' => 
  *     object(Question)[2]
- *       private 'question_url' => string 'https://www.zhihu.com/question/38813693' (length=39)
- *       private 'question_title' => null
+ *       private 'url' => string 'https://www.zhihu.com/question/38813693' (length=39)
+ *       private 'title' => null
  *       public 'dom' => 
  *         object(simple_html_dom)[3]
  *		 ...
@@ -136,11 +136,11 @@ var_dump($answer);
  * 输出该问题下排名第5的回答
  * *************************
  * object(Answer)[3737]
- *   private 'answer_url' => string 'https://www.zhihu.com/question/38813693/answer/78327104' (length=55)
+ *   private 'url' => string 'https://www.zhihu.com/question/38813693/answer/78327104' (length=55)
  *   private 'question' => 
  *     object(Question)[2]
- *       private 'question_url' => string 'https://www.zhihu.com/question/38813693' (length=39)
- *       private 'question_title' => null
+ *       private 'url' => string 'https://www.zhihu.com/question/38813693' (length=39)
+ *       private 'title' => null
  *       public 'dom' => 
  *         object(simple_html_dom)[3]
  *           public 'root' => 

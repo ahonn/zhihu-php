@@ -135,11 +135,11 @@ foreach ($asks_list as $asks) {
  * 输出用户提问列表
  * ***********************
  * object(Question)[4150]
- *   private 'question_url' => string 'https://www.zhihu.com/question/39081089' (length=39)
- *   private 'question_title' => string '如何评价Google Contributor？' (length=33)
+ *   private 'url' => string 'https://www.zhihu.com/question/39081089' (length=39)
+ *   private 'title' => string '如何评价Google Contributor？' (length=33)
  * object(Question)[4151]
- *   private 'question_url' => string 'https://www.zhihu.com/question/39080584' (length=39)
- *   private 'question_title' => string '如果一个宗教的教义在多处地方都跟本国法律相抵触，那正确对待他的方法是什么，应该承认这个宗教吗？' (length=141)
+ *   private 'url' => string 'https://www.zhihu.com/question/39080584' (length=39)
+ *   private 'title' => string '如果一个宗教的教义在多处地方都跟本国法律相抵触，那正确对待他的方法是什么，应该承认这个宗教吗？' (length=141)
  * .....
  */
 
@@ -175,13 +175,13 @@ foreach ($topic_list as $topic) {
  * 输出用户关注话题列表
  * ********************
  * object(Topic)[6670]
- *   private 'topics_url' => string 'https://www.zhihu.com/topic/19554298' (length=36)
- *   private 'topics_id' => string '编程' (length=6)
+ *   private 'url' => string 'https://www.zhihu.com/topic/19554298' (length=36)
+ *   private 'name' => string '编程' (length=6)
  * object(Topic)[6671]
- *   private 'topics_url' => string 'https://www.zhihu.com/topic/19551667' (length=36)
- *   private 'topics_id' => string '微软（Microsoft）' (length=21)
+ *   private 'url' => string 'https://www.zhihu.com/topic/19551667' (length=36)
+ *   private 'name' => string '微软（Microsoft）' (length=21)
  * object(Topic)[6670]
- *   private 'topics_url' => string 'https://www.zhihu.com/topic/19550517' (length=36)
- *   private 'topics_id' => string '互联网' (length=9)
+ *   private 'url' => string 'https://www.zhihu.com/topic/19550517' (length=36)
+ *   private 'name' => string '互联网' (length=9)
  */
 ```

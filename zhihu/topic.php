@@ -2,17 +2,17 @@
 
 class Topic 
 {
-	private $topics_url;
-	private $topics_id;
+	public $url;
+	private $name;
 
-	function __construct($topics_url, $topics_id=null)
+	function __construct($url, $name = null)
 	{
-		if (substr($topics_url, 0, 28) != TOPICS_PREFIX_URL) {
-			throw new Exception($topics_url.": it isn't a topics url !");
+		if (substr($url, 0, 28) != TOPICS_PREFIX_URL) {
+			throw new Exception($url.": it isn't a topics url !");
 		} else {
-			$this->topics_url = $topics_url;
-			if ( ! empty($topics_id)) {
-				$this->topics_id = $topics_id;
+			$this->url = $url;
+			if ( ! empty($name)) {
+				$this->name = $name;
 			}
 		}
 	}
@@ -24,19 +24,25 @@ class Topic
 	public function parser()
 	{
 		if (empty($this->dom) || ! isset($this->dom)) {
-			$r = Request::get($this->topics_url);
+			$r = Request::get($this->url);
 
 			$this->dom = str_get_html($r);
 		}
 	}
 
 	/**
-	 * 获取该话题主页 URL
-	 * @return string 话题主页 URL
+	 * 获取该话题的名称
+	 * @return string 话题名称
 	 */
-	public function get_topics_url()
+	public function get_name()
 	{
-		return $this->topics_url;
+		if ( ! empty($this->name)) {
+			return $this->name;
+		} else {
+			$this->parser();
+			$this->name = $this->dom->find('h1', 0)->plaintext;
+			return $this->name;
+		}
 	}
 
 	/**
@@ -46,7 +52,10 @@ class Topic
 	public function get_description()
 	{
 		$this->parser();
-		$description = $this->dom->find('div#zh-topic-desc div.zm-editable-content', 0)->plaintext;
+		$description = trim($this->dom->find('div#zh-topic-desc div.zm-editable-content', 0)->plaintext);
+		if ($description === '') {
+			$description = null;
+		}
 		return $description;
 	}
 
@@ -91,7 +100,7 @@ class Topic
 		$children_num = $this->dom->find('a.zm-topic-side-title-link', 0)->plaintext;
 		$children_num = (int)explode(' ', $children_num, 3)[1];
 
-		$entire_url = $this->topics_url.'/organize';
+		$entire_url = $this->url.'/organize';
 		$r = Request::get($entire_url);
 		$dom = str_get_html($r);
 
@@ -127,7 +136,7 @@ class Topic
 	 */
 	public function get_hot_question()
 	{
-		$hot_question_url = $this->topics_url.TOPICS_HOT_SUFFIX_URL;
+		$hot_question_url = $this->url.TOPICS_HOT_SUFFIX_URL;
 		$r = Request::get($hot_question_url);
 		$dom = str_get_html($r);
 
@@ -146,7 +155,7 @@ class Topic
 	 */
 	public function get_top_question()
 	{
-		$top_question_url = $this->topics_url.TOPICS_TOP_SUFFIX_URL;
+		$top_question_url = $this->url.TOPICS_TOP_SUFFIX_URL;
 		$r = Request::get($top_question_url);
 		$dom = str_get_html($r);
 
@@ -166,7 +175,7 @@ class Topic
 	 */
 	public function get_new_question()
 	{
-		$new_question_url = $this->topics_url.TOPICS_NEW_SUFFIX_URL;
+		$new_question_url = $this->url.TOPICS_NEW_SUFFIX_URL;
 		$r = Request::get($new_question_url);
 		$dom = str_get_html($r);
 

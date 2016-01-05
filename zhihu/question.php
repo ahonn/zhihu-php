@@ -5,17 +5,17 @@
  */
 class Question 
 {
-	private $question_url;
-	private $question_title;
+	public $url;
+	private $title;
 
-	function __construct($question_url, $question_title=null)
+	function __construct($url, $title=null)
 	{
-		if (substr($question_url, 0, 31) !== QUESTION_PREFIX_URL) {
-			throw new Exception($question_url.": it isn't a question url !");
+		if (substr($url, 0, 31) !== QUESTION_PREFIX_URL) {
+			throw new Exception($url.": it isn't a question url !");
 		} else {
-			$this->question_url = $question_url;
-			if ( ! empty($question_title)) {
-				$this->question_title = $question_title;
+			$this->url = $url;
+			if ( ! empty($title)) {
+				$this->title = $title;
 			}
 		}	
 	}
@@ -28,19 +28,10 @@ class Question
 	public function parser()
 	{
 		if (empty($this->dom) || ! isset($this->dom)) {
-			$r = Request::get($this->question_url);
+			$r = Request::get($this->url);
 
 			$this->dom = str_get_html($r);
 		}
-	}
-
-	/**
-	 * 获取该问题 URL
-	 * @return string 问题 URL
-	 */		
-	public function get_question_url()
-	{
-		return $this->question_url;
 	}
 
 	/**
@@ -49,13 +40,13 @@ class Question
 	 */
 	public function get_title()
 	{
-		if ( ! empty($this->question_title)) {
-			return $this->question_title;
+		if ( ! empty($this->title)) {
+			return $this->title;
 		} else {
 			$this->parser();
-			$question_title = trim($this->dom->find('h2.zm-item-title', 0)->plaintext);
-			$this->question_title = $question_title;
-			return $question_title;
+			$title = trim($this->dom->find('h2.zm-item-title', 0)->plaintext);
+			$this->title = $title;
+			return $title;
 		}
 	}
 
@@ -123,7 +114,7 @@ class Question
 		if ($followers_num == 0) {
 			yield null;
 		} else {
-			$follwers_url = $this->question_url.FOLLOWERS_SUFFIX_URL;
+			$follwers_url = $this->url.FOLLOWERS_SUFFIX_URL;
 			$r = Request::get($follwers_url);
 			$dom = str_get_html($r);
 
@@ -216,7 +207,7 @@ class Question
 						'params' => $params
 					);
 
-					$r = Request::post($post_url, $data, array("Referer: {$this->question_url}" ));
+					$r = Request::post($post_url, $data, array("Referer: {$this->url}" ));
 
 					$r = json_decode($r)->msg;
 

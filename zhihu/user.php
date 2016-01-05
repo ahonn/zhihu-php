@@ -5,7 +5,7 @@
  */
 class User 
 {
-	private $url;
+	public $url;
 	private $name;
 
 	function __construct($url, $name=null)
@@ -50,16 +50,6 @@ class User
 			$this->about_dom = str_get_html($r);
 		}
 		return $this->about_dom;
-	}
-
-
-	/**
-	 * 获取用户主页 URL
-	 * @return string 用户主页 URL
-	 */
-	public function get_url()
-	{
-		return $this->url;
 	}
 
 	/**

@@ -5,15 +5,15 @@
  */
 class Answer
 {
-	private $answer_url;
+	public $url;
 	private $question;
 	private $author;
 	private $upvote;
 	private $content;
 
-	function __construct($answer_url, Question $question=null, User $author=null, $upvote=null, $content=null)
+	function __construct($url, Question $question = null, User $author = null, $upvote = null, $content = null)
 	{
-		$this->answer_url = $answer_url;
+		$this->url = $url;
 		if ( ! empty($question)) {
 			$this->question = $question;
 		}
@@ -35,19 +35,11 @@ class Answer
 	public function parser()
 	{
 		if (empty($this->dom) || ! isset($this->dom)) {
-			$r = Request::get($this->answer_url);
+			$r = Request::get($this->url);
 			$this->dom = str_get_html($r);
 		}
 	}
 
-	/**
-	 * 获取该回答的 URL
-	 * @return string 回答 URL
-	 */
-	public function get_answers_url()
-	{
-		return $this->answer_url;
-	}
 
 	/**
 	 * 获取答案所在问题
@@ -55,16 +47,14 @@ class Answer
 	 */
 	public function get_question()
 	{
-		if( ! empty($this->question)) {
-			$question = $this->question;
-		} else {
+		if(empty($this->question)) {
 			$this->parser();
 			$question_link = $this->dom->find('div#zh-question-title a',0);
 			$question_url = ZHIHU_URL.$question_link->href;
 			$title = $question_link->plaintext;
-			$question = new Question($question_url, $title);
+			$this->question = new Question($question_url, $title);
 		}
-		return $question;
+		return $this->question;
 	}
 
 	/**
@@ -73,9 +63,7 @@ class Answer
 	 */
 	public function get_author()
 	{
-		if ( ! empty($this->author)) {
-			$author = $this->author();
-		} else {
+		if (empty($this->author)) {
 			$this->parser();
 			$author_link = $this->dom->find('h2.zm-list-content-title', 0);
 
@@ -85,9 +73,9 @@ class Answer
 			} else {
 				$author_url = null;
 			}
-			$author = new User($author_url, $author_id);
-			return $author;
+			$this->author = new User($author_url, $author_id);
 		}
+		return $this->author;
 	}
 
 
@@ -97,19 +85,17 @@ class Answer
 	 */
 	public function get_upvote()
 	{
-		if ( ! empty($this->upvote)) {
-			$upvote = $this->upvote;
-		} else {
+		if (empty($this->upvote)) {
 			$this->parser();
 			$upvote_link = $this->dom->find('div#zh-question-answer-wrap', 0);
 
-			if (@empty($upvote_link->find('button.up span', 0))) {
-				$upvote = $this->dom->find('div.zm-item-vote a', 0)->plaintext;
+			if ( ! empty($upvote_link->find('button.up span', 0))) {
+				$this->upvote = (int)$upvote_link->find('button.up span', 0)->plaintext;
 			} else {
-				$upvote = $upvote_link->find('button.up span', 0)->plaintext;
+				$this->upvote = (int)$this->dom->find('div.zm-item-vote a', 0)->plaintext;
 			}
-			return (int)$upvote;
 		}
+		return $this->upvote;
 	}
 
 	/**
@@ -118,9 +104,7 @@ class Answer
 	 */
 	public function get_content()
 	{
-		if ( ! empty($this->content)) {
-			$content = $this->content;
-		} else {
+		if (empty($this->content)) {
 			$this->parser();
 			$content = $this->dom->find('div#zh-question-answer-wrap div.zm-editable-content', 0)->plaintext;
 		}
@@ -167,7 +151,7 @@ class Answer
 
 	/**
 	 * 获取该答案被收藏数
-	 * @return num 收藏数
+	 * @return integer 收藏数
 	 */
 	public function get_collection_num()
 	{
@@ -183,7 +167,7 @@ class Answer
 
 	/**
 	 * 获取收藏该回答的收藏夹列表
-	 * @return [type] [description]
+	 * @return Generator 收藏夹列表
 	 */
 	public function get_collection()
 	{
@@ -191,7 +175,7 @@ class Answer
 		if ($collection_num == 0) {
 			yield null;
 		} else {
-			$collection_url = $this->answer_url.COLLECTION_SUFFIX_URL;
+			$collection_url = $this->url.COLLECTION_SUFFIX_URL;
 			$r = Request::get($collection_url);
 
 			$dom = str_get_html($r);
