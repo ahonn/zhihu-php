@@ -26,7 +26,7 @@ var_dump($about);
  * 输出样例
  * ****************
  * array (size=10)
- *   'user_id' => string 'vczh ' (length=5)
+ *   'name' => string 'vczh ' (length=5)
  *   'avatar' => string 'https://pic1.zhimg.com/3a6c25ac3864540e80cdef9bc2a73900.jpg' (length=59)
  *   'location' => string '西雅图（Seattle）' (length=22)
  *   'business' => string '计算机软件' (length=15)
@@ -40,8 +40,8 @@ var_dump($about);
 
 
 // 获取用户 ID
-$user_id = $user->get_user_id();
-var_dump($user_id);
+$name = $user->get_name();
+var_dump($name);
 
 /**
  * 输出样例
@@ -72,11 +72,11 @@ foreach ($followees_list as $followees) {
  * 输出该用户所关注的用户列表
  * **************************
  * object(User)[4230]
- *   private 'user_url' => string 'https://www.zhihu.com/people/Kirio' (length=34)
- *   private 'user_id' => string 'Kirio' (length=5)
+ *   private 'url' => string 'https://www.zhihu.com/people/Kirio' (length=34)
+ *   private 'name' => string 'Kirio' (length=5)
  * object(User)[4231]
- *   private 'user_url' => string 'https://www.zhihu.com/people/mao-yu-ai-li-si-55' (length=47)
- *   private 'user_id' => string '猫与爱丽丝' (length=15)
+ *   private 'url' => string 'https://www.zhihu.com/people/mao-yu-ai-li-si-55' (length=47)
+ *   private 'name' => string '猫与爱丽丝' (length=15)
  * ....
  */
 

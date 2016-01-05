@@ -5,22 +5,23 @@
  */
 class User 
 {
-	private $user_url;
-	private $user_id;
+	private $url;
+	private $name;
 
-	function __construct($user_url, $user_id=null)
+	function __construct($url, $name=null)
 	{
-		if (empty($user_url)) {
-			$this->user_id = '匿名用户';
-		} elseif (substr($user_url, 0, 29) !== USER_PREFIX_URL) {
-			throw new Exception($user_url.": it isn't a user url !");
+		if (empty($url)) {
+			$this->name = '匿名用户';
+		} elseif (substr($url, 0, 29) !== USER_PREFIX_URL) {
+			throw new Exception($url.": it isn't a user url !");
 		} else {
-			$this->user_url = $user_url;
-			if ( ! empty($user_id)) {
-				$this->user_id = $user_id;
+			$this->url = $url;
+			if ( ! empty($name)) {
+				$this->name = $name;
 			}
 		}	
 	}
+
 
 	/**
 	 * 解析用户主页
@@ -29,7 +30,7 @@ class User
 	public function parser()
 	{
 		if (empty($this->dom) || ! isset($this->dom)) {
-			$r = Request::get($this->user_url);
+			$r = Request::get($this->url);
 
 			$this->dom = str_get_html($r);
 		}
@@ -43,7 +44,7 @@ class User
 	public function parser_about()
 	{
 		if (empty($this->about_dom)) {
-			$user_info_url = $this->user_url.'/about';
+			$user_info_url = $this->url.'/about';
 
 			$r = Request::get($user_info_url);
 			$this->about_dom = str_get_html($r);
@@ -58,22 +59,22 @@ class User
 	 */
 	public function get_url()
 	{
-		return $this->user_url;
+		return $this->url;
 	}
 
 	/**
 	 * 获取用户ID
 	 * @return string 用户知乎ID
 	 */
-	public function get_user_id()
+	public function get_name()
 	{
-		if ( ! empty($this->user_id)) {
-			return $this->user_id;
+		if ( ! empty($this->name)) {
+			return $this->name;
 		} else {
 			$this->parser();
-			$user_id = trim($this->dom->find('div.title-section span.name',0)->plaintext);
-			$this->user_id = $user_id;
-			return $user_id;
+			$name = trim($this->dom->find('div.title-section span.name',0)->plaintext);
+			$this->name = $name;
+			return $name;
 		}
 	}
 
@@ -84,7 +85,7 @@ class User
 	 */
 	public function get_avatar()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return null;
 		} else {
 			$this->parser();
@@ -100,7 +101,7 @@ class User
 	 */
 	public function get_location()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return null;
 		} else {
 			$dom = $this->parser_about();
@@ -123,7 +124,7 @@ class User
 	 */
 	public function get_business()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return null;
 		} else {
 			$dom = $this->parser_about();
@@ -147,7 +148,7 @@ class User
 	 */
 	public function get_gender()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return null;
 		} else {
 			$dom = $this->parser_about();
@@ -171,7 +172,7 @@ class User
 	 */
 	public function get_employment()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return null;
 		} else {
 			$dom = $this->parser_about();
@@ -194,7 +195,7 @@ class User
 	 */
 	public function get_position()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return null;
 		} else {
 			$dom = $this->parser_about();
@@ -218,7 +219,7 @@ class User
 	 */
 	public function get_education()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return null;
 		} else {
 			$dom = $this->parser_about();
@@ -242,7 +243,7 @@ class User
 	 */
 	public function get_major()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return null;
 		} else {
 			$dom = $this->parser_about();
@@ -265,7 +266,7 @@ class User
 	 */
 	public function get_description()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return null;
 		} else {
 			$dom = $this->parser_about();
@@ -290,7 +291,7 @@ class User
 	public function get_about()
 	{
 		$about = array(
-			'user_id'	=>	$this->get_user_id(),
+			'name'	=>	$this->get_name(),
 			'avatar'	=>	$this->get_avatar(),
 			'location'	=>	$this->get_location(),
 			'business'	=>	$this->get_business(),
@@ -311,7 +312,7 @@ class User
 	 */
 	public function get_followees_num()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return -1;
 		} else {
 			$this->parser();
@@ -326,7 +327,7 @@ class User
 	 */
 	public function get_followers_num()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return -1;
 		} else {
 			$this->parser();
@@ -341,7 +342,7 @@ class User
 	 */
 	public function get_agree_num()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return -1;
 		} else {
 			$this->parser();
@@ -357,7 +358,7 @@ class User
 	 */
 	public function get_thanks_num()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return -1;
 		} else {
 			$this->parser();
@@ -372,7 +373,7 @@ class User
 	 */
 	public function get_asks_num()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return -1;
 		} else {
 			$this->parser();
@@ -387,7 +388,7 @@ class User
 	 */
 	public function get_answers_num()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return -1;
 		} else {
 			$this->parser();
@@ -403,7 +404,7 @@ class User
 	 */
 	public function get_posts()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return -1;
 		} else {
 			$this->parser();
@@ -418,7 +419,7 @@ class User
 	 */
 	public function get_collections_num()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return -1;
 		} else {
 			$this->parser();
@@ -433,7 +434,7 @@ class User
 	 */
 	public function get_topics_num()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			return -1;
 		} else {
 			$this->parser();
@@ -454,7 +455,7 @@ class User
 		if ($topics_num <= 0) {
 			yield null;
 		} else {
-			$topics_url = $this->user_url.TOPICS_SUFFIX_URL;
+			$topics_url = $this->url.TOPICS_SUFFIX_URL;
 			$r = Request::get($topics_url);
 			$dom = str_get_html($r);
 
@@ -501,7 +502,7 @@ class User
 		if ($followees_num <= 0) {
 			yield null;
 		} else {
-			$followee_url = $this->user_url.FOLLOWEES_SUFFIX_URL;
+			$followee_url = $this->url.FOLLOWEES_SUFFIX_URL;
 			$r = Request::get($followee_url);
 			
 			$dom = str_get_html($r);
@@ -553,7 +554,7 @@ class User
 		if ($followers_num <= 0) {
 			yield;
 		} else {
-			$follower_url = $this->user_url.FOLLOWERS_SUFFIX_URL;
+			$follower_url = $this->url.FOLLOWERS_SUFFIX_URL;
 			$r = Request::get($follower_url);
 			
 			$dom = str_get_html($r);
@@ -601,7 +602,7 @@ class User
 	 */
 	public function get_asks()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			yield null;
 		} else {
 			$asks_num = $this->get_asks_num();
@@ -610,7 +611,7 @@ class User
 				yield null;
 			} else {
 				for ($i = 0; $i < $asks_num /20; $i++) { 
-					$ask_url = $this->user_url.ASKS_PAGE_SUFFIX_URL.($i+1);
+					$ask_url = $this->url.ASKS_PAGE_SUFFIX_URL.($i+1);
 
 					$r = Request::get($ask_url);
 					$dom = str_get_html($r);
@@ -633,7 +634,7 @@ class User
 	 */
 	public function get_answers()
 	{
-		if (empty($this->user_url)) {
+		if (empty($this->url)) {
 			yield null;
 		} else {
 			$answers_num = $this->get_answers_num();
@@ -642,7 +643,7 @@ class User
 				yield null;
 			} else {
 				for ($i = 0; $i < $answers_num / 20; $i++) { 
-					$answer_url = $this->user_url.ANSWERS_PAGE_SUFFIX_URL.($i+1);
+					$answer_url = $this->url.ANSWERS_PAGE_SUFFIX_URL.($i+1);
 
 					$r = Request::get($answer_url);
 					$dom = str_get_html($r);

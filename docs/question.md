@@ -76,14 +76,14 @@ foreach ($followers_list as $followers) {
  * 输出关注该问题的用户
  * ********************
  * object(User)[4999]
- *   private 'user_url' => string 'https://www.zhihu.com/people/qiejiang' (length=37)
- *   private 'user_id' => string '茄酱' (length=6)
+ *   private 'url' => string 'https://www.zhihu.com/people/qiejiang' (length=37)
+ *   private 'name' => string '茄酱' (length=6)
  * object(User)[5000]
- *   private 'user_url' => string 'https://www.zhihu.com/people/you-yu-de-xing-xing' (length=48)
- *   private 'user_id' => string '忧郁的星星' (length=15)
+ *   private 'url' => string 'https://www.zhihu.com/people/you-yu-de-xing-xing' (length=48)
+ *   private 'name' => string '忧郁的星星' (length=15)
  * object(User)[4999]
- *   private 'user_url' => string 'https://www.zhihu.com/people/liu-ye-kuan-2' (length=42)
- *   private 'user_id' => string '宗越' (length=6)
+ *   private 'url' => string 'https://www.zhihu.com/people/liu-ye-kuan-2' (length=42)
+ *   private 'name' => string '宗越' (length=6)
  * ......
  */
 ```
@@ -119,8 +119,8 @@ foreach ($answers as $answer) {
  *		 ...
  *   private 'author' => 
  *     object(User)[3736]
- *       private 'user_url' => string 'https://www.zhihu.com/people/excited-vczh' (length=41)
- *       private 'user_id' => string 'vczh' (length=4)
+ *       private 'url' => string 'https://www.zhihu.com/people/excited-vczh' (length=41)
+ *       private 'name' => string 'vczh' (length=4)
  *   private 'upvote' => string '161 ' (length=4)
  *   private 'content' => string ' 1、熟读并接受《Teach Yourself Programming in 10 Years》
  * 2、不断写代码，不要干别的事情。
@@ -148,8 +148,8 @@ var_dump($answer);
  *               ...
  *   private 'author' => 
  *     object(User)[3736]
- *       private 'user_url' => string 'https://www.zhihu.com/people/ctkjer' (length=35)
- *       private 'user_id' => string '蔡广颂' (length=9)
+ *       private 'url' => string 'https://www.zhihu.com/people/ctkjer' (length=35)
+ *       private 'name' => string '蔡广颂' (length=9)
  *   private 'upvote' => string '0 ' (length=2)
  *   private 'content' => string ' 先学好英语，可以后来居上。  ' (length=42)
  */

@@ -3,7 +3,7 @@
  * @Author: Ahonn
  * @Date:   2015-12-29 20:02:00
  * @Last Modified by:   Ahonn
- * @Last Modified time: 2016-01-03 15:49:15
+ * @Last Modified time: 2016-01-05 10:31:42
  */
 
 /**
@@ -14,10 +14,10 @@ require_once 'zhihu-php/zhihu.php';
 $user_url = 'https://www.zhihu.com/people/excited-vczh';
 $user = new User($user_url);
 
-$user_id = $user->get_user_id();
+$name = $user->get_name();
 $followers_list = $user->get_followees();
 
-$path = dirname(__FILE__).'/'.$user_id.'/';
+$path = dirname(__FILE__).'/'.$name.'/';
 
 if ( ! file_exists($path)) {
 	mkdir($path);
