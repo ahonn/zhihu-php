@@ -23,8 +23,8 @@ var_dump($question);
  * 输出回答的问题，返回 Question 对象
  * **********************************
  * object(Question)[1177]
- *   private 'question_url' => string 'https://www.zhihu.com/question/38199129' (length=39)
- *   private 'question_title' => string '为什么程序代码被编译成机器码就不能跨平台运行？' (length=69)
+ *   public 'url' => string 'https://www.zhihu.com/question/38199129' (length=39)
+ *   private 'title' => string '为什么程序代码被编译成机器码就不能跨平台运行？' (length=69)
  */
 
 // 获取答主
@@ -35,8 +35,8 @@ var_dump($author);
  * 输出该回答的答主，返回 User 对象
  * ********************************
  * object(User)[1178]
- *   private 'user_url' => string 'https://www.zhihu.com/people/s.invalid' (length=38)
- *   private 'user_id' => string 'invalid s' (length=9)
+ *   public 'url' => string 'https://www.zhihu.com/people/s.invalid' (length=38)
+ *   private 'name' => string 'invalid s' (length=9)
  */
 ```
 
@@ -83,8 +83,8 @@ foreach ($comment_list as $comment) {
  * object(Comment)[3555]
  *   private 'author' => 
  *     object(User)[3554]
- *       private 'user_url' => string 'https://www.zhihu.com/people/liu-chun-yang-87-98' (length=48)
- *       private 'user_id' => string '刘春阳' (length=9)
+ *       public 'url' => string 'https://www.zhihu.com/people/liu-chun-yang-87-98' (length=48)
+ *       private 'name' => string '刘春阳' (length=9)
  *   private 'reply' => null
  *   private 'content' => string ' 666 ' (length=5)
  *   private 'time' => string '2016-01-01 ' (length=11)
@@ -92,8 +92,8 @@ foreach ($comment_list as $comment) {
  * object(Comment)[3557]
  *   private 'author' => 
  *     object(User)[3556]
- *       private 'user_url' => string 'https://www.zhihu.com/people/su-xiao-feng-98' (length=44)
- *       private 'user_id' => string '苏小枫' (length=9)
+ *       public 'url' => string 'https://www.zhihu.com/people/su-xiao-feng-98' (length=44)
+ *       private 'name' => string '苏小枫' (length=9)
  *   private 'reply' => null
  *   private 'content' => string ' 易懂点赞！ ' (length=17)
  *   private 'time' => string '2016-01-01 ' (length=11)
@@ -118,18 +118,18 @@ foreach ($collections as $collection) {
 /**
  * 
  * object(Collection)[2343]
- *   private 'collection_url' => string 'https://www.zhihu.com/collection/20615676' (length=41)
- *   private 'collection_title' => string '不需要解释' (length=15)
+ *   public 'url' => string 'https://www.zhihu.com/collection/20615676' (length=41)
+ *   private 'title' => string '不需要解释' (length=15)
  *   private 'author' => 
  *     object(User)[2342]
- *       private 'user_url' => string 'https://www.zhihu.com/people/watcher' (length=36)
- *       private 'user_id' => string 'Watcher' (length=7)
+ *       public 'url' => string 'https://www.zhihu.com/people/watcher' (length=36)
+ *       private 'name' => string 'Watcher' (length=7)
  * object(Collection)[2345]
- *   private 'collection_url' => string 'https://www.zhihu.com/collection/34218394' (length=41)
- *   private 'collection_title' => string '实用资料和一些比较有趣的东西（欢迎投稿）' (length=60)
+ *   public 'url' => string 'https://www.zhihu.com/collection/34218394' (length=41)
+ *   private 'title' => string '实用资料和一些比较有趣的东西（欢迎投稿）' (length=60)
  *   private 'author' => 
  *     object(User)[2344]
- *       private 'user_url' => string 'https://www.zhihu.com/people/yang-huai-bin' (length=42)
- *       private 'user_id' => string '杨怀斌' (length=9)
+ *       public 'url' => string 'https://www.zhihu.com/people/yang-huai-bin' (length=42)
+ *       private 'name' => string '杨怀斌' (length=9)
  */
 ```

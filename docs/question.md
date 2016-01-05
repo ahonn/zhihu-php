@@ -1,4 +1,4 @@
-Question 对象
+Question 类
 =============
 
 根据 URL 生成知乎问题对象。
@@ -76,13 +76,13 @@ foreach ($followers_list as $followers) {
  * 输出关注该问题的用户
  * ********************
  * object(User)[4999]
- *   private 'url' => string 'https://www.zhihu.com/people/qiejiang' (length=37)
+ *   public 'url' => string 'https://www.zhihu.com/people/qiejiang' (length=37)
  *   private 'name' => string '茄酱' (length=6)
  * object(User)[5000]
- *   private 'url' => string 'https://www.zhihu.com/people/you-yu-de-xing-xing' (length=48)
+ *   public 'url' => string 'https://www.zhihu.com/people/you-yu-de-xing-xing' (length=48)
  *   private 'name' => string '忧郁的星星' (length=15)
  * object(User)[4999]
- *   private 'url' => string 'https://www.zhihu.com/people/liu-ye-kuan-2' (length=42)
+ *   public 'url' => string 'https://www.zhihu.com/people/liu-ye-kuan-2' (length=42)
  *   private 'name' => string '宗越' (length=6)
  * ......
  */
@@ -109,10 +109,10 @@ foreach ($answers as $answer) {
  * 输出该问题下的所有答案，返回迭代器 
  * **********************************
  * object(Answer)[3737]
- *   private 'url' => string 'https://www.zhihu.com/question/38813693/answer/78222103' (length=55)
+ *   public 'url' => string 'https://www.zhihu.com/question/38813693/answer/78222103' (length=55)
  *   private 'question' => 
  *     object(Question)[2]
- *       private 'url' => string 'https://www.zhihu.com/question/38813693' (length=39)
+ *       public 'url' => string 'https://www.zhihu.com/question/38813693' (length=39)
  *       private 'title' => null
  *       public 'dom' => 
  *         object(simple_html_dom)[3]
@@ -136,10 +136,10 @@ var_dump($answer);
  * 输出该问题下排名第5的回答
  * *************************
  * object(Answer)[3737]
- *   private 'url' => string 'https://www.zhihu.com/question/38813693/answer/78327104' (length=55)
+ *   public 'url' => string 'https://www.zhihu.com/question/38813693/answer/78327104' (length=55)
  *   private 'question' => 
  *     object(Question)[2]
- *       private 'url' => string 'https://www.zhihu.com/question/38813693' (length=39)
+ *       public 'url' => string 'https://www.zhihu.com/question/38813693' (length=39)
  *       private 'title' => null
  *       public 'dom' => 
  *         object(simple_html_dom)[3]
@@ -148,7 +148,7 @@ var_dump($answer);
  *               ...
  *   private 'author' => 
  *     object(User)[3736]
- *       private 'url' => string 'https://www.zhihu.com/people/ctkjer' (length=35)
+ *       public 'url' => string 'https://www.zhihu.com/people/ctkjer' (length=35)
  *       private 'name' => string '蔡广颂' (length=9)
  *   private 'upvote' => string '0 ' (length=2)
  *   private 'content' => string ' 先学好英语，可以后来居上。  ' (length=42)

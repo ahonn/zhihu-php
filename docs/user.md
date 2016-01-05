@@ -1,4 +1,4 @@
-User 对象
+User 类
 =========
 
 根据 URL 生成知乎用户对象。
@@ -72,10 +72,10 @@ foreach ($followees_list as $followees) {
  * 输出该用户所关注的用户列表
  * **************************
  * object(User)[4230]
- *   private 'url' => string 'https://www.zhihu.com/people/Kirio' (length=34)
+ *   public 'url' => string 'https://www.zhihu.com/people/Kirio' (length=34)
  *   private 'name' => string 'Kirio' (length=5)
  * object(User)[4231]
- *   private 'url' => string 'https://www.zhihu.com/people/mao-yu-ai-li-si-55' (length=47)
+ *   public 'url' => string 'https://www.zhihu.com/people/mao-yu-ai-li-si-55' (length=47)
  *   private 'name' => string '猫与爱丽丝' (length=15)
  * ....
  */
@@ -135,10 +135,10 @@ foreach ($asks_list as $asks) {
  * 输出用户提问列表
  * ***********************
  * object(Question)[4150]
- *   private 'url' => string 'https://www.zhihu.com/question/39081089' (length=39)
+ *   public 'url' => string 'https://www.zhihu.com/question/39081089' (length=39)
  *   private 'title' => string '如何评价Google Contributor？' (length=33)
  * object(Question)[4151]
- *   private 'url' => string 'https://www.zhihu.com/question/39080584' (length=39)
+ *   public 'url' => string 'https://www.zhihu.com/question/39080584' (length=39)
  *   private 'title' => string '如果一个宗教的教义在多处地方都跟本国法律相抵触，那正确对待他的方法是什么，应该承认这个宗教吗？' (length=141)
  * .....
  */
@@ -175,13 +175,13 @@ foreach ($topic_list as $topic) {
  * 输出用户关注话题列表
  * ********************
  * object(Topic)[6670]
- *   private 'url' => string 'https://www.zhihu.com/topic/19554298' (length=36)
+ *   public 'url' => string 'https://www.zhihu.com/topic/19554298' (length=36)
  *   private 'name' => string '编程' (length=6)
  * object(Topic)[6671]
- *   private 'url' => string 'https://www.zhihu.com/topic/19551667' (length=36)
+ *   public 'url' => string 'https://www.zhihu.com/topic/19551667' (length=36)
  *   private 'name' => string '微软（Microsoft）' (length=21)
  * object(Topic)[6670]
- *   private 'url' => string 'https://www.zhihu.com/topic/19550517' (length=36)
+ *   public 'url' => string 'https://www.zhihu.com/topic/19550517' (length=36)
  *   private 'name' => string '互联网' (length=9)
  */
 ```
