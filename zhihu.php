@@ -27,6 +27,11 @@ const ZHIHU_URL = 'https://www.zhihu.com';
 const USER_PREFIX_URL = 'https://www.zhihu.com/people/';
 
 /**
+ * 答案 URL 前缀
+ */
+const ANSWERS_PREFIX_URL = 'https://www.zhihu.com/answer/';
+
+/**
  * 问题 URL 前缀
  */
 const QUESTION_PREFIX_URL = 'https://www.zhihu.com/question/';
@@ -93,6 +98,11 @@ const TOPICS_NEW_SUFFIX_URL = '/questions';
 const GET_PAGE_SUFFIX_URL = '?page=';
 
 /**
+ * 答案赞同 URL 后缀 
+ */
+const VOTERS_SUFFIX_URL = '/voters_profile';
+
+/**
  * 用户关注 POST URL
  */
 const FOLLOWEES_LIST_URL = 'https://www.zhihu.com/node/ProfileFolloweesListV2';
@@ -116,3 +126,4 @@ const COMMENT_LIST_URL = 'https://www.zhihu.com/node/AnswerCommentBoxV2';
  * 答案收藏夹 POST URL
  */
 const COLLECTION_LIST_URL = 'https://www.zhihu.com/node/AnswerFavlists';
+

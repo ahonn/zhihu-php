@@ -116,7 +116,8 @@ foreach ($collections as $collection) {
 }
 
 /**
- * 
+ * 输出收藏了该回答的收藏夹
+ * ************************ 
  * object(Collection)[2343]
  *   public 'url' => string 'https://www.zhihu.com/collection/20615676' (length=41)
  *   private 'title' => string '不需要解释' (length=15)
@@ -132,4 +133,25 @@ foreach ($collections as $collection) {
  *       public 'url' => string 'https://www.zhihu.com/people/yang-huai-bin' (length=42)
  *       private 'name' => string '杨怀斌' (length=9)
  */
+```
+
+**获取点赞该回答的用户**
+``` php
+// 获取点赞该回答的用户
+$voters = $answer->get_voters();
+foreach ($voters as $key => $voter) {
+	var_dump($voter);
+}
+
+/**
+ * 输出点赞的用户
+ * **************
+ * object(User)[1226]
+ *   public 'url' => string 'https://www.zhihu.com/people/sheldonelee' (length=40)
+ *   private 'name' => string '李焕朋' (length=9)
+ * object(User)[1273]
+ *   public 'url' => string 'https://www.zhihu.com/people/huxpro' (length=35)
+ *   private 'name' => string '黄玄' (length=6)
+ */
+
 ```

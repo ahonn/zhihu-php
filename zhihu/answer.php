@@ -201,7 +201,6 @@ class Answer
 							$collection_author = null;
 						}
 						
-
 						yield new Collection($collection_url, $collection_title, $collection_author);
 					}
 				} else {
@@ -241,6 +240,41 @@ class Answer
 						yield new Collection($collection_url, $collection_title, $collection_author);
 					}
 				}
+			}
+		}
+	}
+
+
+	/**
+	 * 获取点赞该回答的用户
+	 * @return Generator 点赞用户迭代器
+	 */
+	public function get_voters()
+	{
+		$this->parser();
+		$answer_id = $this->dom->find('div.zm-item-answer', 0)->attr['data-aid'];
+
+		$voters_url = ANSWERS_PREFIX_URL.$answer_id.VOTERS_SUFFIX_URL;
+		while ($voters_url) {
+			$r = Request::get($voters_url);
+			$response_json = json_decode($r);
+
+			$voters = $response_json->payload;
+			$voters_url = ZHIHU_URL.$response_json->paging->next;
+			
+			foreach ($voters as $voter) {
+				$dom = str_get_html($voter);
+				if ( ! empty($dom->find('div.author a', 0))) {
+					$voter_link = $dom->find('div.author a', 0);
+
+					$voter_url = $voter_link->href;
+					$voter_name = $voter_link->plaintext;
+				} else {
+					$voter_url = null;
+					$voter_name = $dom->find('div.body', 0)->plaintext;
+				}
+
+				yield new User($voter_url, $voter_name);
 			}
 		}
 	}

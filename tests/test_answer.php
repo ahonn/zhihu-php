@@ -50,5 +50,11 @@ foreach ($collections as $collection) {
 	var_dump($collection);
 }
 
+// 获取点赞该回答的用户
+$voters = $answer->get_voters();
+foreach ($voters as $key => $voter) {
+	var_dump($voter);
+}
+
 $time->stop();
 echo "\nTime:" . $time->spent();
