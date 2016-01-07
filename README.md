@@ -18,7 +18,10 @@ const COOKIE = "your cookie";
 <?php
 require_one 'zhihu-php/zhihu.php';
 
+// 设置 URL
 $question_url = 'https://www.zhihu.com/question/19550393';
+
+// 实例化对象
 $question = new Question($question_url);
 
 // 获取该问题排名第一的答案
@@ -37,8 +40,8 @@ var_dump($about);
 ## 文档
 - [User](https://github.com/ahonn/zhihu-php/blob/master/docs/user.md)
 - [Question](https://github.com/ahonn/zhihu-php/blob/master/docs/question.md)
-
-正在完善~
+- [Answer](https://github.com/ahonn/zhihu-php/blob/master/docs/answer.md)
+- [Topic](https://github.com/ahonn/zhihu-php/blob/master/docs/topic.md)
 
 ## 联系我
 - Email：[ahonn95@outlook.com](mailto:ahonn95@outlook.com)

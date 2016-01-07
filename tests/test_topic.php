@@ -38,11 +38,11 @@ var_dump($children);
 $answerer = $topic->get_answerer();
 var_dump($answerer);
 
-// // 获取该话题下的热门问题
-// $hot_question = $topic->get_hot_question();
-// foreach ($hot_question as $question) {
-// 	var_dump($question);
-// }
+// 获取该话题下的热门问题
+$hot_question = $topic->get_hot_question();
+foreach ($hot_question as $question) {
+	var_dump($question);
+}
 	
 // 获取该话题下排名靠前的问题
 $top_question = $topic->get_top_question();
