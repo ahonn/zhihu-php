@@ -108,7 +108,7 @@ class Topic
 				$children_link = $dom->find('div#zh-topic-organize-child-editor a', $i);
 
 				$children_url = ZHIHU_URL.substr($children_link->href, 0, 15);
-				$children_id = $children_link->plaintext;
+				$children_id = trim($children_link->plaintext);
 				$children_list[] = new Topic($children_url, $children_id);
 		}
 		return $children_list;
@@ -124,7 +124,7 @@ class Topic
 		for ($i = 0; ! empty($this->dom->find('div.zm-topic-side-person-item', $i)) ; $i++) { 
 			$answerer_link = $this->dom->find('div.zm-topic-side-person-item', $i)->find('a', 1);
 			$answerer_url = ZHIHU_URL.$answerer_link->href;
-			$answerer_id = $answerer_link->plaintext;
+			$answerer_id = trim($answerer_link->plaintext);
 			$answerer_list[] = new User($answerer_url, $answerer_id);
 		}
 		return $answerer_list;
@@ -132,7 +132,7 @@ class Topic
 
 	/**
 	 * 获取该话题下的热门问题
-	 * @return array 热门问题列表
+	 * @return Generator 热门问题列表
 	 */
 	public function get_hot_question()
 	{
@@ -186,7 +186,7 @@ class Topic
 
 	/**
 	 * 获取该话题下精华问题
-	 * @return array 精华问题列表
+	 * @return Generator 精华问题列表
 	 */
 	public function get_top_question()
 	{
@@ -196,13 +196,13 @@ class Topic
 
 
 	/**
-	 * 获取该话题下最新的问题
-	 * @return array 最新的问题
+	 * 获取该话题下全部问题
+	 * @return Generator 全部的问题
 	 */
-	public function get_new_question()
+	public function get_all_question()
 	{
-		$new_question_url = $this->url.TOPICS_NEW_SUFFIX_URL;
-		return $this->get_question($new_question_url);
+		$all_question_url = $this->url.TOPICS_NEW_SUFFIX_URL;
+		return $this->get_question($all_question_url);
 	}
 
 

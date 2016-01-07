@@ -10,7 +10,7 @@ require_once 'time.php';
 $time = new Time();
 $time->star();
 
-$topic_url = 'https://www.zhihu.com/topic/19606711';
+$topic_url = 'https://www.zhihu.com/topic/19552330';
 
 $topic = new Topic($topic_url);
 
@@ -38,21 +38,21 @@ var_dump($children);
 $answerer = $topic->get_answerer();
 var_dump($answerer);
 
-// 获取该话题下的热门问题
-$hot_question = $topic->get_hot_question();
-foreach ($hot_question as $question) {
-	var_dump($question);
-}
+// // 获取该话题下的热门问题
+// $hot_question = $topic->get_hot_question();
+// foreach ($hot_question as $question) {
+// 	var_dump($question);
+// }
 	
-// 获ge取该话题下排名靠前的问题
+// 获取该话题下排名靠前的问题
 $top_question = $topic->get_top_question();
 foreach ($top_question as $question) {
 	var_dump($question);
 }
 
-// 获取该话题下最新的问题
-$new_question = $topic->get_new_question();
-foreach ($new_question as $question) {
+// 获取该话题下全部问题
+$all_question = $topic->get_all_question();
+foreach ($all_question as $question) {
 	var_dump($question);
 }
 
