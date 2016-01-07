@@ -40,15 +40,21 @@ var_dump($answerer);
 
 // 获取该话题下的热门问题
 $hot_question = $topic->get_hot_question();
-var_dump($hot_question);
+foreach ($hot_question as $question) {
+	var_dump($question);
+}
 	
 // 获ge取该话题下排名靠前的问题
 $top_question = $topic->get_top_question();
-var_dump($top_question);
+foreach ($top_question as $question) {
+	var_dump($question);
+}
 
 // 获取该话题下最新的问题
 $new_question = $topic->get_new_question();
-var_dump($new_question);
+foreach ($new_question as $question) {
+	var_dump($question);
+}
 
 $time->stop();
 echo "\nTime:" . $time->spent();

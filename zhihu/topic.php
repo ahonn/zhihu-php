@@ -140,13 +140,48 @@ class Topic
 		$r = Request::get($hot_question_url);
 		$dom = str_get_html($r);
 
-		for ($i = 0; ! empty($dom->find('div.first-combine', $i)); $i++) { 
-			$question_link = $dom->find('div.first-combine', $i)->find('h2 a.question_link', 0);
+		$tmp_url = null;
+		$_xsrf = $dom->find('input[name=_xsrf]', 0)->attr['value'];
+		for ($i = 0; ! empty($dom->find('div.feed-item', $i)); $i++) { 
+			$combine = $dom->find('div.feed-item', $i);
+			$offset = $combine->attr['data-score'];
+
+			$question_link = $combine->find('h2 a.question_link', 0);
 			$question_url = ZHIHU_URL.$question_link->href;
-			$question_title = $question_link->plaintext;
-			$question_list[] = new Question($question_url, $question_title);
+
+			if ($question_url != $tmp_url) {
+				$tmp_url = $question_url;
+
+				$question_title = $question_link->plaintext;
+				yield new Question($question_url, $question_title);
+			}
 		}
-		return $question_list;
+		do {
+			$data = array(
+				'start' => 0,
+				'offset' => $offset,
+				'_xsrf' => $_xsrf
+			);
+			$r = Request::post($hot_question_url, $data, array('Referer: {$hot_question_url}"'));
+			$r = json_decode($r)->msg;
+			$item = $r[0];
+			$dom = str_get_html($r[1]);
+
+			for ($i = 0; $item && ! empty($dom->find('div.feed-item', $i)) ; $i++) { 
+				$combine = $dom->find('div.feed-item', $i);
+				$offset = $combine->attr['data-score'];
+
+				$question_link = $combine->find('h2 a.question_link', 0);
+				$question_url = ZHIHU_URL.$question_link->href;
+
+				if ($question_url != $tmp_url) {
+					$tmp_url = $question_url;
+
+					$question_title = $question_link->plaintext;
+					yield new Question($question_url, $question_title);
+				}
+			}
+		} while ($item);
 	}
 
 	/**
@@ -156,16 +191,7 @@ class Topic
 	public function get_top_question()
 	{
 		$top_question_url = $this->url.TOPICS_TOP_SUFFIX_URL;
-		$r = Request::get($top_question_url);
-		$dom = str_get_html($r);
-
-		for ($i = 0; ! empty($dom->find('div.feed-item', $i)); $i++) { 
-			$question_link = $dom->find('div.feed-item', $i)->find('h2 a.question_link', 0);
-			$question_url = ZHIHU_URL.$question_link->href;
-			$question_title = $question_link->plaintext;
-			$question_list[] = new Question($question_url, $question_title);
-		}
-		return $question_list;
+		return $this->get_question($top_question_url);
 	}
 
 
@@ -176,15 +202,34 @@ class Topic
 	public function get_new_question()
 	{
 		$new_question_url = $this->url.TOPICS_NEW_SUFFIX_URL;
-		$r = Request::get($new_question_url);
-		$dom = str_get_html($r);
+		return $this->get_question($new_question_url);
+	}
 
-		for ($i = 0; ! empty($dom->find('div.feed-item', $i)); $i++) { 
-			$question_link = $dom->find('div.feed-item', $i)->find('h2 a.question_link', 0);
-			$question_url = ZHIHU_URL.$question_link->href;
-			$question_title = $question_link->plaintext;
-			$question_list[] = new Question($question_url, $question_title);
+
+	/**
+	 * 获取问题列表
+	 * @param  string $url 目标 url
+	 * @return Generator   问题迭代器
+	 */		
+	private function get_question($url)
+	{
+		$r = Request::get($url);
+		$dom = str_get_html($r);
+		$max_page = (int)$dom->find('div.zm-invite-pager span', -2)->plaintext;
+
+		for ($i = 1; $i <= $max_page; $i++) { 
+			if ($i > 1) {
+				$page_url = $url.GET_PAGE_SUFFIX_URL.$i;
+				$r = Request::get($page_url);
+				$dom = str_get_html($r);
+			}
+
+			for ($j = 0; ! empty($dom->find('h2 a.question_link', $j)); $j++) { 
+				$question_link = $dom->find('h2 a.question_link', $j);
+				$question_url = ZHIHU_URL.$question_link->href;
+				$question_title = $question_link->plaintext;
+				yield new Question($question_url, $question_title);	
+			}
 		}
-		return $question_list;
 	}
 }
