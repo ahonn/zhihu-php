@@ -1,4 +1,4 @@
-# zhihu-php 知乎数据解析 by PHP
+# zhihu-php
 
 ## 介绍
 zhihu-php 使用PHP编写，用于获取知乎上的各种信息。
