@@ -1,5 +1,10 @@
 ## Change Log
 
+### 2016.01.08
+- Add 添加获取话题最新问题 get_new_question()
+- Fix 修复 Topic 中获取精华回答的错误，修改 get_top_question() 为 get_top_answer()
+- Fix 修正 Topic 类的文档
+
 ### 2016.01.07
 - Update 更新 Topic 中的 get_hot_question(),get_top_question()以及 get_all_question() 使它们能够获取所有问题
 - Add 添加 Topic 类的文档
