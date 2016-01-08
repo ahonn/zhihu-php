@@ -131,13 +131,61 @@ class Topic
 	}
 
 	/**
-	 * 获取该话题下的热门问题
+	 * 获取该话题下热门问题
 	 * @return Generator 热门问题列表
 	 */
 	public function get_hot_question()
 	{
 		$hot_question_url = $this->url.TOPICS_HOT_SUFFIX_URL;
-		$r = Request::get($hot_question_url);
+		return $this->get_question($hot_question_url);
+	}
+
+	/**
+	 * 获取该话题下最新问题
+	 * @return Generator 最新问题列表
+	 */
+	public function get_new_question()
+	{
+		$new_question_url = $this->url.TOPICS_NEW_SUFFIX_URL;
+		return $this->get_question($new_question_url);
+	}
+
+		/**
+	 * 获取该话题下全部问题
+	 * @return Generator 全部的问题
+	 */
+	public function get_all_question()
+	{
+		$all_question_url = $this->url.TOPICS_ALL_SUFFIX_URL;
+		$r = Request::get($all_question_url);
+		$dom = str_get_html($r);
+		$max_page = (int)$dom->find('div.zm-invite-pager span', -2)->plaintext;
+
+		for ($i = 1; $i <= $max_page; $i++) { 
+			if ($i > 1) {
+				$page_url = $all_question_url.GET_PAGE_SUFFIX_URL.$i;
+				$r = Request::get($page_url);
+				$dom = str_get_html($r);
+			}
+
+			for ($j = 0; ! empty($dom->find('h2 a.question_link', $j)); $j++) { 
+				$question_link = $dom->find('h2 a.question_link', $j);
+				$question_url = ZHIHU_URL.$question_link->href;
+				$question_title = $question_link->plaintext;
+				yield new Question($question_url, $question_title);	
+			}
+		}
+	}
+
+
+	/**
+	 * 获取问题列表
+	 * @param  string $url 目标 url
+	 * @return Generator   问题迭代器
+	 */		
+	private function get_question($url)
+	{
+		$r = Request::get($url);
 		$dom = str_get_html($r);
 
 		$tmp_url = null;
@@ -162,7 +210,7 @@ class Topic
 				'offset' => $offset,
 				'_xsrf' => $_xsrf
 			);
-			$r = Request::post($hot_question_url, $data, array('Referer: {$hot_question_url}"'));
+			$r = Request::post($url, $data, array('Referer: {$url}"'));
 			$r = json_decode($r)->msg;
 			$item = $r[0];
 			$dom = str_get_html($r[1]);
@@ -184,51 +232,44 @@ class Topic
 		} while ($item);
 	}
 
+
 	/**
-	 * 获取该话题下精华问题
-	 * @return Generator 精华问题列表
+	 * 获取该话题下精华回答
+	 * @return Generator 精华回答列表
 	 */
-	public function get_top_question()
+	public function get_top_answer()
 	{
-		$top_question_url = $this->url.TOPICS_TOP_SUFFIX_URL;
-		return $this->get_question($top_question_url);
-	}
-
-
-	/**
-	 * 获取该话题下全部问题
-	 * @return Generator 全部的问题
-	 */
-	public function get_all_question()
-	{
-		$all_question_url = $this->url.TOPICS_NEW_SUFFIX_URL;
-		return $this->get_question($all_question_url);
-	}
-
-
-	/**
-	 * 获取问题列表
-	 * @param  string $url 目标 url
-	 * @return Generator   问题迭代器
-	 */		
-	private function get_question($url)
-	{
-		$r = Request::get($url);
+		$top_answer_url = $this->url.TOPICS_TOP_SUFFIX_URL;
+		$r = Request::get($top_answer_url);
 		$dom = str_get_html($r);
 		$max_page = (int)$dom->find('div.zm-invite-pager span', -2)->plaintext;
 
 		for ($i = 1; $i <= $max_page; $i++) { 
 			if ($i > 1) {
-				$page_url = $url.GET_PAGE_SUFFIX_URL.$i;
+				$page_url = $top_answer_url.GET_PAGE_SUFFIX_URL.$i;
 				$r = Request::get($page_url);
 				$dom = str_get_html($r);
 			}
 
-			for ($j = 0; ! empty($dom->find('h2 a.question_link', $j)); $j++) { 
-				$question_link = $dom->find('h2 a.question_link', $j);
+			for ($j = 0; ! empty($dom->find('div.feed-item', $j)); $j++) { 
+				$item = $dom->find('div.feed-item', $j);
+				$answer_url = ZHIHU_URL.$item->find('div.zm-item-rich-text', 0)->attr['data-entry-url'];
+
+				$question_link = $item->find('h2 a.question_link', 0);
 				$question_url = ZHIHU_URL.$question_link->href;
 				$question_title = $question_link->plaintext;
-				yield new Question($question_url, $question_title);	
+				$question =  new Question($question_url, $question_title);
+
+				$author_link = $item->find('div.zm-item-answer-author-info a', 0);
+				$author_url = ZHIHU_URL.$author_link->href;
+				$author_name = trim($author_link->plaintext);
+				$author = new User($author_url, $author_name);
+
+				$upvote = $item->find('span.count', 0)->plaintext;
+
+				$content = $item->find('textarea.content', 0)->plaintext;
+
+				yield new Answer($answer_url, $question, $author, $upvote, $content);	
 			}
 		}
 	}

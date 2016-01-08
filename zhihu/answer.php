@@ -73,7 +73,7 @@ class Answer
 			} else {
 				$author_url = null;
 			}
-			$this->author = new User($author_url, $author_id);
+			$this->author = new User($author_url, $author_name);
 		}
 		return $this->author;
 	}

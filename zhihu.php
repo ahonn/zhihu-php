@@ -83,14 +83,19 @@ const TOPICS_SUFFIX_URL = '/topics';
 const TOPICS_HOT_SUFFIX_URL = '/hot';
 
 /**
+ * 话题最新 URL 后缀
+ */
+const TOPICS_NEW_SUFFIX_URL = '/newest';
+
+/**
  * 话题精华 URL 后缀
  */
 const TOPICS_TOP_SUFFIX_URL = '/top-answers';
 
 /**
- * 话题最新 URL 后缀
+ * 话题全部问题 URL 后缀
  */
-const TOPICS_NEW_SUFFIX_URL = '/questions';
+const TOPICS_ALL_SUFFIX_URL = '/questions';
 
 /**
  * 页码 URL 后缀

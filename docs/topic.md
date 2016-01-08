@@ -121,9 +121,9 @@ foreach ($hot_question as $question) {
  * ......
  */
 
-// 获取该话题下排名靠前的问题
-$top_question = $topic->get_top_question();
-foreach ($top_question as $question) {
+// 获取该话题下的最新问题
+$new_question = $topic->get_new_question();
+foreach ($new_question as $question) {
 	var_dump($question);
 }
 
@@ -132,4 +132,40 @@ $all_question = $topic->get_all_question();
 foreach ($all_question as $question) {
 	var_dump($question);
 }
+
+// 获取该话题下精华回答
+$top_answer = $topic->get_top_answer();
+foreach ($top_answer as $answer) {
+	var_dump($answer);
+}
+
+/**
+ * 获取该话题下精华回答
+ * ********************
+ * object(Answer)[3887]
+//   public 'url' => string 'https://www.zhihu.com/question/29357990/answer/44260471' (length=55)
+ *   private 'question' => 
+ *     object(Question)[3885]
+ *       public 'url' => string 'https://www.zhihu.com/question/29357990' (length=39)
+ *       private 'title' => string '如何看待 36 岁清华毕业 IT 男马桶上猝死，死前对母亲说「太累」？' (length=89)
+ *   private 'author' => 
+ *     object(User)[3886]
+ *       public 'url' => string 'https://www.zhihu.com/people/baiyunjie' (length=38)
+ *       private 'name' => string '白云杰' (length=9)
+ *   private 'upvote' => string '39K ' (length=4)
+ *   private 'content' => string ' 谨以这文字，给我的老友，给我们的友谊。&lt;br&gt;&lt;br&gt;死者张斌是我最好的朋友，我们从小学一年级开始一个学校，一直经过初中，高中和大学，毕业后，我在北京，他在南方。&lt;br&gt;&lt;br&gt;他是个善良而内向的人，永远在微笑，母亲和姐姐都是教师，他从小学习就很好，我记得最深的，是大学考英语，前面的听力他一定睡着，不是装酷，是因为我们那个年纪的河南考生，听力都'... (length=5247)
+ * object(Answer)[3890]
+ *   public 'url' => string 'https://www.zhihu.com/question/32422838/answer/55775344' (length=55)
+ *   private 'question' => 
+ *     object(Question)[3888]
+ *       public 'url' => string 'https://www.zhihu.com/question/32422838' (length=39)
+ *       private 'title' => string '怎么写出一本程序员风格的修真小说？' (length=51)
+ *   private 'author' => 
+ *     object(User)[3889]
+ *       public 'url' => string 'https://www.zhihu.com/people/li-zhao-hong-14' (length=44)
+ *       private 'name' => string '李昭鸿' (length=9)
+ *   private 'upvote' => string '22K ' (length=4)
+ *   private 'content' => string ' &lt;p&gt;更新了一下，稍微完善了一点。&lt;/p&gt;&lt;br&gt;&lt;p&gt;大体没改。&lt;/p&gt;&lt;br&gt;&lt;p&gt;很多人问结衣是新垣结衣还是波多老师，这个问题很深刻。&lt;/p&gt;&lt;br&gt;&lt;p&gt;答案是，你心里是什么，她就是什么。&lt;/p&gt;&lt;br&gt;&lt;p&gt;么么你们个哒。&lt;/p&gt;&lt;p&gt;*************************************************************************************************************&lt;/p&gt;&lt;p&gt;终有一天我手中的编译'... (length=28668)
+ * .......
+ */
 ```
