@@ -96,6 +96,8 @@ class Collection
 
 			for ($j = 0; ! empty($dom->find('div.zm-item', $j)); $j++) { 
 				$collection_link = $dom->find('div.zm-item', $j);
+				$answer_url = ZHIHU_URL.$collection_link->find('div.zm-item-rich-text', 0)->attr['data-entry-url'];
+
 				if ( ! empty($collection_link->find('h2.zm-item-title a', 0))) {
 					$question_link = $collection_link->find('h2.zm-item-title a', 0);
 					$question_url = ZHIHU_URL.$question_link->href;
@@ -103,9 +105,15 @@ class Collection
 
 					$question = new Question($question_url, $question_title);
 				}
-				$answer_id = $collection_link->find('div.zm-item-fav div.zm-item-answer', 0)->attr['data-atoken'];
-				$answer_url = $question_url.ANSWERS_SUFFIX_URL.'/'.$answer_id;
-				yield new Answer($answer_url, $question);
+				
+				$author_link = $collection_link->find('div.zm-item-answer-author-info a', 0);
+				$author_url = ZHIHU_URL.$author_link->href;
+				$author_name = $author_link->plaintext;
+				$author = new User($author_url, $author_name);
+
+				$upvote = $collection_link->find('div.zm-item-vote a', 0)->plaintext;
+				$content = $collection_link->find('textarea.content', 0)->plaintext;
+				yield new Answer($answer_url, $question, $author, $upvote, $content);
 			}
 		}
 	}

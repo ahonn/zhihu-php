@@ -2,7 +2,8 @@
 
 set_time_limit(0);
 
-require_once dirname(__FILE__) .'/zhihu/simple_html_dom/simple_html_dom.php';
+require_once dirname(__FILE__) .'/zhihu/libraries/simple_html_dom.php';
+require_once dirname(__FILE__) .'/zhihu/libraries/request.php';
 
 function __autoload($class)
 {
@@ -22,29 +23,34 @@ const COOKIE = 'q_c1=0bececc01938485b9f53fb861f1e3a09|1451374262000|145137426200
 const ZHIHU_URL = 'https://www.zhihu.com';
 
 /**
- * 用户 URL 前缀
+ * 用户 URL 
  */
 const USER_PREFIX_URL = 'https://www.zhihu.com/people/';
 
 /**
- * 答案 URL 前缀
+ * 答案 URL 
  */
 const ANSWERS_PREFIX_URL = 'https://www.zhihu.com/answer/';
 
 /**
- * 问题 URL 前缀
+ * 问题 URL 
  */
 const QUESTION_PREFIX_URL = 'https://www.zhihu.com/question/';
 
 /**
- * 话题 URL 前缀
+ * 话题 URL 
  */
 const TOPICS_PREFIX_URL = 'https://www.zhihu.com/topic/';
 
 /**
- * 收藏夹 URL 前缀
+ * 收藏夹 URL 
  */
 const COLLECTION_PREFIX_URL = 'https://www.zhihu.com/collection/';
+
+/**
+ * 知乎圆桌 URL 
+ */
+const ROUNDTABLE_URL = 'https://www.zhihu.com/roundtable';
 
 /**
  * 收藏夹 URL 后缀

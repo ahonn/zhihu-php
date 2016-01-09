@@ -81,7 +81,7 @@ class Answer
 
 	/**
 	 * 获取回答赞同数
-	 * @return integer 赞同数
+	 * @return string 赞同数
 	 */
 	public function get_upvote()
 	{
@@ -90,9 +90,9 @@ class Answer
 			$upvote_link = $this->dom->find('div#zh-question-answer-wrap', 0);
 
 			if ( ! empty($upvote_link->find('button.up span', 0))) {
-				$this->upvote = (int)$upvote_link->find('button.up span', 0)->plaintext;
+				$this->upvote = $upvote_link->find('button.up span', 0)->plaintext;
 			} else {
-				$this->upvote = (int)$this->dom->find('div.zm-item-vote a', 0)->plaintext;
+				$this->upvote = $this->dom->find('div.zm-item-vote a', 0)->plaintext;
 			}
 		}
 		return $this->upvote;
@@ -106,9 +106,9 @@ class Answer
 	{
 		if (empty($this->content)) {
 			$this->parser();
-			$content = $this->dom->find('div#zh-question-answer-wrap div.zm-editable-content', 0)->plaintext;
+			$this->content = $this->dom->find('div#zh-question-answer-wrap div.zm-editable-content', 0)->plaintext;
 		}
-		return $content;
+		return $this->content;
 	}
 
 
