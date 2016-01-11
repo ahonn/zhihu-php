@@ -1,5 +1,10 @@
 ## Change Log
 
+### 2016.01.11
+- Add 添加 Comment 类测试
+- Fix 修改 Comment 类中的 reply 为 replyed
+- Fix 修改 Answer 类文档中与 Comment 相关内容
+
 ### 2016.01.09
 - Fix 完善 Collection 类 get_answers()
 - Add 添加 Collection 类文档
