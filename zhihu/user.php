@@ -484,80 +484,56 @@ class User
 
 	/**
 	 * 获取用户关注列表
-	 * @return Generator 关注列表迭代器
+	 * @return Generator 关注列表
 	 */
 	public function get_followees()
 	{
-		$followees_num = $this->get_followees_num();
-		if ($followees_num <= 0) {
-			yield null;
-		} else {
-			$followee_url = $this->url.FOLLOWEES_SUFFIX_URL;
-			$r = Request::get($followee_url);
-			
-			$dom = str_get_html($r);
-
-			$_xsrf = $dom->find('input[name=_xsrf]', 0)->attr['value'];
-			$json = $dom->find('div.zh-general-list', 0)->attr['data-init'];
-
-			for ($i = 0; $i < $followees_num / 20; $i++) { 
-				if ($i == 0) {
-					for ($j = 0; $j < min($followees_num, 20); $j++) { 
-						$user_link = $dom->find('a.zg-link', $j);
-						yield new User($user_link->href, $user_link->title);
-					}
-				} else {
-					$post_url = FOLLOWEES_LIST_URL;
-			
-					$params = json_decode(html_entity_decode($json))->params;
-					$params->offset = $i * 20;
-					$params = json_encode($params);
-
-					$data = array(
-						'_xsrf' => $_xsrf,
-						'method' => 'next',
-						'params' => $params
-					);
-
-					$r = Request::post($post_url, $data, array("Referer: {$followee_url}"));
-					$r = json_decode($r)->msg;
-
-					for ($j = 0; $j < min($followees_num - $i * 20, 20); $j++) { 
-						$dom = str_get_html($r[$j]);
-						
-						$user_link = $dom->find('a.zg-link', 0);
-						yield new User($user_link->href, $user_link->title);						
-					}
-				}
-			}
-		}
+		return $this->get_follow('FOLLOWEES');
 	}
 
 
 	/**
 	 * 获取用户粉丝列表
-	 * @return Generator 粉丝列表迭代器
+	 * @return Generator 粉丝列表
 	 */
 	public function get_followers()
 	{
-		$followers_num = $this->get_followers_num();
-		if ($followers_num <= 0) {
-			yield;
+		return $this->get_follow('FOLLOWERS');
+	}
+
+	/**
+	 * 获取用户列表
+	 * @param  String $type 关注或者粉丝
+	 * @return Generator  用户列表
+	 */
+	private function get_follow($type)
+	{
+		if ($type === 'FOLLOWERS') {
+			$num = $this->get_followers_num();
+			$url = $this->url.FOLLOWERS_SUFFIX_URL;
+			$post_url = FOLLOWERS_LIST_URL;
+		} elseif ($type === 'FOLLOWEES') {
+			$num = $this->get_followees_num();
+			$url = $this->url.FOLLOWEES_SUFFIX_URL;
+			$post_url = FOLLOWEES_LIST_URL;
 		} else {
-			$follower_url = $this->url.FOLLOWERS_SUFFIX_URL;
-			$r = Request::get($follower_url);
-			
+			return null;
+		}
+
+		if ($num <= 0) {
+			return null;
+		} else {
+			$r = Request::get($url);			
 			$dom = str_get_html($r);
 
-			$post_url = FOLLOWERS_LIST_URL;
 			$_xsrf = $dom->find('input[name=_xsrf]',0)->value;
 		  	$json = $dom->find('div.zh-general-list', 0)->attr['data-init'];
 		  	
-			for ($i = 0; $i < $followers_num / 20; $i++) { 
+			for ($i = 0; $i < $num / 20; $i++) { 
 				if ($i == 0) {
-					for ($j = 0; $j < min($followers_num, 20); $j++) { 
-						$user_list[$j] = $dom->find('a.zg-link', $j);
-						yield new User($user_list[$j]->href, $user_list[$j]->title);
+					for ($j = 0; $j < min($num, 20); $j++) { 
+						$user_list = $dom->find('a.zg-link', $j);
+						yield new User($user_list->href, $user_list->title);
 					}
 				} else {
 					$params = json_decode(html_entity_decode($json))->params;
@@ -570,21 +546,19 @@ class User
 						'params' => $params
 					);
 
-					$r = Request::post($post_url, $data, array("Referer: {$follower_url}" ));
-					
+					$r = Request::post($post_url, $data, array("Referer: {$url}" ));
 					$r = json_decode($r)->msg;
 
-					for ($j = 0; $j < min($followers_num - $i * 20, 20); $j++) { 
+					for ($j = 0; $j < min($num - $i * 20, 20); $j++) { 
 						$dom = str_get_html($r[$j]);
 
-						$user_list[$j] = $dom->find('a.zg-link', 0);
-						yield new User($user_list[$j]->href, $user_list[$j]->title);						
+						$user_list = $dom->find('a.zg-link', 0);
+						yield new User($user_list->href, $user_list->title);						
 					}
 				}
 			}
 		}
 	}
-
 
 	/**
 	 * 获取用户提问列表
