@@ -5,7 +5,7 @@
 class Comment
 {
 	private $author;
-	private $reply;
+	private $replyed;
 	private $content;
 	private $time;
 
@@ -54,10 +54,10 @@ class Comment
 	 * 获取被回复者
 	 * @return object 被回复的用户
 	 */
-	public function get_reply()
+	public function get_replyed()
 	{
-		if ( ! empty($this->reply)) {
-			return $this->reply;
+		if ( ! empty($this->replyed)) {
+			return $this->replyed;
 		} else {
 			return null;
 		}

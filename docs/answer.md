@@ -78,14 +78,15 @@ foreach ($comment_list as $comment) {
 }
 
 /**
- * 输出该答案下的评论，返回 Comment 对象，包括评论者，被回复者，评论内容以及评论时间
+ * 输出该答案下的评论，返回 Comment 对象，包括评论者，被回复者，
+ * 评论内容以及评论时间。可通过 Comment 类的方法获取单个信息
  * *********************************************************************************
  * object(Comment)[3555]
  *   private 'author' => 
  *     object(User)[3554]
  *       public 'url' => string 'https://www.zhihu.com/people/liu-chun-yang-87-98' (length=48)
  *       private 'name' => string '刘春阳' (length=9)
- *   private 'reply' => null
+ *   private 'replyed' => null
  *   private 'content' => string ' 666 ' (length=5)
  *   private 'time' => string '2016-01-01 ' (length=11)
  *
@@ -94,7 +95,7 @@ foreach ($comment_list as $comment) {
  *     object(User)[3556]
  *       public 'url' => string 'https://www.zhihu.com/people/su-xiao-feng-98' (length=44)
  *       private 'name' => string '苏小枫' (length=9)
- *   private 'reply' => null
+ *   private 'replyed' => null
  *   private 'content' => string ' 易懂点赞！ ' (length=17)
  *   private 'time' => string '2016-01-01 ' (length=11)
  */
