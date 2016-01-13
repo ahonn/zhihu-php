@@ -1,5 +1,8 @@
 ## Change Log
 
+### 2016.01.13
+- Fix 根据知乎前端回答评论更新为分页显示，修复获取回答评论时的 Bug
+
 ### 2016.01.11
 - Add 添加 Comment 类测试
 - Fix 修改 Comment 类中的 reply 为 replyed
