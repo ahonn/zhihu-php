@@ -67,8 +67,8 @@ class Answer
 			$this->parser();
 			$author_link = $this->dom->find('h2.zm-list-content-title', 0);
 
-			$author_id = $author_link->plaintext;
-			if ($author_id != '匿名用户') {
+			$author_name = $author_link->plaintext;
+			if ($author_name != '匿名用户') {
 				$author_url = $author_link->find('a', 0)->href;
 			} else {
 				$author_url = null;
@@ -120,32 +120,35 @@ class Answer
 	{
 		$this->parser();
 		$answer_id = $this->dom->find('div.zm-item-answer', 0)->attr['data-aid'];
-		$date = '?params=%7B%22answer_id%22%3A%22'.$answer_id.'%22%2C%22load_all%22%3Atrue%7D';
-		$get_url = COMMENT_LIST_URL.$date;
-
-		$r = Request::get($get_url);
-		$dom = str_get_html($r);
-		
-		for ($i = 0; ! empty($dom->find('div.zm-item-comment', $i)); $i++) { 
-			$comment_link = $dom->find('div.zm-item-comment', $i);
+		$comment_url = str_replace("{id}", $answer_id, COMMENT_LIST_URL.GET_PAGE_SUFFIX_URL);
+		for ($page = $pages = 1; $page <= $pages; $page++) { 
+			$page_url = $comment_url.$page;
+			$r = Request::get($page_url, array("Referer: {$this->url}"));
+			$json = json_decode($r);
 			
-			$author_url = $comment_link->find('div.zm-comment-hd a', 0)->href;
-			$author_id = $comment_link->find('div.zm-comment-hd a', 0)->plaintext;
-			$author = new User($author_url, $author_id);
-
-			$content = $comment_link->find('div.zm-comment-content', 0)->plaintext;
-
-			$time = $comment_link->find('span.date', 0)->plaintext;
-
-			if ( ! empty($comment_link->find('div.zm-comment-hd a', 1))) {
-				$reply_url = $comment_link->find('div.zm-comment-hd a', 1)->href;
-				$reply_id = $comment_link->find('div.zm-comment-hd a', 1)->plaintext;
-				$reply = new User($reply_url, $reply_id);
-			} else {
-				$reply = null;
+			if ($page == 1) {
+				$totalCount = (int)$json->paging->totalCount;
+				$pages = ceil($totalCount / 30);
 			}
+			
+			$comments = $json->data;
+			foreach ($comments as $comment) {
+				$author_name = $comment->author->name;
+				$author_url = str_replace('http', 'https', $comment->author->url);
+				$author = new User($author_url, $author_name);
 
-			yield new Comment($author, $content, $time, $reply);
+				if ( ! empty($comment->inReplyToUser)) {
+					$replyed_name = $comment->inReplyToUser->name;
+					$replyed_url = str_replace('http', 'https', $comment->inReplyToUser->url);
+					$replyed = new User($replyed_url, $replyed_name);
+				} else {
+					$replyed = null;
+				}
+
+				$content = $comment->content;
+
+				yield new Comment($author, $content, $time = null, $replyed);
+			}
 		}
 	}
 

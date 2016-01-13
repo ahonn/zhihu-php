@@ -9,14 +9,14 @@ class Comment
 	private $content;
 	private $time;
 
-	function __construct(User $author, $content, $time, $reply)
+	function __construct(User $author, $content, $time, $replyed)
 	{
 		$this->author = $author;
 		$this->content = $content;
 		$this->time = $time;
 
-		if ( ! empty($reply)) {
-			$this->reply = $reply;
+		if ( ! empty($replyed)) {
+			$this->replyed = $replyed;
 		}
 	}
 
