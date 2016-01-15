@@ -25,13 +25,13 @@ $question_url = 'https://www.zhihu.com/question/19550393';
 $question = new Question($question_url);
 
 // 获取该问题排名第一的答案
-$answer = $question->get_top_answer();
+$answer = $question->top_answer();
 
 // 获取该回答的答主
-$author = $answer->get_author();
+$author = $answer->author();
 
 // 获取答案答主的信息
-$about = $author->get_about();
+$about = $author->about();
 
 // 输出答主基本信息
 var_dump($about);

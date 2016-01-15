@@ -34,7 +34,7 @@ class Topic
 	 * 获取该话题的名称
 	 * @return string 话题名称
 	 */
-	public function get_name()
+	public function name()
 	{
 		if ( ! empty($this->name)) {
 			return $this->name;
@@ -49,7 +49,7 @@ class Topic
 	 * 获取话题描述
 	 * @return string 话题描述
 	 */
-	public function get_description()
+	public function description()
 	{
 		$this->parser();
 		$description = trim($this->dom->find('div#zh-topic-desc div.zm-editable-content', 0)->plaintext);
@@ -64,7 +64,7 @@ class Topic
 	 * 获取关注该话题的人数
 	 * @return integer 话题关注人数
 	 */
-	public function get_followers()
+	public function followers()
 	{
 		$this->parser();
 		$followers_num = (int)$this->dom->find('div.zm-topic-side-followers-info strong', 0)->plaintext;
@@ -75,7 +75,7 @@ class Topic
 	 * 获取该话题的父话题
 	 * @return array 父话题列表
 	 */
-	public function get_parent()
+	public function parent()
 	{
 		$this->parser();
 		$parent_link = $this->dom->find('div.parent-topic', 0);
@@ -92,7 +92,7 @@ class Topic
 	 * 获取该话题的子话题
 	 * @return array 子话题列表
 	 */
-	public function get_children()
+	public function children()
 	{
 		if (empty($this->dom->find('a.zm-topic-side-title-link', 0))) {
 			return null;
@@ -118,7 +118,7 @@ class Topic
 	 * 获取该话题下的最佳回答者
 	 * @return array 最佳回答者列表
 	 */
-	public function get_answerer()
+	public function answerer()
 	{
 		$this->parser();
 		for ($i = 0; ! empty($this->dom->find('div.zm-topic-side-person-item', $i)) ; $i++) { 
@@ -134,27 +134,27 @@ class Topic
 	 * 获取该话题下热门问题
 	 * @return Generator 热门问题列表
 	 */
-	public function get_hot_question()
+	public function hot_question()
 	{
 		$hot_question_url = $this->url.TOPICS_HOT_SUFFIX_URL;
-		return $this->get_question($hot_question_url);
+		return $this->question($hot_question_url);
 	}
 
 	/**
 	 * 获取该话题下最新问题
 	 * @return Generator 最新问题列表
 	 */
-	public function get_new_question()
+	public function new_question()
 	{
 		$new_question_url = $this->url.TOPICS_NEW_SUFFIX_URL;
-		return $this->get_question($new_question_url);
+		return $this->question($new_question_url);
 	}
 
 		/**
 	 * 获取该话题下全部问题
 	 * @return Generator 全部的问题
 	 */
-	public function get_all_question()
+	public function all_question()
 	{
 		$all_question_url = $this->url.TOPICS_ALL_SUFFIX_URL;
 		$r = Request::get($all_question_url);
@@ -183,7 +183,7 @@ class Topic
 	 * @param  string $url 目标 url
 	 * @return Generator   问题迭代器
 	 */		
-	private function get_question($url)
+	private function question($url)
 	{
 		$r = Request::get($url);
 		$dom = str_get_html($r);
@@ -237,7 +237,7 @@ class Topic
 	 * 获取该话题下精华回答
 	 * @return Generator 精华回答列表
 	 */
-	public function get_top_answer()
+	public function top_answer()
 	{
 		$top_answer_url = $this->url.TOPICS_TOP_SUFFIX_URL;
 		$r = Request::get($top_answer_url);

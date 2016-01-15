@@ -38,7 +38,7 @@ class Question
 	 * 获取问题标题
 	 * @return string 标题
 	 */
-	public function get_title()
+	public function title()
 	{
 		if ( ! empty($this->title)) {
 			return $this->title;
@@ -54,7 +54,7 @@ class Question
 	 * 获取问题描述
 	 * @return string 问题描述
 	 */
-	public function get_detail()
+	public function detail()
 	{
 		$this->parser();
 		$detail = $this->dom->find('div#zh-question-detail', 0)->plaintext;
@@ -65,7 +65,7 @@ class Question
 	 * 获取问题回答数
 	 * @return integer 回答数
 	 */
-	public function get_answers_num()
+	public function answers_num()
 	{
 		$this->parser();
 		if ( ! empty($this->dom->find('h3#zh-question-answer-num', 0))) {
@@ -81,7 +81,7 @@ class Question
 	 * 获取问题关注数
 	 * @return integer 关注数
 	 */
-	public function get_followers_num()
+	public function followers_num()
 	{
 		$this->parser();
 		$followers_num = $this->dom->find('div.zg-gray-normal strong', 0)->plaintext;
@@ -93,7 +93,7 @@ class Question
 	 * 获取话题分类
 	 * @return array 话题分类
 	 */
-	public function get_topics()
+	public function topics()
 	{
 		$this->parser();
 		for ($i = 0; @$this->dom->find('a.zm-item-tag',$i) != null ; $i++) { 
@@ -107,9 +107,9 @@ class Question
 	 * 获取问题关注者
 	 * @return Generator 关注者列表迭代器
 	 */
-	public function get_followers()
+	public function followers()
 	{
-		$followers_num = $this->get_followers_num(); 
+		$followers_num = $this->followers_num(); 
 
 		if ($followers_num == 0) {
 			yield null;
@@ -160,9 +160,9 @@ class Question
 	 * 获取该问题的回答
 	 * @return Generator 答案迭代器
 	 */
-	public function get_answers()
+	public function answers()
 	{
-		$answers_num = $this->get_answers_num(); 
+		$answers_num = $this->answers_num(); 
 
 		if ($answers_num == 0) {
 			yield null;
@@ -248,13 +248,13 @@ class Question
 	 * @param  integer $top 答案排名
 	 * @return object       Answer 对象
 	 */
-	public function get_top_answer($top=1)
+	public function top_answer($top=1)
 	{
 		if ( ! $top || $top > $this->get_answers_num()) {
 			throw new Exception("The answer does not exist !");
 		} else {
 			$num = 0;
-			$answer_list = $this->get_answers();
+			$answer_list = $this->answers();
 			foreach ($answer_list as $answer) {
 				$num++;
 				if ($num === $top) {
@@ -268,7 +268,7 @@ class Question
 	 * 获取问题浏览数
 	 * @return integer 浏览数
 	 */
-	public function get_visit_times()
+	public function visit_times()
 	{
 		$this->parser();
 		$times = (int)$this->dom->find('div.zg-gray-normal strong', 0)->plaintext;

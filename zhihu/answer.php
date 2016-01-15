@@ -45,7 +45,7 @@ class Answer
 	 * 获取答案所在问题
 	 * @return object Question对象
 	 */
-	public function get_question()
+	public function question()
 	{
 		if(empty($this->question)) {
 			$this->parser();
@@ -61,7 +61,7 @@ class Answer
 	 * 获取回答作者
 	 * @return object User对象
 	 */
-	public function get_author()
+	public function author()
 	{
 		if (empty($this->author)) {
 			$this->parser();
@@ -83,7 +83,7 @@ class Answer
 	 * 获取回答赞同数
 	 * @return string 赞同数
 	 */
-	public function get_upvote()
+	public function upvote()
 	{
 		if (empty($this->upvote)) {
 			$this->parser();
@@ -102,7 +102,7 @@ class Answer
 	 * 获取答案内容
 	 * @return string 答案内容
 	 */
-	public function get_content()
+	public function content()
 	{
 		if (empty($this->content)) {
 			$this->parser();
@@ -116,7 +116,7 @@ class Answer
 	 * 获取该答案下的评论
 	 * @return Generator 评论列表迭代器
 	 */
-	public function get_comment()
+	public function comment()
 	{
 		$this->parser();
 		$answer_id = $this->dom->find('div.zm-item-answer', 0)->attr['data-aid'];
@@ -156,7 +156,7 @@ class Answer
 	 * 获取该答案被收藏数
 	 * @return integer 收藏数
 	 */
-	public function get_collection_num()
+	public function collection_num()
 	{
 		$this->parser();
 		if ( ! empty($this->dom->find('div.zm-side-section-inner h3 a', 0))) {
@@ -172,9 +172,9 @@ class Answer
 	 * 获取收藏该回答的收藏夹列表
 	 * @return Generator 收藏夹列表
 	 */
-	public function get_collection()
+	public function collection()
 	{
-		$collection_num = $this->get_collection_num();
+		$collection_num = $this->collection_num();
 		if ($collection_num == 0) {
 			yield null;
 		} else {
@@ -252,7 +252,7 @@ class Answer
 	 * 获取点赞该回答的用户
 	 * @return Generator 点赞用户迭代器
 	 */
-	public function get_voters()
+	public function voters()
 	{
 		$this->parser();
 		$answer_id = $this->dom->find('div.zm-item-answer', 0)->attr['data-aid'];
@@ -286,7 +286,7 @@ class Answer
 	 * 获取问题被浏览次数
 	 * @return integer 浏览数
 	 */
-	public function get_visit_times()
+	public function visit_times()
 	{
 		$this->parser();
 		$visit_times = (int)$this->dom->find('div.zh-answer-status p strong', 0)->plaintext;

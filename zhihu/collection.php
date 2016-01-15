@@ -40,7 +40,7 @@ class Collection
 	 * 获取收藏夹名称
 	 * @return string 收藏夹名称
 	 */
-	public function get_title()
+	public function title()
 	{
 		if( ! empty($this->title)) {
 			$title = $this->title;
@@ -55,7 +55,7 @@ class Collection
 	 * 获取收藏夹描述
 	 * @return string 收藏夹描述
 	 */
-	public function get_description()
+	public function description()
 	{
 		$this->parser();
 		$description = $this->dom->find('div#zh-fav-head-description', 0)->plaintext;
@@ -66,7 +66,7 @@ class Collection
 	 * 获取收藏夹创建者
 	 * @return object 创建者
 	 */
-	public function get_author()
+	public function author()
 	{
 		if( ! empty($this->author)) {
 			$author = $this->author;
@@ -85,7 +85,7 @@ class Collection
 	 * 获取收藏夹中的全部回答
 	 * @return Generator 回答迭代器
 	 */
-	public function get_answers()
+	public function answers()
 	{
 		$this->parser();
 		$max_page = (int)$this->dom->find('div.zm-invite-pager span', -2)->plaintext;
@@ -96,23 +96,32 @@ class Collection
 
 			for ($j = 0; ! empty($dom->find('div.zm-item', $j)); $j++) { 
 				$collection_link = $dom->find('div.zm-item', $j);
-				$answer_url = ZHIHU_URL.$collection_link->find('div.zm-item-rich-text', 0)->attr['data-entry-url'];
-
-				if ( ! empty($collection_link->find('h2.zm-item-title a', 0))) {
-					$question_link = $collection_link->find('h2.zm-item-title a', 0);
+				if ( ! empty($question_link = $collection_link->find('h2.zm-item-title a', 0))) {
 					$question_url = ZHIHU_URL.$question_link->href;
 					$question_title = $question_link->plaintext;
 
 					$question = new Question($question_url, $question_title);
 				}
 				
-				$author_link = $collection_link->find('div.zm-item-answer-author-info a', 0);
-				$author_url = ZHIHU_URL.$author_link->href;
-				$author_name = $author_link->plaintext;
+				$answer_id = $collection_link->find('div.zm-item-answer', 0)->attr['data-atoken'];
+				$answer_url = $question_url.'/answer'.$answer_id;
+
+				if ( ! empty($author_link = $collection_link->find('div.zm-item-answer-author-info a', 0))) {
+					$author_url = ZHIHU_URL.$author_link->href;
+					$author_name = $author_link->plaintext;
+				} else {
+					$author_url = null;
+					$author_name = '匿名用户';
+				}
 				$author = new User($author_url, $author_name);
 
 				$upvote = $collection_link->find('div.zm-item-vote a', 0)->plaintext;
-				$content = $collection_link->find('textarea.content', 0)->plaintext;
+
+				if ( ! empty($content = $collection_link->find('textarea.content', 0))) {
+					$content = $content->plaintext;
+				} else {
+					$content = trim($collection_link->find('div.answer-status p', 0)->plaintext);
+				}
 				yield new Answer($answer_url, $question, $author, $upvote, $content);
 			}
 		}

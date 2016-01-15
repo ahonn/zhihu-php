@@ -24,7 +24,7 @@ class Comment
 	 * 获取评论作者
 	 * @return object 评论作者
 	 */
-	public function get_author()
+	public function author()
 	{
 		return $this->author;
 	}
@@ -34,7 +34,7 @@ class Comment
 	 * 获取评论内容
 	 * @return string 评论内容
 	 */
-	public function get_content()
+	public function content()
 	{
 		return $this->content;
 	}
@@ -44,7 +44,7 @@ class Comment
 	 * 获取评论时间
 	 * @return string 评论时间
 	 */
-	public function get_time()
+	public function time()
 	{
 		return $this->time;
 	}
@@ -54,7 +54,7 @@ class Comment
 	 * 获取被回复者
 	 * @return object 被回复的用户
 	 */
-	public function get_replyed()
+	public function replyed()
 	{
 		if ( ! empty($this->replyed)) {
 			return $this->replyed;

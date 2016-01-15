@@ -13,24 +13,24 @@ $answer_url = 'https://www.zhihu.com/question/19550393/answer/12202130';
 $answer = new Answer($answer_url);
 
 // 获取该回答的评论
-$comments = $answer->get_comment();
+$comments = $answer->comment();
 foreach ($comments as $comment) {
 	var_dump($comment);
 
 	// 获取评论作者
-	$author = $comment->get_author();
+	$author = $comment->author();
 	var_dump($author);
 
 	// 获取被回复者
-	$replyed = $comment->get_replyed();
+	$replyed = $comment->replyed();
 	var_dump($replyed);
 
 	// 获取评论内容
-	$content = $comment->get_content();
+	$content = $comment->content();
 	var_dump($content);
 
 	// 获取评论时间
-	$time = $comment->get_time();
+	$time = $comment->time();
 	var_dump($time);
 }
 
