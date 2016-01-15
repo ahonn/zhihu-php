@@ -115,6 +115,24 @@ class User
 	}
 
 	/**
+	 * 获取用户微博链接
+	 * @return string 微博链接
+	 */
+	public function weibo_url()
+	{
+		if (empty($this->url)) {
+			return null;
+		} else {
+			if ( ! empty($this->dom->find('a.zm-profile-header-user-weibo', 0))) {
+				$weibo_url = $this->dom->find('a.zm-profile-header-user-weibo', 0)->href;
+			} else {
+				$weibo_url = null;
+			}
+			return $weibo_url;
+		}
+	}
+
+	/**
 	 * 获取用户居住地
 	 * @return string 用户居住地
 	 */
@@ -322,6 +340,8 @@ class User
 		}
 	}
 
+	# TODO: 获取用户专栏
+
 	/**
 	 * 获取用户收藏数
 	 * @return integer 收藏数
@@ -336,6 +356,8 @@ class User
 			return (int)$collections_num;
 		}
 	}
+
+	# TODO: 获取用户收藏夹
 
 	/**
 	 * 获取用户关注话题数

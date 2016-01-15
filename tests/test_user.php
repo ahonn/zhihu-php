@@ -55,6 +55,10 @@ var_dump($collection_num);
 $avatar = $user->avatar();
 var_dump($avatar);
 
+// 获取用户微博链接
+$weibo_url = $user->weibo_url();
+var_dump($weibo_url);
+
 // 获取用户信息
 $about = $user->about();
 var_dump($about);
