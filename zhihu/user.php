@@ -36,27 +36,11 @@ class User
 		}
 	}
 
-
-	/**
-	 * 解析用户about页
-	 * @return object simple html dom 对象
-	 */
-	public function parser_about()
-	{
-		if (empty($this->about_dom)) {
-			$user_info_url = $this->url.'/about';
-
-			$r = Request::get($user_info_url);
-			$this->about_dom = str_get_html($r);
-		}
-		return $this->about_dom;
-	}
-
 	/**
 	 * 获取用户ID
 	 * @return string 用户知乎ID
 	 */
-	public function get_name()
+	public function name()
 	{
 		if ( ! empty($this->name)) {
 			return $this->name;
@@ -73,10 +57,10 @@ class User
 	 * 获取用户头像
 	 * @return string 用户头像url
 	 */
-	public function get_avatar()
+	public function avatar()
 	{
 		if (empty($this->url)) {
-			return null;
+			return 'http://pic1.zhimg.com/da8e974dc_r.jpg';
 		} else {
 			$this->parser();
 			$avatar = $this->dom->find('div.zm-profile-header-avatar-container img', 0)->srcset;
@@ -86,64 +70,16 @@ class User
 	}
 
 	/**
-	 * 获取用户居住地
-	 * @return string 用户居住地
-	 */
-	public function get_location()
-	{
-		if (empty($this->url)) {
-			return null;
-		} else {
-			$dom = $this->parser_about();
-			$location_link = $dom->find('div.item span.location', 0);
-			if ( ! empty($location_link)) {
-				$location = trim($location_link->plaintext);
-				if ($location == '填写居住地 ') {
-					$location = null;
-				}
-			} else {
-				$location = null;
-			}
-			return $location;
-		}
-	}
-
-	/**
-	 * 获取用户所在行业
-	 * @return string 所在行业
-	 */
-	public function get_business()
-	{
-		if (empty($this->url)) {
-			return null;
-		} else {
-			$dom = $this->parser_about();
-			$business_link = $dom->find('div.item span.business', 0);
-			if ( ! empty($business_link)) {
-				$business = trim($business_link->plaintext);
-				if ($business == '填写行业 ') {
-					$business = null;
-				}
-			} else {
-				$business = null;
-			}
-			return $business;
-		}
-	}
-
-
-	/**
 	 * 获取用户性别
 	 * @return string 用户性别
 	 */
-	public function get_gender()
+	public function gender()
 	{
 		if (empty($this->url)) {
 			return null;
 		} else {
-			$dom = $this->parser_about();
-			if ( ! empty($dom->find('div.item span.gender', 0))) {
-				$gender_link = $dom->find('div.item span.gender', 0);
+			if ( ! empty($this->dom->find('div.item span.gender', 0))) {
+				$gender_link = $this->dom->find('div.item span.gender', 0);
 				if ( ! empty($gender_link->find('i.icon-profile-male'))) {
 					$gender = 'male';
 				} elseif ( ! empty($gender_link->find('i.icon-profile-female'))) {
@@ -157,110 +93,15 @@ class User
 	}
 
 	/**
-	 * 获取用户公司信息
-	 * @return string 用户公司信息
-	 */
-	public function get_employment()
-	{
-		if (empty($this->url)) {
-			return null;
-		} else {
-			$dom = $this->parser_about();
-			$employment_link = $dom->find('div.item span.employment', 0);
-			if ( ! empty($employment_link)) {
-				$employment = trim($employment_link->plaintext);
-				if ($employment == '填写公司信息 ') {
-					$employment = null;
-				}
-			} else {
-				$employment = null;
-			}
-			return $employment;
-		}
-	}
-
-	/**
-	 * 获取用户职位
-	 * @return string 用户职位
-	 */
-	public function get_position()
-	{
-		if (empty($this->url)) {
-			return null;
-		} else {
-			$dom = $this->parser_about();
-			$position_link = $dom->find('div.item span.position', 0);
-			if ( ! empty($position_link)) {
-				$position = trim($position_link->plaintext);
-				if ($position == '填写职位 ') {
-					$position = null;
-				}
-			} else {
-				$position = null;
-			}
-			return $position;
-		}
-	}
-
-
-	/**
-	 * 获取用户学校信息
-	 * @return string [获取用户学校信息]
-	 */
-	public function get_education()
-	{
-		if (empty($this->url)) {
-			return null;
-		} else {
-			$dom = $this->parser_about();
-			$education_link = $dom->find('div.item span.education', 0);
-			if ( ! empty($education_link)) {
-				$education = trim($education_link->plaintext);
-				if ($education == '填写学校信息 ') {
-					$education = null;
-				}
-			} else {
-				$education = null;
-			}
-			return $education;
-		}
-	}
-
-
-	/**
-	 * 获取用户专业
-	 * @return string 用户专业
-	 */
-	public function get_major()
-	{
-		if (empty($this->url)) {
-			return null;
-		} else {
-			$dom = $this->parser_about();
-			$major_link = $dom->find('div.item span.education-extra', 0);
-			if ( ! empty($major_link)) {
-				$major = trim($major_link->plaintext);
-				if ($major == '填写专业 ') {
-					$major = null;
-				}
-			} else {
-				$major = null;
-			}
-			return $major;
-		}
-	}
-
-	/**
 	 * 获取用户个人简介
 	 * @return string 用户个人简介
 	 */
-	public function get_description()
+	public function description()
 	{
 		if (empty($this->url)) {
 			return null;
 		} else {
-			$dom = $this->parser_about();
-			$description_link = $dom->find('div.zm-profile-header-description span.description', 0);
+			$description_link = $this->dom->find('div.zm-profile-header-description span.description', 0);
 			if ( ! empty($description_link)) {
 				$description = trim($description_link->find('[class!=collapse]', 0)->innertext);
 				if ($description == '') {
@@ -273,37 +114,115 @@ class User
 		}
 	}
 
+	/**
+	 * 获取用户居住地
+	 * @return string 用户居住地
+	 */
+	public function location()
+	{
+		return $this->parser_about('location');
+	}
+
+	/**
+	 * 获取用户所在行业
+	 * @return string 所在行业
+	 */
+	public function business()
+	{
+		return $this->parser_about('business');
+	}
+
+	/**
+	 * 获取用户公司信息
+	 * @return string 用户公司信息
+	 */
+	public function employment()
+	{
+		return $this->parser_about('employment');
+	}
+
+	/**
+	 * 获取用户职位
+	 * @return string 用户职位
+	 */
+	public function position()
+	{
+		return $this->parser_about('position');
+	}
+
+
+	/**
+	 * 获取用户学校信息
+	 * @return string [获取用户学校信息]
+	 */
+	public function education()
+	{
+		return $this->parser_about('education');
+	}
+
+
+	/**
+	 * 获取用户专业
+	 * @return string 用户专业
+	 */
+	public function major()
+	{
+		return $this->parser_about('education-extra');
+	}
+
+	/**
+	 * 获取用户资料
+	 * @param  string $key 类别
+	 * @return string            对应信息
+	 */
+	public function parser_about($key)
+	{
+		if (empty($this->url)) {
+			return null;
+		} else {
+			if (empty($this->about_dom)) {
+				$about_url = $this->url.'/about';
+				$r = Request::get($about_url);
+				$this->about_dom = str_get_html($r);
+			}
+			if ($this->about_dom->find("div.item span.{$key}", 0)->title) {
+				$value = $this->about_dom->find("div.item span.{$key}", 0)->title;
+			} else {
+				$value = null;
+			}
+			return $value;
+		}
+	}
 
 	/**
 	 * 获取用户信息
 	 * @return string 用户信息
 	 */
-	public function get_about()
+	public function about()
 	{
 		$about = array(
-			'name'	=>	$this->get_name(),
-			'avatar'	=>	$this->get_avatar(),
-			'location'	=>	$this->get_location(),
-			'business'	=>	$this->get_business(),
-			'gender'	=>	$this->get_gender(),
-			'employment'=>	$this->get_employment(),
-			'position'	=>	$this->get_position(),
-			'education'	=>	$this->get_education(),
-			'major'	=>	$this->get_major(),
-			'description'	=>	$this->get_description()
+			'name'	=>	$this->name(),
+			'avatar'	=>	$this->avatar(),
+			'location'	=>	$this->location(),
+			'business'	=>	$this->business(),
+			'gender'	=>	$this->gender(),
+			'employment'=>	$this->employment(),
+			'position'	=>	$this->position(),
+			'education'	=>	$this->education(),
+			'major'	=>	$this->major(),
+			'description'	=>	$this->description()
 		);
 		return $about;
 	}
-
 
 	/**
 	 * 获取用户关注数
 	 * @return integer 关注人数
 	 */
-	public function get_followees_num()
+	public function followees_num()
 	{
 		if (empty($this->url)) {
-			return -1;
+			return 0;
 		} else {
 			$this->parser();
 			$followees_num = $this->dom->find('div.zm-profile-side-following strong', 0)->plaintext;
@@ -315,10 +234,10 @@ class User
 	 * 获取用户粉丝数
 	 * @return integer 粉丝人数
 	 */
-	public function get_followers_num()
+	public function followers_num()
 	{
 		if (empty($this->url)) {
-			return -1;
+			return 0;
 		} else {
 			$this->parser();
 			$followers_num = $this->dom->find('div.zm-profile-side-following strong', 1)->plaintext;
@@ -330,10 +249,10 @@ class User
 	 * 获取用户赞同数
 	 * @return integer 赞同数
 	 */
-	public function get_agree_num()
+	public function agree_num()
 	{
 		if (empty($this->url)) {
-			return -1;
+			return 0;
 		} else {
 			$this->parser();
 			$agree_num = $this->dom->find('div.zm-profile-header-info-list strong', 0)->plaintext;
@@ -346,10 +265,10 @@ class User
 	 * 获取用户感谢数
 	 * @return integer 感谢数
 	 */
-	public function get_thanks_num()
+	public function thanks_num()
 	{
 		if (empty($this->url)) {
-			return -1;
+			return 0;
 		} else {
 			$this->parser();
 			$thanks_num = $this->dom->find('div.zm-profile-header-info-list strong', 1)->plaintext;
@@ -361,10 +280,10 @@ class User
 	 * 获取用户提问数
 	 * @return integer 提问数
 	 */
-	public function get_asks_num()
+	public function asks_num()
 	{
 		if (empty($this->url)) {
-			return -1;
+			return 0;
 		} else {
 			$this->parser();
 			$asks_num = $this->dom->find('span.num', 0)->plaintext;
@@ -376,10 +295,10 @@ class User
 	 * 获取用户回答数
 	 * @return integer 回答数
 	 */
-	public function get_answers_num()
+	public function answers_num()
 	{
 		if (empty($this->url)) {
-			return -1;
+			return 0;
 		} else {
 			$this->parser();
 			$answers_num = $this->dom->find('span.num', 1)->plaintext;
@@ -392,10 +311,10 @@ class User
 	 * 获取用户专栏文章数
 	 * @return integer 专栏文章数
 	 */
-	public function get_posts()
+	public function posts_num()
 	{
 		if (empty($this->url)) {
-			return -1;
+			return 0;
 		} else {
 			$this->parser();
 			$posts_num = $this->dom->find('span.num', 2)->plaintext;
@@ -407,10 +326,10 @@ class User
 	 * 获取用户收藏数
 	 * @return integer 收藏数
 	 */
-	public function get_collections_num()
+	public function collections_num()
 	{
 		if (empty($this->url)) {
-			return -1;
+			return 0;
 		} else {
 			$this->parser();
 			$collections_num = $this->dom->find('span.num', 3)->plaintext;
@@ -422,10 +341,10 @@ class User
 	 * 获取用户关注话题数
 	 * @return integer 用户关注话题数
 	 */
-	public function get_topics_num()
+	public function topics_num()
 	{
 		if (empty($this->url)) {
-			return -1;
+			return 0;
 		} else {
 			$this->parser();
 			$topics_num = $this->dom->find('div.zm-profile-side-section strong', 1)->plaintext;
@@ -439,9 +358,9 @@ class User
 	 * 获取用户关注的话题列表
 	 * @return Generator 话题迭代器
 	 */
-	public function get_topics()
+	public function topics()
 	{
-		$topics_num = $this->get_topics_num();
+		$topics_num = $this->topics_num();
 		if ($topics_num <= 0) {
 			yield null;
 		} else {
@@ -454,10 +373,7 @@ class User
 				if ($i == 0) {
 					for ($j = 0; $j < min($topics_num, 20); $j++) { 
 						$topics_link =  $dom->find('div.zm-profile-section-main', $j);
-
-						$topic_url = ZHIHU_URL.$topics_link->find('a', 1)->href;
-						$topic_id = $topics_link->find('a', 1)->plaintext;
-						yield new Topic($topic_url, $topic_id);
+						yield parser_topics_from_user($topics_link);
 					}
 				} else {
 					$data = array(
@@ -472,10 +388,7 @@ class User
 					$dom = str_get_html($r[1]);
 					for ($j = 0; $j < min(($topics_num - $i * 20), 20); $j++) { 
 						$topics_link = $dom->find('div.zm-profile-section-main', $j);		
-
-						$topic_url = ZHIHU_URL.$topics_link->find('a', 1)->href;
-						$topic_id = $topics_link->find('a', 1)->plaintext;
-						yield new Topic($topic_url, $topic_id);			
+						yield parser_topics_from_user($topics_link);		
 					}
 				}
 			}
@@ -486,9 +399,9 @@ class User
 	 * 获取用户关注列表
 	 * @return Generator 关注列表
 	 */
-	public function get_followees()
+	public function followees()
 	{
-		return $this->get_follow('FOLLOWEES');
+		return $this->follow('FOLLOWEES');
 	}
 
 
@@ -496,9 +409,9 @@ class User
 	 * 获取用户粉丝列表
 	 * @return Generator 粉丝列表
 	 */
-	public function get_followers()
+	public function followers()
 	{
-		return $this->get_follow('FOLLOWERS');
+		return $this->follow('FOLLOWERS');
 	}
 
 	/**
@@ -506,19 +419,17 @@ class User
 	 * @param  String $type 关注或者粉丝
 	 * @return Generator  用户列表
 	 */
-	private function get_follow($type)
+	private function follow($type)
 	{
 		if ($type === 'FOLLOWERS') {
-			$num = $this->get_followers_num();
+			$num = $this->followers_num();
 			$url = $this->url.FOLLOWERS_SUFFIX_URL;
 			$post_url = FOLLOWERS_LIST_URL;
 		} elseif ($type === 'FOLLOWEES') {
-			$num = $this->get_followees_num();
+			$num = $this->followees_num();
 			$url = $this->url.FOLLOWEES_SUFFIX_URL;
 			$post_url = FOLLOWEES_LIST_URL;
-		} else {
-			return null;
-		}
+		} 
 
 		if ($num <= 0) {
 			return null;
@@ -526,7 +437,7 @@ class User
 			$r = Request::get($url);			
 			$dom = str_get_html($r);
 
-			$_xsrf = $dom->find('input[name=_xsrf]',0)->value;
+			$_xsrf = _xsrf($dom);
 		  	$json = $dom->find('div.zh-general-list', 0)->attr['data-init'];
 		  	
 			for ($i = 0; $i < $num / 20; $i++) { 
@@ -551,7 +462,6 @@ class User
 
 					for ($j = 0; $j < min($num - $i * 20, 20); $j++) { 
 						$dom = str_get_html($r[$j]);
-
 						$user_list = $dom->find('a.zg-link', 0);
 						yield new User($user_list->href, $user_list->title);						
 					}
@@ -564,28 +474,23 @@ class User
 	 * 获取用户提问列表
 	 * @return Generator 提问列表迭代器
 	 */
-	public function get_asks()
+	public function asks()
 	{
 		if (empty($this->url)) {
 			yield null;
 		} else {
-			$asks_num = $this->get_asks_num();
-
+			$asks_num = $this->asks_num();
 			if ($asks_num <= 0) {
 				yield null;
 			} else {
-				for ($i = 0; $i < $asks_num /20; $i++) { 
+				for ($i = 0; $i < $asks_num / 20; $i++) { 
 					$ask_url = $this->url.ASKS_PAGE_SUFFIX_URL.($i+1);
-
 					$r = Request::get($ask_url);
 					$dom = str_get_html($r);
 
 					for ($j = 0; $j < min($asks_num - $i * 20, 20); $j++) { 
 						$question_link = $dom->find('a.question_link', $j);
-						
-					 	$question_url = ZHIHU_URL.$question_link->href;
-					 	$title = $question_link->plaintext;
-					 	yield new Question($question_url, $title);
+						yield parser_question_from_user($question_link);
 					} 
 				}
 			}
@@ -596,30 +501,26 @@ class User
 	 * 获取用户回答列表
 	 * @return Generator 回答列表迭代器
 	 */
-	public function get_answers()
+	public function answers()
 	{
 		if (empty($this->url)) {
 			yield null;
 		} else {
-			$answers_num = $this->get_answers_num();
-
+			$answers_num = $this->answers_num();
 			if ($answers_num <= 0) {
 				yield null;
 			} else {
 				for ($i = 0; $i < $answers_num / 20; $i++) { 
-					$answer_url = $this->url.ANSWERS_PAGE_SUFFIX_URL.($i+1);
+					$answer_page_url = $this->url.ANSWERS_PAGE_SUFFIX_URL.($i+1);
 
-					$r = Request::get($answer_url);
+					$r = Request::get($answer_page_url);
 					$dom = str_get_html($r);
 
 					for ($j = 0; $j < min($answers_num - $i * 20, 20); $j++) { 
 						$question_link = $dom->find('a.question_link', $j);
 
 						$answer_url = ZHIHU_URL.$question_link->href;
-						$question_url = ZHIHU_URL.substr($answer_url, 21, 18);
-						$question_title = $question_link->plaintext;
-
-						$question = new Question($question_url, $question_title);
+						$question = parser_question_from_user($question_link);
 						yield new Answer($answer_url, $question);
 					}
 				}

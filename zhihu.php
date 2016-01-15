@@ -15,126 +15,64 @@ function __autoload($class)
 /**
  * 设置 cookie 
  */
-const COOKIE = 'q_c1=0bececc01938485b9f53fb861f1e3a09|1451374262000|1451374262000; cap_id="Yjk3OGYzMGYyZmY1NDZiZjlmN2MwNzg2ZGQxNWU1ZTY=|1451374262|26a62e5db0643bf3f527942341264fbf05f0c1af"; _za=774754b5-1e6f-4c5b-be79-08a65c9e198c; z_c0="QUFCQW4zZ3pBQUFYQUFBQVlRSlZUY0REcVZaaHhlR0t2N3NrR244VzYyZmU5cm5uQnBSUktRPT0=|1451374272|1f48597f0d2cacac441b94235bd20cbf1b6bdfd9"; _xsrf=cfa92cdf2061545910d43e57d1634b94; __utma=51854390.1679535047.1451626147.1451626147.1451629103.2; __utmb=51854390.13.8.1451629299882; __utmc=51854390; __utmz=51854390.1451626147.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmv=51854390.100-1|2=registration_date=20140722=1^3=entry_date=20140722=1';
+const COOKIE = 'q_c1=0bececc01938485b9f53fb861f1e3a09|1451374262000|1451374262000; _za=774754b5-1e6f-4c5b-be79-08a65c9e198c; _xsrf=cfa92cdf2061545910d43e57d1634b94; _ga=GA1.2.280749046.1452361232; cap_id="MTU2NjQ0MDVmM2U5NGY3OGJkOTc3Mzk2YzE5MmJmMDg=|1452741625|d1e8ae8d861d6811473fd29d9e8558c6364d7b2e"; z_c0="QUFCQW4zZ3pBQUFYQUFBQVlRSlZUV1NpdmxhYVRadE5rblNramFyazdlZW1UZ21zN052eXhRPT0=|1452741988|843c71f102706b525c3b314e813250af53270efa"; __utmt=1; __utma=51854390.1751597568.1452778482.1452788128.1452788128.3; __utmb=51854390.7.8.1452828812227; __utmc=51854390; __utmz=51854390.1452788128.2.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided); __utmv=51854390.100-1|2=registration_date=20140722=1^3=entry_date=20140722=1';
 
-/**
- * 首页 URL
- */
+// URL 
 const ZHIHU_URL = 'https://www.zhihu.com';
-
-/**
- * 用户 URL 
- */
 const USER_PREFIX_URL = 'https://www.zhihu.com/people/';
-
-/**
- * 答案 URL 
- */
 const ANSWERS_PREFIX_URL = 'https://www.zhihu.com/answer/';
-
-/**
- * 问题 URL 
- */
 const QUESTION_PREFIX_URL = 'https://www.zhihu.com/question/';
-
-/**
- * 话题 URL 
- */
 const TOPICS_PREFIX_URL = 'https://www.zhihu.com/topic/';
-
-/**
- * 收藏夹 URL 
- */
 const COLLECTION_PREFIX_URL = 'https://www.zhihu.com/collection/';
-
-/**
- * 知乎圆桌 URL 
- */
 const ROUNDTABLE_URL = 'https://www.zhihu.com/roundtable';
-
-/**
- * 收藏夹 URL 后缀
- */
 const COLLECTION_SUFFIX_URL = '/collections';
-
-/**
- * 用户关注 URL 后缀
- */
 const FOLLOWEES_SUFFIX_URL = '/followees';
-
-/**
- * 用户粉丝 URL 后缀
- */
 const FOLLOWERS_SUFFIX_URL = '/followers';
-
-/**
- * 用户提问 URL 后缀
- */
 const ASKS_PAGE_SUFFIX_URL = '/asks?page=';
-
-/**
- * 用户回答 URL 后缀
- */
 const ANSWERS_SUFFIX_URL = '/answer';
 const ANSWERS_PAGE_SUFFIX_URL = '/answers?page=';
-
-/**
- * 话题 URL 后缀
- */
 const TOPICS_SUFFIX_URL = '/topics';
-
-/**
- * 话题热门 URL 后缀
- */
 const TOPICS_HOT_SUFFIX_URL = '/hot';
-
-/**
- * 话题最新 URL 后缀
- */
 const TOPICS_NEW_SUFFIX_URL = '/newest';
-
-/**
- * 话题精华 URL 后缀
- */
 const TOPICS_TOP_SUFFIX_URL = '/top-answers';
-
-/**
- * 话题全部问题 URL 后缀
- */
 const TOPICS_ALL_SUFFIX_URL = '/questions';
-
-/**
- * 页码 URL 后缀
- */
 const GET_PAGE_SUFFIX_URL = '?page=';
-
-/**
- * 答案赞同 URL 后缀 
- */
 const VOTERS_SUFFIX_URL = '/voters_profile';
-
-/**
- * 用户关注 POST URL
- */
 const FOLLOWEES_LIST_URL = 'https://www.zhihu.com/node/ProfileFolloweesListV2';
-
-/**
- * 用户粉丝 POST URL
- */
 const FOLLOWERS_LIST_URL = 'https://www.zhihu.com/node/ProfileFollowersListV2';
-
-/**
- * 用户回答 POST URL
- */
 const ANSWERS_LIST_URL = 'http://www.zhihu.com/node/QuestionAnswerListV2';
-
-/**
- * 答案评论 POST URL
- */
 const COMMENT_LIST_URL = 'https://www.zhihu.com/r/answers/{id}/comments';
-
-/**
- * 答案收藏夹 POST URL
- */
 const COLLECTION_LIST_URL = 'https://www.zhihu.com/node/AnswerFavlists';
 
+
+function _xsrf($dom)
+{
+	return $dom->find('input[name=_xsrf]', 0)->value;
+}
+
+function parser_about_item($item, $edit_str)
+{
+	if ( ! empty($item)) {
+		$about_item = trim($item->plaintext);
+		if ($about_item == $edit_str) {
+			$about_item = null;
+		}
+	} else {
+		$about_item = null;
+	}
+	return $about_item;
+}
+
+function parser_topics_from_user($topic)
+{
+	$topic_url = ZHIHU_URL.$topic->find('a', 1)->href;
+	$topic_name = $topic->find('a', 1)->plaintext;
+	return new Topic($topic_url, $topic_name);
+}
+
+function parser_question_from_user($question)
+{
+	$question_url = ZHIHU_URL.substr($question->href, 0, 18);
+	$question_title = $question->plaintext;
+	return new Question($question_url, $question_title);
+}
