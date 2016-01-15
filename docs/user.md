@@ -14,10 +14,10 @@ $user = new User($user_url);
 ----------------
 获取用户ID，头像URL，性别，所在地等等。
 
-使用 get_about() 获取所有基本信息，亦可使用 get_{要获取的键名}() 来获取单一信息。
+使用 about() 获取所有基本信息，亦可使用 {要获取的键名}() 来获取单一信息。
 ``` php
 // 获取用户信息
-$about = $user->get_about();
+$about = $user->about();
 
 // 输出用户信息
 var_dump($about);
@@ -40,7 +40,7 @@ var_dump($about);
 
 
 // 获取用户 ID
-$name = $user->get_name();
+$name = $user->name();
 var_dump($name);
 
 /**
@@ -57,13 +57,13 @@ var_dump($name);
 **获取用户关注、粉丝**
 ``` php
 // 所关注的用户数
-$followees_num = $user->get_followees_num();
+$followees_num = $user->followees_num();
 var_dump($followees_num);
 
 // 输出：int 1493
 
 // 所关注的用户列表，返回迭代器
-$followees_list = $user->get_followees();
+$followees_list = $user->followees();
 foreach ($followees_list as $followees) {
 	var_dump($followees);
 }
@@ -82,13 +82,13 @@ foreach ($followees_list as $followees) {
 
 
 // 关注该用户的粉丝数
-$followers_num = $user->get_followers_num();
+$followers_num = $user->followers_num();
 var_dump(followers_num);
 
 // 输出：int 232270
 
 // 获取该用户粉丝列表，返回迭代器
-$followers_list = $user->get_followers();
+$followers_list = $user->followers();
 foreach ($followers_list as $followers) {
 	var_dump($followers);
 }
@@ -98,19 +98,19 @@ foreach ($followers_list as $followers) {
 **获取该用户被赞同，感谢数，专栏文章数**
 ``` php
 // 获取用户获得的赞同数
-$agree_num = $user->get_agree_num();
+$agree_num = $user->agree_num();
 var_dump($agree_num);
 
 // 输出：int 484778
 
 // 获取用户获得感谢数
-$thanks_num = $user->get_thanks_num();
+$thanks_num = $user->thanks_num();
 var_dump($thanks_num);
 
 // 输出：int 63607
 
 // 获取用户专栏文章数
-$posts_num = $user->get_posts();
+$posts_num = $user->posts_num();
 var_dump($posts_num);
 
 // 输出：int 32
@@ -120,13 +120,13 @@ var_dump($posts_num);
 **获取用户提问，回答**
 ``` php
 // 获取用户问题提问数
-$asks_num = $user->get_asks_num();
+$asks_num = $user->asks_num();
 var_dump($asks_num);
 
 // 输出：int 310
 
 // 获取用户提问列表，返回迭代器
-$asks_list = $user->get_asks();
+$asks_list = $user->asks();
 foreach ($asks_list as $asks) {
 	var_dump($asks);
 }
@@ -144,13 +144,13 @@ foreach ($asks_list as $asks) {
  */
 
 // 获取用户问题回答数
-$answer_num = $user->get_answers_num();
+$answer_num = $user->answers_num();
 var_dump($answer_num);
 
 // 输出：int 9847
 
 // 获取用户提问列表
-$asks_list = $user->get_asks();
+$asks_list = $user->asks();
 foreach ($asks_list as $asks) {
 	var_dump($asks);
 }
@@ -160,13 +160,13 @@ foreach ($asks_list as $asks) {
 **获取用户关注的话题**
 ``` php
 // 获取用户关注话题数
-$topics_num = $user->get_topics_num();
+$topics_num = $user->topics_num();
 var_dump($topics_num);
 	
 // 输出：int 12
 
 // 获取用户关注话题列表
-$topic_list = $user->get_topics();
+$topic_list = $user->topics();
 foreach ($topic_list as $topic) {
 	var_dump($topic);
 }
