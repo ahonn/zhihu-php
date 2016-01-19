@@ -7,8 +7,8 @@ require_once dirname(__FILE__) .'/zhihu/libraries/request.php';
 
 function __autoload($class)
 {
-	if (file_exists(dirname(__FILE__) . '/zhihu/' . $class . '.php')) {
-		require_once(dirname(__FILE__) . '/zhihu/' . $class . '.php');
+	if (file_exists(dirname(__FILE__) . '/zhihu/' . strtolower($class) . '.php')) {
+		require_once(dirname(__FILE__) . '/zhihu/' . strtolower($class). '.php');
 	}
 }
 
@@ -50,29 +50,50 @@ function _xsrf($dom)
 	return $dom->find('input[name=_xsrf]', 0)->value;
 }
 
-function parser_about_item($item, $edit_str)
+function parser_user($user_dom)
 {
-	if ( ! empty($item)) {
-		$about_item = trim($item->plaintext);
-		if ($about_item == $edit_str) {
-			$about_item = null;
-		}
-	} else {
-		$about_item = null;
+	if (empty($user_url = $user_dom->href)) {
+		$user_url = null;
 	}
-	return $about_item;
+	$user_name = trim($user_dom->plaintext);
+	return new User($user_url, $user_name);
 }
 
-function parser_topics_from_user($topic)
+function parser_topics_from_user($topic_dom)
 {
-	$topic_url = ZHIHU_URL.$topic->find('a', 1)->href;
-	$topic_name = $topic->find('a', 1)->plaintext;
+	$topic_url = ZHIHU_URL.$topic_dom->find('a', 1)->href;
+	$topic_name = $topic_dom->find('a', 1)->plaintext;
 	return new Topic($topic_url, $topic_name);
 }
 
-function parser_question_from_user($question)
+function parser_question_from_user($question_dom)
 {
-	$question_url = ZHIHU_URL.substr($question->href, 0, 18);
-	$question_title = $question->plaintext;
+	$question_url = ZHIHU_URL.substr($question_dom->href, 0, 18);
+	$question_title = $question_dom->plaintext;
 	return new Question($question_url, $question_title);
+}
+
+function parser_answer_from_question($answer_dom, $n = 0)
+{
+	$answer_url = ZHIHU_URL.$answer_dom->find('a.answer-date-link', $n)->href;
+
+	$author_link = $answer_dom->find('div.zm-item-answer-author-info', $n);
+	if ( ! empty($author_link->find('a.author-link', 0))) {
+		$author_name = $author_link->find('a.author-link', 0)->plaintext;
+		$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
+	} else {
+		$author_name = $author_link->find('span', 0)->plaintext;
+		$author_url = null;
+	}
+	$author = new User($author_url, $author_name);
+
+	$upvote_link = $answer_dom->find('button.up', $n);
+	if (! empty($upvote_link->find('span.count', 0))) {
+		$upvote = $upvote_link->find('span.count', 0)->plaintext;
+	} else {
+		$upvote = $answer_dom->find('div.zm-item-vote')->plaintext;
+	}
+
+	$content = trim($answer_dom->find('div.zm-item-answer', $n)->find('div.zm-editable-content', 0)->plaintext);
+	return new Answer($answer_url, $this, $author, $upvote, $content);
 }

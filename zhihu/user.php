@@ -458,15 +458,14 @@ class User
 		} else {
 			$r = Request::get($url);			
 			$dom = str_get_html($r);
-
 			$_xsrf = _xsrf($dom);
 		  	$json = $dom->find('div.zh-general-list', 0)->attr['data-init'];
-		  	
+		
 			for ($i = 0; $i < $num / 20; $i++) { 
 				if ($i == 0) {
 					for ($j = 0; $j < min($num, 20); $j++) { 
 						$user_list = $dom->find('a.zg-link', $j);
-						yield new User($user_list->href, $user_list->title);
+						yield parser_user($user_list);
 					}
 				} else {
 					$params = json_decode(html_entity_decode($json))->params;
@@ -481,11 +480,10 @@ class User
 
 					$r = Request::post($post_url, $data, array("Referer: {$url}" ));
 					$r = json_decode($r)->msg;
-
 					for ($j = 0; $j < min($num - $i * 20, 20); $j++) { 
 						$dom = str_get_html($r[$j]);
 						$user_list = $dom->find('a.zg-link', 0);
-						yield new User($user_list->href, $user_list->title);						
+						yield parser_user($user_list);					
 					}
 				}
 			}

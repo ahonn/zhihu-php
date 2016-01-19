@@ -118,15 +118,12 @@ class Question
 			$r = Request::get($follwers_url);
 			$dom = str_get_html($r);
 
-			$_xsrf = $dom->find('input[name=_xsrf]',0)->value;
+			$_xsrf = _xsrf($dom);
 			for ($i = 0; $i < $followers_num / 20; $i++) { 
 				if ($i == 0) {
 					for ($j = 0; $j < min($followers_num, 20); $j++) { 
-						$follower_link = $dom->find('div.zm-profile-card h2 a', $j);
-						$user_url = $follower_link->href;
-						$user_id = $follower_link->plaintext;
-						yield new User($user_url, $user_id);
-
+						$follower_link = $dom->find('div.zm-profile-card h2 ', $j);
+						yield parser_user_from_question($follower_link);
 					}
 				} else {
 					$data = array(
@@ -138,17 +135,9 @@ class Question
 					$r = Request::post($follwers_url, $data, array("Referer: {$follwers_url}"));
 					$r = json_decode($r)->msg;
 					$dom = str_get_html($r[1]);
-
-					for ($j = 0; $j < min(($followers_num - $i * 20), 20); $j++) { 
+					for ($j = 0; $j < min(($followers_num - $i * 20), 20); $j++) {
 						$follower_link = $dom->find('div.zm-profile-card h2', $j);
-
-						$user_url = null;
-						if ( ! empty($follower_link->find('a', 0))) {
-							$user_url = $follower_link->find('a', 0)->href;
-						}
-						$user_id = $follower_link->plaintext;
-						yield new User($user_url, $user_id);
-
+						yield parser_user_from_question($follower_link);
 					}
 				}
 			}
@@ -174,27 +163,7 @@ class Question
 			for ($i = 0; $i < $answers_num / 50; $i++) { 
 				if($i == 0) {
 					for ($j = 0; $j < min($answers_num, 50); $j++) { 
-						$answer_url = ZHIHU_URL.$this->dom->find('a.answer-date-link', $j)->href;
-
-						$author_link = $this->dom->find('div.zm-item-answer-author-info', $j);
-						if ( ! empty($author_link->find('a.author-link', 0))) {
-							$author_id = $author_link->find('a.author-link', 0)->plaintext;
-							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
-						} else {
-							$author_id = $author_link->find('span', 0)->plaintext;
-							$author_url = null;
-						}
-						$author = new User($author_url, $author_id);
-
-						$upvote_link = $this->dom->find('button.up', $j);
-						if ( ! empty($upvote_link->find('span.count', 0))) {
-							$upvote = $upvote_link->find('span.count', 0)->plaintext;
-						} else {
-							$upvote = $this->dom->find('div.zm-item-vote')->plaintext;
-						}
-
-						$content = trim($this->dom->find('div.zm-item-answer', $j)->find('div.zm-editable-content', 0)->plaintext);
-						yield new Answer($answer_url, $this, $author, $upvote, $content);
+						yield parser_answer_from_question($this->dom, $n);
 					}
 				} else {
 					$params = json_decode(html_entity_decode($json))->params;
@@ -208,34 +177,11 @@ class Question
 					);
 
 					$r = Request::post($post_url, $data, array("Referer: {$this->url}" ));
-
 					$r = json_decode($r)->msg;
 
 					for ($j = 0; $j < min($answers_num - $i * 50, 50); $j++) { 
 						$dom = str_get_html($r[$j]);
-
-						$answer_url = ZHIHU_URL.$dom->find('a.answer-date-link', 0)->href;
-
-						$author_link = $dom->find('div.zm-item-answer-author-info', 0);
-						if ( ! empty($author_link->find('a.author-link', 0))) {
-							$author_id = $author_link->find('a.author-link', 0)->plaintext;
-							$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
-						} else {
-							$author_id = $author_link->find('span', 0)->plaintext;
-							$author_url = null;
-						}
-						$author = new User($author_url, $author_id);
-
-						$upvote_link = $dom->find('button.up', 0);
-						if (! empty($upvote_link->find('span.count', 0))) {
-							$upvote = $upvote_link->find('span.count', 0)->plaintext;
-						} else {
-							$upvote = $dom->find('div.zm-item-vote')->plaintext;
-						}
-
-						$content = trim($dom->find('div.zm-item-answer', 0)->find('div.zm-editable-content', 0)->plaintext);
-						yield new Answer($answer_url, $this, $author, $upvote, $content);
-						
+						yield parser_answer_from_question($dom);
 					}
 				}
 			}

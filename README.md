@@ -37,13 +37,6 @@ $about = $author->about();
 var_dump($about);
 ```
 
-## 文档
-- [User](https://github.com/ahonn/zhihu-php/blob/master/docs/user.md)
-- [Question](https://github.com/ahonn/zhihu-php/blob/master/docs/question.md)
-- [Answer](https://github.com/ahonn/zhihu-php/blob/master/docs/answer.md)
-- [Topic](https://github.com/ahonn/zhihu-php/blob/master/docs/topic.md)
-- [Collection](https://github.com/ahonn/zhihu-php/blob/master/docs/collection.md)
-
 ## 联系我
 - Email：[ahonn95@outlook.com](mailto:ahonn95@outlook.com)
 
