@@ -10,8 +10,7 @@ require_once 'time.php';
 $time = new Time();
 $time->star();
 
-// $question_url = 'https://www.zhihu.com/question/38813693';
-$question_url = 'https://www.zhihu.com/question/39211000';
+$question_url = 'https://www.zhihu.com/question/38813693';
 
 $question = new Question($question_url);
 
@@ -31,11 +30,11 @@ $question = new Question($question_url);
 // $followers_num = $question->followers_num();
 // var_dump($followers_num);
 
-// 获取关注该问题的用户
-$followers_list = $question->followers();
-foreach ($followers_list as $followers) {
-	var_dump($followers);
-}
+// // 获取关注该问题的用户
+// $followers_list = $question->followers();
+// foreach ($followers_list as $followers) {
+// 	var_dump($followers);
+// }
 
 // // 获取问题回答数
 // $answers_num = $question->answers_num();

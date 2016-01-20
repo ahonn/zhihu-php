@@ -29,7 +29,6 @@ class Question
 	{
 		if (empty($this->dom) || ! isset($this->dom)) {
 			$r = Request::get($this->url);
-
 			$this->dom = str_get_html($r);
 		}
 	}
@@ -96,7 +95,7 @@ class Question
 	public function topics()
 	{
 		$this->parser();
-		for ($i = 0; @$this->dom->find('a.zm-item-tag',$i) != null ; $i++) { 
+		for ($i = 0; ! empty($this->dom->find('a.zm-item-tag',$i)) ; $i++) { 
 			$topic_list[] = $this->dom->find('a.zm-item-tag',$i)->plaintext;
 		}
 		return $topic_list;
@@ -122,8 +121,8 @@ class Question
 			for ($i = 0; $i < $followers_num / 20; $i++) { 
 				if ($i == 0) {
 					for ($j = 0; $j < min($followers_num, 20); $j++) { 
-						$follower_link = $dom->find('div.zm-profile-card h2 ', $j);
-						yield parser_user_from_question($follower_link);
+						$follower_link = $dom->find('div.zm-profile-card h2  a', $j);
+						yield parser_user($follower_link);
 					}
 				} else {
 					$data = array(
@@ -136,8 +135,8 @@ class Question
 					$r = json_decode($r)->msg;
 					$dom = str_get_html($r[1]);
 					for ($j = 0; $j < min(($followers_num - $i * 20), 20); $j++) {
-						$follower_link = $dom->find('div.zm-profile-card h2', $j);
-						yield parser_user_from_question($follower_link);
+						$follower_link = $dom->find('div.zm-profile-card h2', $j)->find('a', 0);
+						yield parser_user($follower_link);
 					}
 				}
 			}
@@ -163,7 +162,7 @@ class Question
 			for ($i = 0; $i < $answers_num / 50; $i++) { 
 				if($i == 0) {
 					for ($j = 0; $j < min($answers_num, 50); $j++) { 
-						yield parser_answer_from_question($this->dom, $n);
+						yield parser_answer_from_question($this, $this->dom, $j);
 					}
 				} else {
 					$params = json_decode(html_entity_decode($json))->params;
@@ -181,7 +180,7 @@ class Question
 
 					for ($j = 0; $j < min($answers_num - $i * 50, 50); $j++) { 
 						$dom = str_get_html($r[$j]);
-						yield parser_answer_from_question($dom);
+						yield parser_answer_from_question($this, $dom);
 					}
 				}
 			}

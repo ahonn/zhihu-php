@@ -15,7 +15,7 @@ function __autoload($class)
 /**
  * 设置 cookie 
  */
-const COOKIE = 'q_c1=0bececc01938485b9f53fb861f1e3a09|1451374262000|1451374262000; _za=774754b5-1e6f-4c5b-be79-08a65c9e198c; _xsrf=cfa92cdf2061545910d43e57d1634b94; _ga=GA1.2.280749046.1452361232; cap_id="MTU2NjQ0MDVmM2U5NGY3OGJkOTc3Mzk2YzE5MmJmMDg=|1452741625|d1e8ae8d861d6811473fd29d9e8558c6364d7b2e"; z_c0="QUFCQW4zZ3pBQUFYQUFBQVlRSlZUV1NpdmxhYVRadE5rblNramFyazdlZW1UZ21zN052eXhRPT0=|1452741988|843c71f102706b525c3b314e813250af53270efa"; __utmt=1; __utma=51854390.1751597568.1452778482.1452788128.1452788128.3; __utmb=51854390.7.8.1452828812227; __utmc=51854390; __utmz=51854390.1452788128.2.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided); __utmv=51854390.100-1|2=registration_date=20140722=1^3=entry_date=20140722=1';
+const COOKIE = 'q_c1=89866b7ad2944da9a29c831ba64156c7|1453079039000|1453079039000; _za=51ea7776-0cd3-401e-8ca5-418ed33ef1a8; cap_id="NThhMWQxODE3OGJlNGU1YmJkMTFkZjhmOThiNzE5NjQ=|1453111253|9cff5d1bb2bf5cbdd3493f28d33c31d2d9c500b7"; z_c0="QUFCQW4zZ3pBQUFYQUFBQVlRSlZUZkJFeEZZNFdkR3hmcTNld1Qtdng5YTFXdmpPS1RNZ2FBPT0=|1453111280|d3e03cc2b844914f8f3f591980b7b2be3c966c22"; _xsrf=dd3634d2d2afbe464bee2976205fe7da; __utmt=1; __utma=51854390.1313658305.1453079040.1453226793.1453270639.6; __utmb=51854390.2.10.1453270639; __utmc=51854390; __utmz=51854390.1453112913.3.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided); __utmv=51854390.100-1|2=registration_date=20140722=1^3=entry_date=20140722=1';
 
 // URL 
 const ZHIHU_URL = 'https://www.zhihu.com';
@@ -73,7 +73,7 @@ function parser_question_from_user($question_dom)
 	return new Question($question_url, $question_title);
 }
 
-function parser_answer_from_question($answer_dom, $n = 0)
+function parser_answer_from_question($question, $answer_dom, $n = 0)
 {
 	$answer_url = ZHIHU_URL.$answer_dom->find('a.answer-date-link', $n)->href;
 
@@ -95,5 +95,5 @@ function parser_answer_from_question($answer_dom, $n = 0)
 	}
 
 	$content = trim($answer_dom->find('div.zm-item-answer', $n)->find('div.zm-editable-content', 0)->plaintext);
-	return new Answer($answer_url, $this, $author, $upvote, $content);
+	return new Answer($answer_url, $question, $author, $upvote, $content);
 }
