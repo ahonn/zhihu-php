@@ -1,6 +1,11 @@
 ## Change Log
 
-### 2016.1.20
+### 2016.01.21
+- Update 更新 answer 类，替换重复代码
+- Fix 修改所有类的 url 属性为 private，并添加 url() 函数
+- Fix 添加 dom 属性
+
+### 2016.01.20
 - Fix 重写 question 类获取关注者及回答相关函数
 - Add 增加获取问题关注者及回答的公共函数
 
