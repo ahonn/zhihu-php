@@ -5,11 +5,12 @@
  */
 class Answer
 {
-	public $url;
+	private $url;
 	private $question;
 	private $author;
 	private $upvote;
 	private $content;
+	private $dom;
 
 	function __construct($url, Question $question = null, User $author = null, $upvote = null, $content = null)
 	{
@@ -40,6 +41,10 @@ class Answer
 		}
 	}
 
+	public function url()
+	{
+		return $this->url;
+	}
 
 	/**
 	 * 获取答案所在问题
@@ -159,8 +164,8 @@ class Answer
 	public function collection_num()
 	{
 		$this->parser();
-		if ( ! empty($this->dom->find('div.zm-side-section-inner h3 a', 0))) {
-			$collection_num = (int)$this->dom->find('div.zm-side-section-inner h3 a', 0)->plaintext;
+		if ( ! empty($collection_num = $this->dom->find('div.zm-side-section-inner h3 a', 0))) {
+			$collection_num = (int)$collection_num->plaintext;
 		} else {
 			$collection_num = 0;
 		}
@@ -180,7 +185,6 @@ class Answer
 		} else {
 			$collection_url = $this->url.COLLECTION_SUFFIX_URL;
 			$r = Request::get($collection_url);
-
 			$dom = str_get_html($r);
 
 			$_xsrf = $dom->find('input[name=_xsrf]', 0)->attr['value'];
@@ -189,26 +193,11 @@ class Answer
 			for ($i = 0; $i < $collection_num / 20; $i++) { 
 				if ($i == 0) {
 					for ($j = 0; $j < min($collection_num, 20); $j++) { 
-						$link = $dom->find('div.zm-item', $j);
-
-						$collection_link = $link->find('h2 a', 0);
-						$collection_url = ZHIHU_URL.$collection_link->href;
-						$collection_title = $collection_link->plaintext;
-
-						if ( ! empty($link->find('div a[class!=zg-unfollow]', 0))) {
-							$author_link = $link->find('div a[class!=zg-unfollow]', 0);
-							$author_url = $author_link->href;
-							$author_id = $author_link->plaintext;
-							$collection_author = new User($author_url, $author_id);
-						} else {
-							$collection_author = null;
-						}
-						
-						yield new Collection($collection_url, $collection_title, $collection_author);
+						$collection = $dom->find('div.zm-item', $j);
+						yield parser_collection_from_answer($collection);	
 					}
 				} else {
 					$post_url = COLLECTION_LIST_URL;
-
 					$params = json_decode(html_entity_decode($json))->params;
 					$params->offset = $i * 20;
 					$params = json_encode($params);
@@ -222,25 +211,10 @@ class Answer
 					$r = Request::post($post_url, $data, array("Referer: {$collection_url}"));
 					$r = json_decode($r)->msg;
 
-					for ($j = 0; $j < min($collection_num - $i *20, 20); $j++) { 
+					for ($j = 0; $j < count($r); $j++) { 
 						$dom = str_get_html($r[$j]);
-
-						$link = $dom->find('div.zm-item', 0);
-
-						$collection_link = $link->find('h2 a', 0);
-						$collection_url = ZHIHU_URL.$collection_link->href;
-						$collection_title = $collection_link->plaintext;
-
-						if ( ! empty($link->find('div a[class!=zg-unfollow]', 0))) {
-							$author_link = $link->find('div a[class!=zg-unfollow]', 0);
-							$author_url = $author_link->href;
-							$author_id = $author_link->plaintext;
-							$collection_author = new User($author_url, $author_id);
-						} else {
-							$collection_author = null;
-						}
-						
-						yield new Collection($collection_url, $collection_title, $collection_author);
+						$collection = $dom->find('div.zm-item', 0);
+						yield parser_collection_from_answer($collection);
 					}
 				}
 			}
@@ -258,26 +232,20 @@ class Answer
 		$answer_id = $this->dom->find('div.zm-item-answer', 0)->attr['data-aid'];
 
 		$voters_url = ANSWERS_PREFIX_URL.$answer_id.VOTERS_SUFFIX_URL;
-		while ($voters_url) {
+		echo $voters_url;
+		while (true) {
 			$r = Request::get($voters_url);
 			$response_json = json_decode($r);
-
-			$voters = $response_json->payload;
-			$voters_url = ZHIHU_URL.$response_json->paging->next;
-			
-			foreach ($voters as $voter) {
-				$dom = str_get_html($voter);
-				if ( ! empty($dom->find('div.author a', 0))) {
-					$voter_link = $dom->find('div.author a', 0);
-
-					$voter_url = $voter_link->href;
-					$voter_name = $voter_link->plaintext;
-				} else {
-					$voter_url = null;
-					$voter_name = $dom->find('div.body', 0)->plaintext;
+			if ( ! empty($response_json->paging->next)) {
+				$voters_url = ZHIHU_URL.$response_json->paging->next;
+				$voters = $response_json->payload;
+				foreach ($voters as $voter) {
+					$dom = str_get_html($voter);
+					$voter_link = $dom->find('div.body a', 0);
+					yield parser_user($voter_link);
 				}
-
-				yield new User($voter_url, $voter_name);
+			} else {
+				break;
 			}
 		}
 	}

@@ -50,34 +50,36 @@ function _xsrf($dom)
 	return $dom->find('input[name=_xsrf]', 0)->value;
 }
 
-function parser_user($user_dom)
+function parser_user($dom)
 {
-	if (empty($user_url = $user_dom->href)) {
+	if (empty($user_url = $dom->href)) {
 		$user_url = null;
+		$user_name = null;
+	} else {
+		$user_name = trim($dom->plaintext);
 	}
-	$user_name = trim($user_dom->plaintext);
 	return new User($user_url, $user_name);
 }
 
-function parser_topics_from_user($topic_dom)
+function parser_topics_from_user($dom)
 {
-	$topic_url = ZHIHU_URL.$topic_dom->find('a', 1)->href;
-	$topic_name = $topic_dom->find('a', 1)->plaintext;
+	$topic_url = ZHIHU_URL.$dom->find('a', 1)->href;
+	$topic_name = $dom->find('a', 1)->plaintext;
 	return new Topic($topic_url, $topic_name);
 }
 
-function parser_question_from_user($question_dom)
+function parser_question_from_user($dom)
 {
-	$question_url = ZHIHU_URL.substr($question_dom->href, 0, 18);
-	$question_title = $question_dom->plaintext;
+	$question_url = ZHIHU_URL.substr($dom->href, 0, 18);
+	$question_title = $dom->plaintext;
 	return new Question($question_url, $question_title);
 }
 
-function parser_answer_from_question($question, $answer_dom, $n = 0)
+function parser_answer_from_question($question, $dom, $n = 0)
 {
-	$answer_url = ZHIHU_URL.$answer_dom->find('a.answer-date-link', $n)->href;
+	$answer_url = ZHIHU_URL.$dom->find('a.answer-date-link', $n)->href;
 
-	$author_link = $answer_dom->find('div.zm-item-answer-author-info', $n);
+	$author_link = $dom->find('div.zm-item-answer-author-info', $n);
 	if ( ! empty($author_link->find('a.author-link', 0))) {
 		$author_name = $author_link->find('a.author-link', 0)->plaintext;
 		$author_url = ZHIHU_URL.$author_link->find('a.author-link', 0)->href;
@@ -87,13 +89,31 @@ function parser_answer_from_question($question, $answer_dom, $n = 0)
 	}
 	$author = new User($author_url, $author_name);
 
-	$upvote_link = $answer_dom->find('button.up', $n);
+	$upvote_link = $dom->find('button.up', $n);
 	if (! empty($upvote_link->find('span.count', 0))) {
 		$upvote = $upvote_link->find('span.count', 0)->plaintext;
 	} else {
-		$upvote = $answer_dom->find('div.zm-item-vote')->plaintext;
+		$upvote = $dom->find('div.zm-item-vote')->plaintext;
 	}
 
-	$content = trim($answer_dom->find('div.zm-item-answer', $n)->find('div.zm-editable-content', 0)->plaintext);
+	$content = trim($dom->find('div.zm-item-answer', $n)->find('div.zm-editable-content', 0)->plaintext);
 	return new Answer($answer_url, $question, $author, $upvote, $content);
+}
+
+function parser_collection_from_answer($dom)
+{
+	$collection_link = $dom->find('h2 a', 0);
+	$collection_url = ZHIHU_URL.$collection_link->href;
+	$collection_title = $collection_link->plaintext;
+
+	if ( ! empty($author_link = $dom->find('div a[class!=zg-unfollow]', 0))) {
+		$author_url = $author_link->href;
+		$author_id = $author_link->plaintext;
+
+		$collection_author = new User($author_url, $author_id);
+	} else {
+		$collection_author = null;
+	}
+	
+	return new Collection($collection_url, $collection_title, $collection_author);
 }
