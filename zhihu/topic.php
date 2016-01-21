@@ -2,8 +2,9 @@
 
 class Topic 
 {
-	public $url;
+	private $url;
 	private $name;
+	private $dom;
 
 	function __construct($url, $name = null)
 	{
@@ -28,6 +29,15 @@ class Topic
 
 			$this->dom = str_get_html($r);
 		}
+	}
+
+	/**
+	 * 获取 URL
+	 * @return string URL
+	 */
+	public function url()
+	{
+		return $this->url;
 	}
 
 	/**

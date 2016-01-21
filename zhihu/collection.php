@@ -5,9 +5,10 @@
  */
 class Collection
 {
-	public $url;
+	private $url;
 	private $title;
 	private $author;
+	private $dom;
 
 	function __construct($url, $title=null, $author=null)
 	{
@@ -30,10 +31,19 @@ class Collection
 	 */
 	public function parser()
 	{
-		if (empty($this->dom) || ! isset($this->dom)) {
+		if (empty($this->dom)) {
 			$r = Request::get($this->url);
 			$this->dom = str_get_html($r);
 		}
+	}
+
+	/**
+	 * 获取 URL
+	 * @return string URL
+	 */
+	public function url()
+	{
+		return $this->url;
 	}
 
 	/**
