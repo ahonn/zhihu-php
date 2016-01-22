@@ -5,6 +5,7 @@ class Topic
 	private $url;
 	private $name;
 	private $dom;
+	private $entire_dom;
 
 	function __construct($url, $name = null)
 	{
@@ -24,11 +25,23 @@ class Topic
 	 */
 	public function parser()
 	{
-		if (empty($this->dom) || ! isset($this->dom)) {
+		if (empty($this->dom)) {
 			$r = Request::get($this->url);
-
 			$this->dom = str_get_html($r);
 		}
+	}
+
+	/**
+	 * 解析话题结构
+	 * @return object simple html dom
+	 */
+	public function parser_entire()
+	{
+		if (empty($this->entire_dom)) {
+			$entire_url = $this->url.'/organize';
+			$this->entire_dom = str_get_html(Request::get($entire_url));	
+		}
+		return $this->entire_dom;
 	}
 
 	/**
@@ -87,15 +100,12 @@ class Topic
 	 */
 	public function parent()
 	{
-		$this->parser();
-		$parent_link = $this->dom->find('div.parent-topic', 0);
-
-		for ($i = 0; ! empty($parent_link->find('a', $i)) ; $i++) { 
-			$parent_url = ZHIHU_URL.$parent_link->find('a', $i)->href;
-			$parent_id = $parent_link->find('a', $i)->plaintext;
-			$parent_list[] = new Topic($parent_url, $parent_id);
+		$dom = $this->parser_entire();
+		for ($i = 0; ! empty($parent_link = $dom->find('div#zh-topic-organize-parent-editor a', $i)); $i++) { 
+			$parent_url = ZHIHU_URL.substr($parent_link->href, 0 , 15);
+			$parent_name = trim($parent_link->plaintext);
+			yield new Topic($parent_url, $parent_name);
 		}
-		return $parent_list;
 	}
 
 	/**
@@ -104,24 +114,12 @@ class Topic
 	 */
 	public function children()
 	{
-		if (empty($this->dom->find('a.zm-topic-side-title-link', 0))) {
-			return null;
-		}
-		$children_num = $this->dom->find('a.zm-topic-side-title-link', 0)->plaintext;
-		$children_num = (int)explode(' ', $children_num, 3)[1];
-
-		$entire_url = $this->url.'/organize';
-		$r = Request::get($entire_url);
-		$dom = str_get_html($r);
-
-		for ($i = 0; $i < $children_num; $i++) { 
-				$children_link = $dom->find('div#zh-topic-organize-child-editor a', $i);
-
+		$dom = $this->parser_entire();
+		for ($i = 0; ! empty($children_link = $dom->find('div#zh-topic-organize-child-editor a', $i)); $i++) { 
 				$children_url = ZHIHU_URL.substr($children_link->href, 0, 15);
-				$children_id = trim($children_link->plaintext);
-				$children_list[] = new Topic($children_url, $children_id);
+				$children_name = trim($children_link->plaintext);
+				yield new Topic($children_url, $children_name);
 		}
-		return $children_list;
 	}
 
 	/**
@@ -131,13 +129,12 @@ class Topic
 	public function answerer()
 	{
 		$this->parser();
-		for ($i = 0; ! empty($this->dom->find('div.zm-topic-side-person-item', $i)) ; $i++) { 
-			$answerer_link = $this->dom->find('div.zm-topic-side-person-item', $i)->find('a', 1);
+		for ($i = 0; ! empty($dom = $this->dom->find('div.zm-topic-side-person-item', $i)) ; $i++) { 
+			$answerer_link = $dom->find('a', 1);
 			$answerer_url = ZHIHU_URL.$answerer_link->href;
-			$answerer_id = trim($answerer_link->plaintext);
-			$answerer_list[] = new User($answerer_url, $answerer_id);
+			$answerer_name = trim($answerer_link->plaintext);
+			yield new User($answerer_url, $answerer_name);
 		}
-		return $answerer_list;
 	}
 
 	/**
@@ -180,9 +177,7 @@ class Topic
 
 			for ($j = 0; ! empty($dom->find('h2 a.question_link', $j)); $j++) { 
 				$question_link = $dom->find('h2 a.question_link', $j);
-				$question_url = ZHIHU_URL.$question_link->href;
-				$question_title = $question_link->plaintext;
-				yield new Question($question_url, $question_title);	
+				yield parser_question($question_link);	
 			}
 		}
 	}
@@ -198,18 +193,15 @@ class Topic
 		$r = Request::get($url);
 		$dom = str_get_html($r);
 
+		$_xsrf = _xsrf($dom);
 		$tmp_url = null;
-		$_xsrf = $dom->find('input[name=_xsrf]', 0)->attr['value'];
-		for ($i = 0; ! empty($dom->find('div.feed-item', $i)); $i++) { 
-			$combine = $dom->find('div.feed-item', $i);
+		for ($i = 0; ! empty($combine = $dom->find('div.feed-item', $i)); $i++) { 
 			$offset = $combine->attr['data-score'];
 
 			$question_link = $combine->find('h2 a.question_link', 0);
 			$question_url = ZHIHU_URL.$question_link->href;
-
 			if ($question_url != $tmp_url) {
 				$tmp_url = $question_url;
-
 				$question_title = $question_link->plaintext;
 				yield new Question($question_url, $question_title);
 			}
@@ -225,16 +217,13 @@ class Topic
 			$item = $r[0];
 			$dom = str_get_html($r[1]);
 
-			for ($i = 0; $item && ! empty($dom->find('div.feed-item', $i)) ; $i++) { 
-				$combine = $dom->find('div.feed-item', $i);
+			for ($i = 0; $item && ! empty($combine = $dom->find('div.feed-item', $i)) ; $i++) { 
 				$offset = $combine->attr['data-score'];
 
 				$question_link = $combine->find('h2 a.question_link', 0);
 				$question_url = ZHIHU_URL.$question_link->href;
-
 				if ($question_url != $tmp_url) {
 					$tmp_url = $question_url;
-
 					$question_title = $question_link->plaintext;
 					yield new Question($question_url, $question_title);
 				}
@@ -261,22 +250,16 @@ class Topic
 				$dom = str_get_html($r);
 			}
 
-			for ($j = 0; ! empty($dom->find('div.feed-item', $j)); $j++) { 
-				$item = $dom->find('div.feed-item', $j);
+			for ($j = 0; ! empty($item = $dom->find('div.feed-item', $j)); $j++) { 
 				$answer_url = ZHIHU_URL.$item->find('div.zm-item-rich-text', 0)->attr['data-entry-url'];
 
 				$question_link = $item->find('h2 a.question_link', 0);
-				$question_url = ZHIHU_URL.$question_link->href;
-				$question_title = $question_link->plaintext;
-				$question =  new Question($question_url, $question_title);
+				$question =  parser_question($question_link);
 
 				$author_link = $item->find('div.zm-item-answer-author-info a', 0);
-				$author_url = ZHIHU_URL.$author_link->href;
-				$author_name = trim($author_link->plaintext);
-				$author = new User($author_url, $author_name);
+				$author = parser_user_from_topic($author_link);
 
 				$upvote = $item->find('span.count', 0)->plaintext;
-
 				$content = $item->find('textarea.content', 0)->plaintext;
 
 				yield new Answer($answer_url, $question, $author, $upvote, $content);	

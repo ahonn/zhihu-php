@@ -61,18 +61,18 @@ function parser_user($dom)
 	return new User($user_url, $user_name);
 }
 
+function parser_question($dom)
+{
+	$question_url = ZHIHU_URL.substr($dom->href, 0, 18);
+	$question_title = trim($dom->plaintext);
+	return new Question($question_url, $question_title);
+}
+
 function parser_topics_from_user($dom)
 {
 	$topic_url = ZHIHU_URL.$dom->find('a', 1)->href;
 	$topic_name = $dom->find('a', 1)->plaintext;
 	return new Topic($topic_url, $topic_name);
-}
-
-function parser_question_from_user($dom)
-{
-	$question_url = ZHIHU_URL.substr($dom->href, 0, 18);
-	$question_title = $dom->plaintext;
-	return new Question($question_url, $question_title);
 }
 
 function parser_answer_from_question($question, $dom, $n = 0)
@@ -116,4 +116,16 @@ function parser_collection_from_answer($dom)
 	}
 	
 	return new Collection($collection_url, $collection_title, $collection_author);
+}
+
+function parser_user_from_topic($dom)
+{
+	if (empty($dom->href)) {
+		$user_url = null;
+		$user_name = null;
+	} else {
+		$user_url = ZHIHU_URL.$dom->href;
+		$user_name = trim($dom->plaintext);
+	}
+	return new User($user_url, $user_name);
 }

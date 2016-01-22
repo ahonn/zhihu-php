@@ -8,6 +8,7 @@ class User
 	private $url;
 	private $name;
 	private $dom;
+	private $about_dom;
 
 	function __construct($url, $name=null)
 	{
@@ -520,7 +521,7 @@ class User
 
 					for ($j = 0; $j < min($asks_num - $i * 20, 20); $j++) { 
 						$question_link = $dom->find('a.question_link', $j);
-						yield parser_question_from_user($question_link);
+						yield parser_question_from_userparser_question($question_link);
 					} 
 				}
 			}
@@ -550,7 +551,7 @@ class User
 						$question_link = $dom->find('a.question_link', $j);
 
 						$answer_url = ZHIHU_URL.$question_link->href;
-						$question = parser_question_from_user($question_link);
+						$question = parser_question($question_link);
 						yield new Answer($answer_url, $question);
 					}
 				}
