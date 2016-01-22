@@ -1,5 +1,8 @@
 ## Change Log
 
+### 2016.01.22
+- Update 更新 Topic 类，添加 parser_entire() 等
+
 ### 2016.01.21
 - Update 更新 answer 类，替换重复代码
 - Fix 修改所有类的 url 属性为 private，并添加 url() 函数
