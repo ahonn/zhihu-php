@@ -351,7 +351,7 @@ class User
 		}
 	}
 
-	# TODO: 获取用户专栏
+	# TODO: 获取用户专栏文章
 
 	/**
 	 * 获取用户收藏数
@@ -368,7 +368,27 @@ class User
 		}
 	}
 
-	# TODO: 获取用户收藏夹
+	/**
+	 * 获取用户收藏夹
+	 * @return  Generator 收藏夹生成器
+	 */
+	public function collections()
+	{
+		$collections_num = $this->collections_num();
+		if ($collections_num == 0) {
+			yield null;
+		} else {
+			$collections_url = $this->url.'/collections';
+			$r = Request::get($collections_url);
+			$dom = str_get_html($r);
+
+			for ($i = 0; ! empty($collection_link = $dom->find('a.zm-profile-fav-item-title', $i)); $i++) { 
+				$collection_url = ZHIHU_URL.$collection_link->href;
+				$collection_title = trim($collection_link->plaintext);
+				yield new Collection($collection_url, $collection_title, $this);
+			}
+		}
+	}
 
 	/**
 	 * 获取用户关注话题数
@@ -389,12 +409,12 @@ class User
 
 	/**
 	 * 获取用户关注的话题列表
-	 * @return Generator 话题迭代器
+	 * @return Generator 话题生成器
 	 */
 	public function topics()
 	{
 		$topics_num = $this->topics_num();
-		if ($topics_num <= 0) {
+		if ($topics_num == 0) {
 			yield null;
 		} else {
 			$topics_url = $this->url.TOPICS_SUFFIX_URL;
@@ -503,7 +523,7 @@ class User
 
 	/**
 	 * 获取用户提问列表
-	 * @return Generator 提问列表迭代器
+	 * @return Generator 提问列表生成器
 	 */
 	public function asks()
 	{
@@ -511,7 +531,7 @@ class User
 			yield null;
 		} else {
 			$asks_num = $this->asks_num();
-			if ($asks_num <= 0) {
+			if ($asks_num == 0) {
 				yield null;
 			} else {
 				for ($i = 0; $i < $asks_num / 20; $i++) { 
@@ -530,7 +550,7 @@ class User
 
 	/**
 	 * 获取用户回答列表
-	 * @return Generator 回答列表迭代器
+	 * @return Generator 回答列表生成器
 	 */
 	public function answers()
 	{
@@ -538,7 +558,7 @@ class User
 			yield null;
 		} else {
 			$answers_num = $this->answers_num();
-			if ($answers_num <= 0) {
+			if ($answers_num == 0) {
 				yield null;
 			} else {
 				for ($i = 0; $i < $answers_num / 20; $i++) { 

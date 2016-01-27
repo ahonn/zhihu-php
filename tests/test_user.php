@@ -19,6 +19,18 @@ $user = new User($user_url);
 $name = $user->name();
 var_dump($name);
 
+// 获取用户头像URL
+$avatar = $user->avatar();
+var_dump($avatar);
+
+// 获取用户微博链接
+$weibo_url = $user->weibo_url();
+var_dump($weibo_url);
+
+// 获取用户信息
+$about = $user->about();
+var_dump($about);
+
 // 获取用户关注数
 $followees_num = $user->followees_num();
 var_dump($followees_num);
@@ -51,17 +63,6 @@ var_dump($posts_num);
 $collection_num = $user->collections_num();
 var_dump($collection_num);
 	
-// 获取用户头像URL
-$avatar = $user->avatar();
-var_dump($avatar);
-
-// 获取用户微博链接
-$weibo_url = $user->weibo_url();
-var_dump($weibo_url);
-
-// 获取用户信息
-$about = $user->about();
-var_dump($about);
 	
 // 获取用户关注话题数
 $topics_num = $user->topics_num();
@@ -95,6 +96,12 @@ foreach ($asks_list as $asks) {
 $answer_list = $user->answers();
 foreach ($answer_list as $answer) {
 	var_dump($answer);
+}
+
+// 获取用户收藏夹列表
+$collections = $user->collections();
+foreach ($collections as $collection) {
+	var_dump($collection->title());
 }
 
 $time->stop();

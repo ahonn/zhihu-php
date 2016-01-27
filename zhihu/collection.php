@@ -84,8 +84,8 @@ class Collection
 			$this->parser();
 			$author_link = $this->dom->find('h2.zm-list-content-title a', 0);
 			$author_url = ZHIHU_URL.$author_link->href;
-			$author_id = $author_link->plaintext;
-			$author =  new User($author_url, $author_id);
+			$author_name = $author_link->plaintext;
+			$author =  new User($author_url, $author_name);
 		}
 		return $author;
 	}
@@ -121,7 +121,6 @@ class Collection
 					$author_name = $author_link->plaintext;
 				} else {
 					$author_url = null;
-					$author_name = '匿名用户';
 				}
 				$author = new User($author_url, $author_name);
 
