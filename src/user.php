@@ -107,14 +107,14 @@ class User
 	 * 获取用户个人简介
 	 * @return string 用户个人简介
 	 */
-	public function description()
+	public function desc()
 	{
 		if (empty($this->url)) {
 			return null;
 		} else {
 			$description_link = $this->dom->find('div.zm-profile-header-description span.description', 0);
 			if ( ! empty($description_link)) {
-				$description = trim($description_link->find('[class!=collapse]', 0)->innertext);
+				$description = trim($description_link->find('[class!=collapse]', 0)->plaintext);
 				if ($description == '') {
 					$description = null;
 				}
@@ -239,7 +239,7 @@ class User
 			'position'	=>	$this->position(),
 			'education'	=>	$this->education(),
 			'major'	=>	$this->major(),
-			'description'	=>	$this->description()
+			'desc'	=>	$this->desc()
 		);
 		return $about;
 	}
@@ -541,7 +541,7 @@ class User
 
 					for ($j = 0; $j < min($asks_num - $i * 20, 20); $j++) { 
 						$question_link = $dom->find('a.question_link', $j);
-						yield parser_question_from_userparser_question($question_link);
+						yield parser_question($question_link);
 					} 
 				}
 			}

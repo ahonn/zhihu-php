@@ -4,7 +4,7 @@
  * 测试 Question 类
  */
 
-require_once '../zhihu.php';
+require_once '../src/zhihu.php';
 require_once 'time.php';
 
 $time = new Time();

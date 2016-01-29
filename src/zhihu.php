@@ -2,13 +2,13 @@
 
 set_time_limit(0);
 
-require_once dirname(__FILE__) .'/zhihu/libraries/simple_html_dom.php';
-require_once dirname(__FILE__) .'/zhihu/libraries/request.php';
+require_once dirname(__FILE__) .'/libraries/simple_html_dom.php';
+require_once dirname(__FILE__) .'/libraries/request.php';
 
 function __autoload($class)
 {
-	if (file_exists(dirname(__FILE__) . '/zhihu/' . strtolower($class) . '.php')) {
-		require_once(dirname(__FILE__) . '/zhihu/' . strtolower($class). '.php');
+	if (file_exists(dirname(__FILE__) . '/' . strtolower($class) . '.php')) {
+		require_once(dirname(__FILE__) . '/' . strtolower($class). '.php');
 	}
 }
 
