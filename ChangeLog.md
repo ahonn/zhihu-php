@@ -1,5 +1,9 @@
 ## Change Log
 
+### 2016.01.29
+- Update 修改文件夹 zhihu 为 src
+- Update 更新 test_user。
+
 ### 2016.01.27
 - Add User 类添加获取用户收藏夹函数 collections()
 

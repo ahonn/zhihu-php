@@ -37,6 +37,9 @@ $about = $author->about();
 var_dump($about);
 ```
 
+## 更新信息
+[Change Log](https://github.com/ahonn/zhihu-php/blob/master/ChangeLog.md)
+
 ## 联系我
 - Email：[ahonn95@outlook.com](mailto:ahonn95@outlook.com)
 
