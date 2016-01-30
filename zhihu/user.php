@@ -232,6 +232,7 @@ class User
 		$about = array(
 			'name'	=>	$this->name(),
 			'avatar'	=>	$this->avatar(),
+			'weibo_url'	=>	$this->weibo_url(),
 			'location'	=>	$this->location(),
 			'business'	=>	$this->business(),
 			'gender'	=>	$this->gender(),
