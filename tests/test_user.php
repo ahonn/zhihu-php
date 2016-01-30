@@ -4,14 +4,13 @@
  * 测试 User 类
  */
 
-require_once '../src/zhihu.php';
+require_once '../zhihu/zhihu.php';
 require_once 'time.php';
 
 $time = new Time();
 $time->star();
 
-$user_url = 'https://www.zhihu.com/people/excited-vczh';
-// $user_url = 'https://www.zhihu.com/people/ahonn';
+$user_url = 'https://www.zhihu.com/people/ahonn';
 
 $user = new User($user_url);
 
