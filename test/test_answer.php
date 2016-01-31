@@ -1,53 +1,73 @@
 <?php
 
-/**
- * 测试 Answer 类
- */
-
 require_once '../zhihu/zhihu.php';
 
-$answer_url = 'https://www.zhihu.com/question/38199129/answer/79525121';
-
-$answer = new Answer($answer_url);
-
-// 获取回答的问题
-$question = $answer->question();
-var_dump($question);
+class AnswerTest extends PHPUnit_Framework_TestCase
+{
 	
-// 获取答主
-$author = $answer->author();
-var_dump($author);
-	
-// 获取赞同数
-$upvote = $answer->upvote();
-var_dump($upvote);
-	
-// 获取回答内容
-$content = $answer->content();
-var_dump($content);
-	
-// 获取所属问题浏览数
-$visit_times = $answer->visit_times();
-var_dump($visit_times);
-	
-// 获取该答案下的评论
-$comment_list = $answer->comment();
-foreach ($comment_list as $comment) {
-	var_dump($comment);
-}
+	function __construct()
+	{
+		$this->url = 'https://www.zhihu.com/question/24825703/answer/30975949';
+		$this->answer = new Answer($this->url);
+	}
 
-// 获取答案收藏数
-$collection_num = $answer->collection_num();
-var_dump($collection_num);
+	public function testQuestion()
+	{
+		$question = $this->answer->question();
 
-// 获取收藏该回答的收藏夹列表
-$collections = $answer->collection();
-foreach ($collections as $collection) {
-	var_dump($collection);
-}
+		$this->assertInstanceOf('Question', $question);
+	}
 
-// 获取点赞该回答的用户
-$voters = $answer->voters();
-foreach ($voters as $key => $voter) {
-	var_dump($voter);
+	public function testAuthor()
+	{
+		$author = $this->answer->author();
+
+		$this->assertInstanceOf('User', $author);
+	}
+
+	public function testContent()
+	{
+		$content = $this->answer->content();
+
+		$this->assertNotEmpty($content);
+	}
+
+	public function testUpvote()
+	{
+		$upvote = $this->answer->upvote();
+		$this->assertInternalType('int', $upvote);
+
+		$voters = $this->answer->voters();
+		$count = 0;
+		foreach ($voters as $voter) {
+			$count++;
+		}
+		$this->assertLessThanOrEqual($upvote, $count);
+	}
+
+	public function testComment()
+	{
+		$comments_num = $this->answer->comments_num();
+		$this->assertInternalType('int', $comments_num);
+
+		$comments = $this->answer->comments();
+		$count = 0;
+		foreach ($comments as $comment) {
+			$count++;
+		}
+		$this->assertGreaterThanOrEqual($comments_num, $count);
+	}
+
+	public function testCollection()
+	{
+		$collections_num = $this->answer->collections_num();
+		$this->assertInternalType('int', $collections_num);
+
+		$collections = $this->answer->collections();
+		$count = 0;
+		foreach ($collections as $collection) {
+			$count++;
+		}
+		$this->assertLessThanOrEqual($collections_num, $count);	
+	}
 }
