@@ -66,7 +66,7 @@ class Question
 	public function detail()
 	{
 		$this->parser();
-		$detail = $this->dom->find('div#zh-question-detail', 0)->plaintext;
+		$detail = trim($this->dom->find('div#zh-question-detail', 0)->plaintext);
 		return $detail;
 	}
 
@@ -85,6 +85,68 @@ class Question
 		return $answers_num;
 	}
 
+	/**
+	 * 获取该问题的回答
+	 * @return Generator 答案迭代器
+	 */
+	public function answers()
+	{
+		$answers_num = $this->answers_num(); 
+
+		if ($answers_num == 0) {
+			yield null;
+		} else {
+			$post_url = ANSWERS_LIST_URL;
+			$_xsrf = _xsrf($this->dom);
+		  	$json = $this->dom->find('div#zh-question-answer-wrap', 0)->attr['data-init'];
+
+			for ($i = 0; $i < $answers_num / 20; $i++) { 
+				if($i == 0) {
+					for ($j = 0; $j < min($answers_num, 20); $j++) { 
+						yield parser_answer_from_question($this, $this->dom, $j);
+					}
+				} else {
+					$params = json_decode(html_entity_decode($json))->params;
+					$params->offset = $i * 20;
+					$params = json_encode($params);
+
+					$data = array(
+						'_xsrf' => $_xsrf,
+						'method' => 'next',
+						'params' => $params
+					);
+
+					$r = Request::post($post_url, $data, array("Referer: {$this->url}" ));
+					$r = json_decode($r)->msg;
+					for ($j = 0; $j < min($answers_num - $i * 20, 20); $j++) { 
+						$dom = str_get_html($r[$j]);
+						yield parser_answer_from_question($this, $dom);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * 获取问题排名Top n的回答
+	 * @param  integer $top 答案排名
+	 * @return object       Answer 对象
+	 */
+	public function top_answer($top=1)
+	{
+		if ( ! $top || $top > $this->get_answers_num()) {
+			throw new Exception("The answer does not exist !");
+		} else {
+			$num = 0;
+			$answer_list = $this->answers();
+			foreach ($answer_list as $answer) {
+				$num++;
+				if ($num === $top) {
+					return $answer;
+				}
+			}
+		}
+	}
 
 	/**
 	 * 获取问题关注数
@@ -96,21 +158,6 @@ class Question
 		$followers_num = $this->dom->find('div.zg-gray-normal strong', 0)->plaintext;
 		return (int)$followers_num;
 	}
-
-
-	/**
-	 * 获取话题分类
-	 * @return array 话题分类
-	 */
-	public function topics()
-	{
-		$this->parser();
-		for ($i = 0; ! empty($this->dom->find('a.zm-item-tag',$i)) ; $i++) { 
-			$topic_list[] = $this->dom->find('a.zm-item-tag',$i)->plaintext;
-		}
-		return $topic_list;
-	}
-
 
 	/**
 	 * 获取问题关注者
@@ -145,7 +192,7 @@ class Question
 					$r = json_decode($r)->msg;
 					$dom = str_get_html($r[1]);
 					for ($j = 0; $j < min(($followers_num - $i * 20), 20); $j++) {
-						$follower_link = $dom->find('div.zm-profile-card h2', $j)->find('a', 0);
+						$follower_link = $dom->find('div.zm-profile-card h2', $j);
 						yield parser_user($follower_link);
 					}
 				}
@@ -153,70 +200,17 @@ class Question
 		}
 	}
 
-
 	/**
-	 * 获取该问题的回答
-	 * @return Generator 答案迭代器
+	 * 获取话题分类
+	 * @return array 话题分类
 	 */
-	public function answers()
+	public function topics()
 	{
-		$answers_num = $this->answers_num(); 
-
-		if ($answers_num == 0) {
-			yield null;
-		} else {
-			$post_url = ANSWERS_LIST_URL;
-			$_xsrf = $this->dom->find('input[name=_xsrf]', 0)->value;
-		  	$json = $this->dom->find('div#zh-question-answer-wrap', 0)->attr['data-init'];
-
-			for ($i = 0; $i < $answers_num / 50; $i++) { 
-				if($i == 0) {
-					for ($j = 0; $j < min($answers_num, 50); $j++) { 
-						yield parser_answer_from_question($this, $this->dom, $j);
-					}
-				} else {
-					$params = json_decode(html_entity_decode($json))->params;
-					$params->offset = $i * 50;
-					$params = json_encode($params);
-
-					$data = array(
-						'_xsrf' => $_xsrf,
-						'method' => 'next',
-						'params' => $params
-					);
-
-					$r = Request::post($post_url, $data, array("Referer: {$this->url}" ));
-					$r = json_decode($r)->msg;
-
-					for ($j = 0; $j < min($answers_num - $i * 50, 50); $j++) { 
-						$dom = str_get_html($r[$j]);
-						yield parser_answer_from_question($this, $dom);
-					}
-				}
-			}
+		$this->parser();
+		for ($i = 0; ! empty($this->dom->find('a.zm-item-tag',$i)) ; $i++) { 
+			$topic_list[] = trim($this->dom->find('a.zm-item-tag',$i)->plaintext);
 		}
-	}
-
-
-	/**
-	 * 获取问题排名Top n的回答
-	 * @param  integer $top 答案排名
-	 * @return object       Answer 对象
-	 */
-	public function top_answer($top=1)
-	{
-		if ( ! $top || $top > $this->get_answers_num()) {
-			throw new Exception("The answer does not exist !");
-		} else {
-			$num = 0;
-			$answer_list = $this->answers();
-			foreach ($answer_list as $answer) {
-				$num++;
-				if ($num === $top) {
-					return $answer;
-				}
-			}
-		}
+		return $topic_list;
 	}
 
 	/**

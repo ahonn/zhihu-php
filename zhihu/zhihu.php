@@ -52,11 +52,12 @@ function _xsrf($dom)
 
 function parser_user($dom)
 {
-	if (empty($user_url = $dom->href)) {
+	if ( ! empty($dom = $dom->find("a", 0))) {
+		$user_url = $dom->href;
+		$user_name = trim($dom->plaintext);
+	} else {
 		$user_url = null;
 		$user_name = null;
-	} else {
-		$user_name = trim($dom->plaintext);
 	}
 	return new User($user_url, $user_name);
 }

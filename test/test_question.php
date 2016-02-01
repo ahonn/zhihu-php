@@ -1,51 +1,63 @@
 <?php
 
-/**
- * 测试 Question 类
- */
 
 require_once '../zhihu/zhihu.php';
 
-$question_url = 'https://www.zhihu.com/question/38813693';
-
-$question = new Question($question_url);
-
-// // 获取问题标题
-// $title = $question->title();
-// var_dump($title);
-
-// // 获取问题描述，返回字符串
-// $detail_str = $question->detail();
-// var_dump($detail_str);
-
-// // 获取问题话题标签
-// $topics = $question->topics();
-// var_dump($topics);
-
-// // 获取问题关注数
-// $followers_num = $question->followers_num();
-// var_dump($followers_num);
-
-// // 获取关注该问题的用户
-// $followers_list = $question->followers();
-// foreach ($followers_list as $followers) {
-// 	var_dump($followers);
-// }
-
-// // 获取问题回答数
-// $answers_num = $question->answers_num();
-// var_dump($answers_num);
-
-// 获取问题的所有回答
-$answers = $question->answers();
-foreach ($answers as $answer) {
-	var_dump($answer);
-}
-
-// // 获取该问题排名Top n的答案
-// $answer = $question->top_answer(5);
-// var_dump($answer);
+class QuestionTest extends PHPUnit_Framework_TestCase
+{
 	
-// // 获取问题被浏览数
-// $times = $question->visit_times();
-// var_dump($times);
+	function __construct()
+	{
+		$this->url = 'https://www.zhihu.com/question/27187478';
+		$this->question = new Question($this->url);
+	}
+
+	public function testTitle()
+	{
+		$title = $this->question->title();
+		$title_tmp = '徒手码一千行以上代码是一种怎样的体验？';
+
+		$this->assertSame($title_tmp, $title);
+	}
+
+	public function testDetail()
+	{
+		$detail = $this->question->detail();
+		$detail_tmp = '在学C语言（非本专业），感觉看着代码一行一行码下来好爽啊。不知道徒手码一千行以上的代码是个什么感觉呢？有人试过吗？';
+
+		$this->assertSame($detail_tmp, $detail);
+	}
+
+	public function testAnswer()
+	{
+		$answers_num = $this->question->answers_num();
+		$this->assertInternalType('int', $answers_num);
+
+		$answers = $this->question->answers();
+		$count = 0;
+		foreach ($answers as $answer) {
+			$count++;
+		}
+		$this->assertGreaterThanOrEqual($answers_num, $count);
+	}
+
+	public function testFollower()
+	{
+		$followers_num = $this->question->followers_num();
+		$this->assertInternalType('int', $followers_num);
+
+		$followers = $this->question->followers();
+		$count = 0;
+		foreach ($followers as $follower) {
+			$count++;
+		}
+		$this->assertLessThanOrEqual($followers_num, $count);	
+	}
+
+	public function testTopic()
+	{
+		$topics = $this->question->topics();
+		$topics_tmp = array("编程", "编程学习");
+		$this->assertSame($topics_tmp, $topics);
+	}	
+}

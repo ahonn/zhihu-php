@@ -1,5 +1,9 @@
 ## Change Log
 
+### 2016.02.01
+- Change 修改 test_question.php，并修复 Question 中的小 bug
+- Fix 由于知乎问题回答下默认显示条数由 50 变为 20，修复 Question->answers() 中的 bug
+
 ### 2016.01.31
 - Change 修改 test_answer.php，使用 phpunit 进行测试
 - Change 将 Answer 中获取 aid 单独为一个 aid() 函数，并添加 private aid 属性
