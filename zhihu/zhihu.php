@@ -54,6 +54,9 @@ function parser_user($dom)
 {
 	if ( ! empty($dom = $dom->find("a", 0))) {
 		$user_url = $dom->href;
+		if(strpos($user_url, ZHIHU_URL) === false) {
+			$user_url = ZHIHU_URL.$user_url;
+		}
 		$user_name = trim($dom->plaintext);
 	} else {
 		$user_url = null;
@@ -67,6 +70,13 @@ function parser_question($dom)
 	$question_url = ZHIHU_URL.substr($dom->href, 0, 18);
 	$question_title = trim($dom->plaintext);
 	return new Question($question_url, $question_title);
+}
+
+function parser_topic($dom)
+{
+	$topic_url = ZHIHU_URL.substr($dom->href, 0, 15);
+	$topic_name = trim($dom->plaintext);
+	return new Topic($topic_url, $topic_name);
 }
 
 function parser_topics_from_user($dom)

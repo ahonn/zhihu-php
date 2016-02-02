@@ -1,5 +1,9 @@
 ## Change Log
 
+### 2016.02.02
+- Change 修改 test_topic.php 
+- Update 精简 Topic 类冗余代码
+
 ### 2016.02.01
 - Change 修改 test_question.php，并修复 Question 中的小 bug
 - Fix 由于知乎问题回答下默认显示条数由 50 变为 20，修复 Question->answers() 中的 bug

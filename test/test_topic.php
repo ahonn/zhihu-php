@@ -1,65 +1,86 @@
 <?php
 
-/**
- * 测试 Topic 类
- */
-
 require_once '../zhihu/zhihu.php';
 
-$topic_url = 'https://www.zhihu.com/topic/19599592';
+class TopicTest extends PHPUnit_Framework_TestCase
+{
 
-$topic = new Topic($topic_url);
+	function __construct()
+	{
+		$this->url = 'https://www.zhihu.com/topic/19552330';
+		$this->topic = new Topic($this->url);
+	}
 
-// 获取话题名称
-$name = $topic->name();
-var_dump($name);
+	public function testName()
+	{
+		$name = $this->topic->name();
+		$name_tmp = '程序员';
 
-// 获取话题描述
-$description = $topic->description();
-var_dump($description);
+		$this->assertSame($name_tmp, $name);
+	}
 
-// 获取话题关注人数
-$followers_num = $topic->followers();
-var_dump($followers_num);
+	public function testDesc()
+	{
+		$desc = $this->topic->desc();
+		$desc_tmp = '程序员可以指在程序设计某个专业领域中的专业人士或是从事软件撰写，程序开发、维护的专业人员。';
 
-// 获取父话题
-$parents = $topic->parent();
-foreach ($parents as $parent) {
-	var_dump($parent);
-}
+		$this->assertSame($desc_tmp, $desc);
+	}
 
-// 获取子话题
-$childrens = $topic->children();
-foreach ($childrens as $children) {
-	var_dump($children);
-}
+	public function testFollower()
+	{
+		$followers_num = $this->topic->followers_num();
+		$this->assertInternalType('int', $followers_num);
+	}
 
-// 获取最佳回答者
-$answerers = $topic->answerer();
-foreach ($answerers as $answerer) {
-	var_dump($answerer);
-}
+	public function testParentAndChildren()
+	{
+		$parents = $this->topic->parents();
+		foreach ($parents as $parent) {
+			$this->assertInstanceOf('Topic', $parent);
+		}
 
-// 获取该话题下热门问题
-$hot_question = $topic->hot_question();
-foreach ($hot_question as $question) {
-	var_dump($question);
-}
+		$childrens = $this->topic->childrens();
+		foreach ($childrens as $children) {
+			$this->assertInstanceOf('Topic', $children);
+		}
+	}
 
-// 获取该话题下最新问题
-$new_question = $topic->new_question();
-foreach ($new_question as $question) {
-	var_dump($question);
-}
-	
-// 获取该话题下精华回答
-$top_answer = $topic->top_answer();
-foreach ($top_answer as $answer) {
-	var_dump($answer);
-}
+	public function testAnswerer()
+	{
+		$answerer = $this->topic->answerer();
+		foreach ($answerer as $user) {
+			$this->assertInstanceOf('User', $user);
+		}
+	}
 
-// 获取该话题下全部问题
-$all_question = $topic->all_question();
-foreach ($all_question as $question) {
-	var_dump($question);
+	public function testQuestion()
+	{
+		$hot_question = $this->topic->hot_question();
+		for($i = 0; $i < 200; $i++) {
+			$question = $hot_question->current();
+			$this->assertInstanceOf('Question', $question);
+		}
+
+		$new_question = $this->topic->new_question();
+		for($i = 0; $i < 200; $i++) {
+			$question = $new_question->current();
+			$this->assertInstanceOf('Question', $question);
+		}
+
+		$all_question = $this->topic->all_question();
+		for($i = 0; $i < 200; $i++) {
+			$question = $all_question->current();
+			$this->assertInstanceOf('Question', $question);
+		}
+	}
+
+	public function testAnswer()
+	{
+		$top_answer = $this->topic->top_answer();
+		for($i = 0; $i < 200; $i++) {
+			$answer = $top_answer->current();
+			$this->assertInstanceOf('Answer', $answer);
+		}
+	}
 }

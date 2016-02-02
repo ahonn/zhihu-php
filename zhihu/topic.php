@@ -72,7 +72,7 @@ class Topic
 	 * 获取话题描述
 	 * @return string 话题描述
 	 */
-	public function description()
+	public function desc()
 	{
 		$this->parser();
 		$description = trim($this->dom->find('div#zh-topic-desc div.zm-editable-content', 0)->plaintext);
@@ -87,7 +87,7 @@ class Topic
 	 * 获取关注该话题的人数
 	 * @return integer 话题关注人数
 	 */
-	public function followers()
+	public function followers_num()
 	{
 		$this->parser();
 		$followers_num = (int)$this->dom->find('div.zm-topic-side-followers-info strong', 0)->plaintext;
@@ -98,13 +98,11 @@ class Topic
 	 * 获取该话题的父话题
 	 * @return array 父话题列表
 	 */
-	public function parent()
+	public function parents()
 	{
 		$dom = $this->parser_entire();
 		for ($i = 0; ! empty($parent_link = $dom->find('div#zh-topic-organize-parent-editor a', $i)); $i++) { 
-			$parent_url = ZHIHU_URL.substr($parent_link->href, 0 , 15);
-			$parent_name = trim($parent_link->plaintext);
-			yield new Topic($parent_url, $parent_name);
+			yield parser_topic($parent_link);
 		}
 	}
 
@@ -112,13 +110,11 @@ class Topic
 	 * 获取该话题的子话题
 	 * @return array 子话题列表
 	 */
-	public function children()
+	public function childrens()
 	{
 		$dom = $this->parser_entire();
 		for ($i = 0; ! empty($children_link = $dom->find('div#zh-topic-organize-child-editor a', $i)); $i++) { 
-				$children_url = ZHIHU_URL.substr($children_link->href, 0, 15);
-				$children_name = trim($children_link->plaintext);
-				yield new Topic($children_url, $children_name);
+				yield parser_topic($children_link);
 		}
 	}
 
@@ -130,10 +126,7 @@ class Topic
 	{
 		$this->parser();
 		for ($i = 0; ! empty($dom = $this->dom->find('div.zm-topic-side-person-item', $i)) ; $i++) { 
-			$answerer_link = $dom->find('a', 1);
-			$answerer_url = ZHIHU_URL.$answerer_link->href;
-			$answerer_name = trim($answerer_link->plaintext);
-			yield new User($answerer_url, $answerer_name);
+			yield parser_user($dom);
 		}
 	}
 
