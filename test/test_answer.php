@@ -4,6 +4,8 @@ require_once '../zhihu/zhihu.php';
 
 class AnswerTest extends PHPUnit_Framework_TestCase
 {
+	private $url;
+	private $answer;
 	
 	function __construct()
 	{

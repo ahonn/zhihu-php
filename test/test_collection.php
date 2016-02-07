@@ -1,29 +1,46 @@
 <?php
 
-/**
- * 测试 Collection 类
- */
-
 require_once '../zhihu/zhihu.php';
 
-$collection_url = 'https://www.zhihu.com/collection/19650606';
+class CollectionTest extends PHPUnit_Framework_TestCase
+{
 
-$collection = new Collection($collection_url);
+    function __construct()
+    {
+        $this->url = 'https://www.zhihu.com/collection/19650606';
+        $this->collection = new Collection($this->url);
+    }
 
-// 获取收藏夹名称
-$title = $collection->title();
-var_dump($title);
+    public function testTitle()
+    {
+        $title = $this->collection->title();
+        $title_tmp = '妙趣横生';
 
-// 获取收藏夹简介
-$description = $collection->description();
-var_dump($description);
+        $this->assertSame($title_tmp, $title);
+    }
 
-// 获取收藏夹建立者
-$author = $collection->author();
-var_dump($author);
+    public function testDesc()
+    {
+        $desc = $this->collection->desc();
+        $desc_tmp = '嬉笑怒骂，剑走偏锋，思路切入显大巧，文字构筑含义深。';
 
-// 获取收藏夹内容
-$answer_list = $collection->answers();
-foreach ($answer_list as $answer) {
-	var_dump($answer);
+        $this->assertSame($desc_tmp, $desc);
+    }
+
+    public function testAuthor()
+    {
+        $author = $this->collection->author();
+
+        $this->assertInstanceOf('User', $author);
+    }
+
+
+    public function testAnswer()
+    {
+        $answers = $this->collection->answers();
+        for($i = 0; $i < 200; $i++) {
+            $answer = $answers->current();
+            $this->assertInstanceOf('Answer', $answer);
+        }
+    }    
 }

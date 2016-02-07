@@ -65,7 +65,7 @@ class Collection
 	 * 获取收藏夹描述
 	 * @return string 收藏夹描述
 	 */
-	public function description()
+	public function desc()
 	{
 		$this->parser();
 		$description = $this->dom->find('div#zh-fav-head-description', 0)->plaintext;
@@ -83,9 +83,7 @@ class Collection
 		} else {
 			$this->parser();
 			$author_link = $this->dom->find('h2.zm-list-content-title a', 0);
-			$author_url = ZHIHU_URL.$author_link->href;
-			$author_name = $author_link->plaintext;
-			$author =  new User($author_url, $author_name);
+			$author = parser_user($author_link);
 		}
 		return $author;
 	}
@@ -97,6 +95,7 @@ class Collection
 	 */
 	public function answers()
 	{
+		# TODO
 		$this->parser();
 		$max_page = (int)$this->dom->find('div.zm-invite-pager span', -2)->plaintext;
 		for ($i = 1; $i <= $max_page; $i++) { 
