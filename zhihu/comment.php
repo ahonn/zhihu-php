@@ -7,13 +7,11 @@ class Comment
 	private $author;
 	private $replyed;
 	private $content;
-	private $time;
 
-	function __construct(User $author, $content, $time, $replyed)
+	function __construct(User $author, $content, $replyed)
 	{
 		$this->author = $author;
 		$this->content = $content;
-		$this->time = $time;
 
 		if ( ! empty($replyed)) {
 			$this->replyed = $replyed;
@@ -29,7 +27,6 @@ class Comment
 		return $this->author;
 	}
 
-
 	/**
 	 * 获取评论内容
 	 * @return string 评论内容
@@ -38,17 +35,6 @@ class Comment
 	{
 		return $this->content;
 	}
-
-
-	/**
-	 * 获取评论时间
-	 * @return string 评论时间
-	 */
-	public function time()
-	{
-		return $this->time;
-	}
-
 
 	/**
 	 * 获取被回复者

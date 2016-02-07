@@ -1,32 +1,45 @@
 <?php
-/**
- * 测试 Comment 类
- */
+
 require_once '../zhihu/zhihu.php';
 
-$answer_url = 'https://www.zhihu.com/question/19550393/answer/12202130';
+class CommentTest extends PHPUnit_Framework_TestCase
+{
+	private $url;
+	private $comments;
 
-$answer = new Answer($answer_url);
+	function __construct()
+	{
+		$this->url = 'https://www.zhihu.com/question/19550393/answer/12202130';
+		$answer = new Answer($this->url);
+		$this->comments = $answer->comments();
+	}
 
-// 获取该回答的评论
-$comments = $answer->comment();
-foreach ($comments as $comment) {
-	var_dump($comment);
+	public function testAuthor()
+	{
+		foreach ($this->comments as $comment) {
+			$author = $comment->author();
+			$this->assertInstanceOf('User', $author);
+		}
+	}
 
-	// 获取评论作者
-	$author = $comment->author();
-	var_dump($author);
+	public function testContent()
+	{
+		foreach ($this->comments as $comment) {
+			$content = $comment->content();
+			$this->assertInternalType('string', $content);
+		}
+	}
 
-	// 获取被回复者
-	$replyed = $comment->replyed();
-	var_dump($replyed);
-
-	// 获取评论内容
-	$content = $comment->content();
-	var_dump($content);
-
-	// 获取评论时间
-	$time = $comment->time();
-	var_dump($time);
+	public function testReplyed()
+	{
+		foreach ($this->comments as $comment) {
+			$replyed = $comment->replyed();
+			try {
+				$this->assertInstanceOf('User', $replyed);
+			} catch (Exception $e) {
+				$this->assertEquals(NULL, $replyed);
+			}
+		}
+	}
 }
 

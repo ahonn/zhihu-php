@@ -216,7 +216,7 @@ class Answer
 
 				$content = $comment->content;
 
-				yield new Comment($author, $content, $time = null, $replyed);
+				yield new Comment($author, $content, $replyed);
 			}
 		}
 	}
