@@ -16,7 +16,7 @@ const COOKIE = "your cookie";
 ## 简单样例
 ``` php
 <?php
-require_one 'zhihu-php/zhihu.php';
+require_one 'zhihu/zhihu.php';
 
 // 设置 URL
 $question_url = 'https://www.zhihu.com/question/19550393';
