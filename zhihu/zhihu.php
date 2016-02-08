@@ -24,25 +24,31 @@ const ANSWERS_PREFIX_URL = 'https://www.zhihu.com/answer/';
 const QUESTION_PREFIX_URL = 'https://www.zhihu.com/question/';
 const TOPICS_PREFIX_URL = 'https://www.zhihu.com/topic/';
 const COLLECTION_PREFIX_URL = 'https://www.zhihu.com/collection/';
-const ROUNDTABLE_URL = 'https://www.zhihu.com/roundtable';
-const COLLECTION_SUFFIX_URL = '/collections';
-const FOLLOWEES_SUFFIX_URL = '/followees';
-const FOLLOWERS_SUFFIX_URL = '/followers';
-const ASKS_PAGE_SUFFIX_URL = '/asks?page=';
-const ANSWERS_SUFFIX_URL = '/answer';
-const ANSWERS_PAGE_SUFFIX_URL = '/answers?page=';
-const TOPICS_SUFFIX_URL = '/topics';
-const TOPICS_HOT_SUFFIX_URL = '/hot';
-const TOPICS_NEW_SUFFIX_URL = '/newest';
-const TOPICS_TOP_SUFFIX_URL = '/top-answers';
-const TOPICS_ALL_SUFFIX_URL = '/questions';
-const GET_PAGE_SUFFIX_URL = '?page=';
-const VOTERS_SUFFIX_URL = '/voters_profile';
+const ROUNDTABLE_PREFIX_URL = 'https://www.zhihu.com/roundtable/';
+const COLUMN_PREFIX_URL = 'http://zhuanlan.zhihu.com/';
+
 const FOLLOWEES_LIST_URL = 'https://www.zhihu.com/node/ProfileFolloweesListV2';
 const FOLLOWERS_LIST_URL = 'https://www.zhihu.com/node/ProfileFollowersListV2';
 const ANSWERS_LIST_URL = 'http://www.zhihu.com/node/QuestionAnswerListV2';
 const COMMENT_LIST_URL = 'https://www.zhihu.com/r/answers/{id}/comments';
 const COLLECTION_LIST_URL = 'https://www.zhihu.com/node/AnswerFavlists';
+const COLUMN_POSTS_URL = 'http://zhuanlan.zhihu.com/api/columns/{id}';
+
+const COLLECTION_SUFFIX_URL = '/collections';
+const FOLLOWEES_SUFFIX_URL = '/followees';
+const FOLLOWERS_SUFFIX_URL = '/followers';
+const ANSWERS_SUFFIX_URL = '/answer';
+const ASKS_PAGE_SUFFIX_URL = '/asks?page=';
+const ANSWERS_PAGE_SUFFIX_URL = '/answers?page=';
+
+const TOPICS_SUFFIX_URL = '/topics';
+const TOPICS_HOT_SUFFIX_URL = '/hot';
+const TOPICS_NEW_SUFFIX_URL = '/newest';
+const TOPICS_TOP_SUFFIX_URL = '/top-answers';
+const TOPICS_ALL_SUFFIX_URL = '/questions';
+
+const VOTERS_SUFFIX_URL = '/voters_profile';
+const GET_PAGE_SUFFIX_URL = '?page=';
 
 
 function _xsrf($dom)

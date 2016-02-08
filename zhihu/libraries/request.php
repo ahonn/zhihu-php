@@ -22,9 +22,14 @@ class Request
 	 * @param  array  $header 头信息
 	 * @return string         返回数据
 	 */
-	public static function get($url, $header=array())
+	public static function get($url, $column=False,  $header=array())
 	{
 		$header = array_merge(self::$header, $header);
+
+		if ($column) {
+			$header[0] = "Host: zhuanlan.zhihu.com";
+			$header[2] = "Accept:application/json, text/plain, */*";
+		}
 
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HEADER, 0);

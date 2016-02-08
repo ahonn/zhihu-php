@@ -48,19 +48,16 @@ class User
 	}
 
 	/**
-	 * 获取用户ID
-	 * @return string 用户知乎ID
+	 * 获取用户名
+	 * @return string 用户名
 	 */
 	public function name()
 	{
-		if ( ! empty($this->name)) {
-			return $this->name;
-		} else {
+		if (empty($this->name)) {
 			$this->parser();
-			$name = trim($this->dom->find('div.title-section span.name',0)->plaintext);
-			$this->name = $name;
-			return $name;
+			$this->name = trim($this->dom->find('div.zm-profile-header span.name', 0)->plaintext);
 		}
+		return $this->name;
 	}
 
 
@@ -74,7 +71,7 @@ class User
 			return 'http://pic1.zhimg.com/da8e974dc_r.jpg';
 		} else {
 			$this->parser();
-			$avatar = $this->dom->find('div.zm-profile-header-avatar-container img', 0)->srcset;
+			$avatar = $this->dom->find('img.Avatar', 0)->srcset;
 			$avatar = str_replace("_xl", "", explode(' ', $avatar, 2)[0]);
 			return $avatar;
 		}
@@ -89,8 +86,7 @@ class User
 		if (empty($this->url)) {
 			return null;
 		} else {
-			if ( ! empty($this->dom->find('div.item span.gender', 0))) {
-				$gender_link = $this->dom->find('div.item span.gender', 0);
+			if ( ! empty($gender_link = $this->dom->find('div.item span.gender', 0))) {
 				if ( ! empty($gender_link->find('i.icon-profile-male'))) {
 					$gender = 'male';
 				} elseif ( ! empty($gender_link->find('i.icon-profile-female'))) {
