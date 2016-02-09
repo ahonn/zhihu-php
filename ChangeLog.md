@@ -1,5 +1,9 @@
 ## Change Log
 
+### 2016.02.08
+- Add 增加知乎专栏类 Column 与知乎文章类 Post
+- Add 增加专栏相关测试
+
 ### 2016.02.02
 - Change 修改 test_topic.php 
 - Update 精简 Topic 类冗余代码

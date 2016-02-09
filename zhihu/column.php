@@ -13,7 +13,7 @@ class Column
 
     function __construct($url, $name=null, $author=null)
     {
-        if (substr($url, 0, 26) !== COLUMN_PREFIX_URL) {
+        if (substr($url, 0, 25) !== COLUMN_PREFIX_URL) {
             throw new Exception($url.": it isn't a column url !");
         } else {
             $this->id = substr($url, 26);

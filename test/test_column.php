@@ -54,7 +54,6 @@ class ColumnTest extends PHPUnit_Framework_TestCase
         $count = 0;
         foreach ($posts as $post) {
             $count++;
-            $this->assertInstanceOf('Post', $post);
         }
         $this->assertLessThanOrEqual($posts_num, $count); 
     }

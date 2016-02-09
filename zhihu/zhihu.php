@@ -25,7 +25,7 @@ const QUESTION_PREFIX_URL = 'https://www.zhihu.com/question/';
 const TOPICS_PREFIX_URL = 'https://www.zhihu.com/topic/';
 const COLLECTION_PREFIX_URL = 'https://www.zhihu.com/collection/';
 const ROUNDTABLE_PREFIX_URL = 'https://www.zhihu.com/roundtable/';
-const COLUMN_PREFIX_URL = 'http://zhuanlan.zhihu.com/';
+const COLUMN_PREFIX_URL = 'http://zhuanlan.zhihu.com';
 
 const FOLLOWEES_LIST_URL = 'https://www.zhihu.com/node/ProfileFolloweesListV2';
 const FOLLOWERS_LIST_URL = 'https://www.zhihu.com/node/ProfileFollowersListV2';
@@ -33,6 +33,7 @@ const ANSWERS_LIST_URL = 'http://www.zhihu.com/node/QuestionAnswerListV2';
 const COMMENT_LIST_URL = 'https://www.zhihu.com/r/answers/{id}/comments';
 const COLLECTION_LIST_URL = 'https://www.zhihu.com/node/AnswerFavlists';
 const COLUMN_POSTS_URL = 'http://zhuanlan.zhihu.com/api/columns/{id}';
+const POST_URL = 'http://zhuanlan.zhihu.com/api/columns/{uid}/posts/{pid}';
 
 const COLLECTION_SUFFIX_URL = '/collections';
 const FOLLOWEES_SUFFIX_URL = '/followees';
