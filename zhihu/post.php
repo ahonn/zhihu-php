@@ -34,6 +34,10 @@ class Post
         }
     }
 
+    /**
+     * 解析文章主页
+     * @return object simple html dom 对象
+     */
     public function parser()
     {
         if (empty($this->dom)) {
@@ -43,11 +47,20 @@ class Post
         }
     }
 
+    /**
+     * 获取文章链接
+     * @return string 文章 URL
+     */
     public function url()
     {
-        return $this->url;
+        $this->parser();
+        return COLUMN_PREFIX_URL.$this->dom->url;;
     }
 
+    /**
+     * 获取文章标题
+     * @return string 文章标题
+     */
     public function title()
     {
         if (empty($this->title)) {
@@ -57,6 +70,10 @@ class Post
         return $this->title;
     }
 
+    /**
+     * 获取文章内容
+     * @return string 文章内容
+     */
     public function content()
     {
         if(empty($this->content)) {
@@ -66,8 +83,17 @@ class Post
         return $this->content;
     }
 
+    /**
+     * 获取文章作者
+     * @return User 文章作者
+     */
     public function author()
     {
-        # code...
+        if(empty($this->author)) {
+            $this->parser();
+            $author = $this->dom->author;
+            $this->author = new User(USER_PREFIX_URL.$author->slug, $author->name);
+        }
+        return $this->author;
     }
 }

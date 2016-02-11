@@ -13,6 +13,13 @@ class PostTest extends PHPUnit_Framework_TestCase
         $this->post = new Post($this->url);
     }
 
+    public function testUrl()
+    {
+        $url = $this->post->url();
+
+        $this->assertSame($this->url, $url);
+    }
+
     public function testTitle()
     {
         $title = $this->post->title();
@@ -26,5 +33,12 @@ class PostTest extends PHPUnit_Framework_TestCase
         $content = $this->post->content();
 
         $this->assertInternalType('string', $content);
+    }
+
+    public function testAuthor()
+    {
+        $author = $this->post->author();
+
+        $this->assertInstanceOf('User', $author);
     }
 }
