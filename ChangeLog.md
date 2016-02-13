@@ -1,5 +1,12 @@
 ## Change Log
 
+### 2016.02.14 
+- Add 增加 examples, 添加 get_user_info.php 例子
+- Update 更新 test_user, 增加测试数据输出 
+
+### 2016.02.11 
+- Finish 完成 Post 类及测试
+
 ### 2016.02.08
 - Add 增加知乎专栏类 Column 与知乎文章类 Post
 - Add 增加专栏相关测试
