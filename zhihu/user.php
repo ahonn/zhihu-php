@@ -348,7 +348,41 @@ class User
 		}
 	}
 
-	# TODO: 获取用户专栏文章
+	/**
+	 * 获取用户专栏
+	 * @return Generator 用户专栏
+	 */
+	public function columns()
+	{
+		$posts_url = $this->url.'/posts';
+		$r = Request::get($posts_url);
+		$dom = str_get_html($r);
+
+		for ($i = 0; ! empty($column_link = $dom->find('div.column a.avatar-link', $i)) ; $i++) { 
+		 	$column_url = $column_link->href;
+		 	$column_name = trim($column_link->plaintext);
+		 	yield new Column($column_url, $column_name, $this);
+		 }
+	}
+
+	/**
+	 * 获取用户专栏文章
+	 * @return Generator 专栏文章
+	 */
+	public function posts()
+	{
+		$posts_num = $this->posts_num();
+		if($posts_num == 0) {
+			yield null;
+		} else {
+		 	$columns = $this->columns();
+		 	foreach ($columns as $column) {
+		 		foreach ($column->posts() as $post) {
+			 		yield $post;
+			 	}
+		 	}
+		}
+	}
 
 	/**
 	 * 获取用户收藏数
@@ -492,7 +526,7 @@ class User
 			for ($i = 0; $i < $num / 20; $i++) { 
 				if ($i == 0) {
 					for ($j = 0; $j < min($num, 20); $j++) { 
-						$user_list = $dom->find('a.zg-link', $j);
+						$user_list = $dom->find('h2.zm-list-content-title', $j);
 						yield parser_user($user_list);
 					}
 				} else {
@@ -510,7 +544,7 @@ class User
 					$r = json_decode($r)->msg;
 					for ($j = 0; $j < min($num - $i * 20, 20); $j++) { 
 						$dom = str_get_html($r[$j]);
-						$user_list = $dom->find('a.zg-link', 0);
+						$user_list = $dom->find('h2.zm-list-content-title', 0);
 						yield parser_user($user_list);					
 					}
 				}
