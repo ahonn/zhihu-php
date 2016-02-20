@@ -13,11 +13,11 @@ function __autoload($class)
 }
 
 /**
- * 设置 cookie 
+ * 设置 cookie
  */
-const COOKIE = 'q_c1=89866b7ad2944da9a29c831ba64156c7|1453079039000|1453079039000; _za=51ea7776-0cd3-401e-8ca5-418ed33ef1a8; cap_id="NThhMWQxODE3OGJlNGU1YmJkMTFkZjhmOThiNzE5NjQ=|1453111253|9cff5d1bb2bf5cbdd3493f28d33c31d2d9c500b7"; z_c0="QUFCQW4zZ3pBQUFYQUFBQVlRSlZUZkJFeEZZNFdkR3hmcTNld1Qtdng5YTFXdmpPS1RNZ2FBPT0=|1453111280|d3e03cc2b844914f8f3f591980b7b2be3c966c22"; _xsrf=dd3634d2d2afbe464bee2976205fe7da; __utmt=1; __utma=51854390.1313658305.1453079040.1453226793.1453270639.6; __utmb=51854390.2.10.1453270639; __utmc=51854390; __utmz=51854390.1453112913.3.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided); __utmv=51854390.100-1|2=registration_date=20140722=1^3=entry_date=20140722=1';
+const COOKIE = 'q_c1=778677133ad646b4a15874f17588605f|1454754491000|1454754491000; cap_id="NzcwMjM3OWQ5ODE3NDY2NWFjYjRjMTNiY2IwYmRiZTE=|1454754491|5e220b215b9517e8f89fb1ffe34e841845b37cc6"; _za=a8e7629f-b2c6-426f-a5ad-9e12822913e5; z_c0="QUFCQW4zZ3pBQUFYQUFBQVlRSlZUYjVYM1ZZYXNHX2JsZWtjUHEwWmVSUVRYYzczMUVXMkJ3PT0=|1454754494|210353aff135cceb4a5d10436c4d5d263d98c89c"; _xsrf=cd48cee1666d15325320342f7418a669; aliyungf_tc=AQAAAFCK0GnH9gIAhAxJ3/WKX2pcXYOu; __utmt=1; __utma=51854390.818835007.1455895246.1455895246.1455954592.2; __utmb=51854390.21.9.1455954730853; __utmc=51854390; __utmz=51854390.1455954592.2.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided); __utmv=51854390.100-1|2=registration_date=20140722=1^3=entry_date=20140722=1';
 
-// URL 
+// URL
 const ZHIHU_URL = 'https://www.zhihu.com';
 const USER_PREFIX_URL = 'https://www.zhihu.com/people/';
 const ANSWERS_PREFIX_URL = 'https://www.zhihu.com/answer/';
@@ -132,7 +132,7 @@ function parser_collection_from_answer($dom)
 	} else {
 		$collection_author = null;
 	}
-	
+
 	return new Collection($collection_url, $collection_title, $collection_author);
 }
 

@@ -3,7 +3,7 @@
 ## 介绍
 zhihu-php 使用PHP编写，用于获取知乎上的各种信息。
 
-**本项目需要 `PHP version >= 5.3` ，开启 `CURL` 扩展，使用 simple html dom 解析**
+**本项目需要 `PHP version >= 5.3` ，开启 `CURL` 扩展，使用 `simple html dom` 解析网页**
 
 根据 URL 生成对应的对象，例如知乎用户对象 User、知乎问题对象 Question、答案对象 Answer 等等。
 
