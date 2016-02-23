@@ -158,68 +158,68 @@ class Answer
 		}
 	}
 
-	/**
-	 * 获取回答评论数
-	 * @return int 评论数
-	 */
-	public function comments_num()
-	{
-		$answer_id = $this->aid();
-		$comment_url = str_replace("{id}", $answer_id, COMMENT_LIST_URL);
-		$r = Request::get($comment_url, array("Referer: {$this->url}"));
-		$json = json_decode($r);
-		$comment_num = (int)$json->paging->totalCount;
-		return $comment_num;
-	}
+	// /**
+	//  * 获取回答评论数
+	//  * @return int 评论数
+	//  */
+	// public function comments_num()
+	// {
+	// 	$answer_id = $this->aid();
+	// 	$comment_url = str_replace("{id}", $answer_id, COMMENT_LIST_URL);
+	// 	$r = Request::get($comment_url, array("Referer: {$this->url}"));
+	// 	$json = json_decode($r);
+	// 	$comment_num = (int)$json->paging->totalCount;
+	// 	return $comment_num;
+	// }
 
-	/**
-	 * 获取该答案下的评论
-	 * @return Generator 评论列表迭代器
-	 */
-	public function comments()
-	{
-		$answer_id = $this->aid();
-		$comment_url = str_replace("{id}", $answer_id, COMMENT_LIST_URL.GET_PAGE_SUFFIX_URL);
-		for ($page = $pages = 1; $page <= $pages; $page++) { 
-			$page_url = $comment_url.$page;
-			$r = Request::get($page_url, array("Referer: {$this->url}"));
-			$json = json_decode($r);
+	// /**
+	//  * 获取该答案下的评论
+	//  * @return Generator 评论列表迭代器
+	//  */
+	// public function comments()
+	// {
+	// 	$answer_id = $this->aid();
+	// 	$comment_url = str_replace("{id}", $answer_id, COMMENT_LIST_URL.GET_PAGE_SUFFIX_URL);
+	// 	for ($page = $pages = 1; $page <= $pages; $page++) { 
+	// 		$page_url = $comment_url.$page;
+	// 		$r = Request::get($page_url, array("Referer: {$this->url}"));
+	// 		$json = json_decode($r);
 			
-			if ($page == 1) {
-				$totalCount = (int)$json->paging->totalCount;
-				$pages = ceil($totalCount / 30);
-			}
+	// 		if ($page == 1) {
+	// 			$totalCount = (int)$json->paging->totalCount;
+	// 			$pages = ceil($totalCount / 30);
+	// 		}
 			
-			$comments = $json->data;
-			foreach ($comments as $comment) {
-				if( ! empty($comment->author->url)) {
-					$author_name = $comment->author->name;
-					$author_url = str_replace('http', 'https', $comment->author->url);
-				} else {
-					$author_name = null;
-					$author_url = null;
-				}
-				$author = new User($author_url, $author_name);
+	// 		$comments = $json->data;
+	// 		foreach ($comments as $comment) {
+	// 			if( ! empty($comment->author->url)) {
+	// 				$author_name = $comment->author->name;
+	// 				$author_url = str_replace('http', 'https', $comment->author->url);
+	// 			} else {
+	// 				$author_name = null;
+	// 				$author_url = null;
+	// 			}
+	// 			$author = new User($author_url, $author_name);
 
-				if ( ! empty($comment->inReplyToUser)) {
-					if( ! empty($comment->inReplyToUser->url)) {
-						$replyed_name = $comment->inReplyToUser->name;
-						$replyed_url = str_replace('http', 'https', $comment->inReplyToUser->url);
-					} else {
-						$replyed_name = null;
-						$replyed_url = null;
-					}
-					$replyed = new User($replyed_url, $replyed_name);
-				} else {
-					$replyed = null;
-				}
+	// 			if ( ! empty($comment->inReplyToUser)) {
+	// 				if( ! empty($comment->inReplyToUser->url)) {
+	// 					$replyed_name = $comment->inReplyToUser->name;
+	// 					$replyed_url = str_replace('http', 'https', $comment->inReplyToUser->url);
+	// 				} else {
+	// 					$replyed_name = null;
+	// 					$replyed_url = null;
+	// 				}
+	// 				$replyed = new User($replyed_url, $replyed_name);
+	// 			} else {
+	// 				$replyed = null;
+	// 			}
 
-				$content = $comment->content;
+	// 			$content = $comment->content;
 
-				yield new Comment($author, $content, $replyed);
-			}
-		}
-	}
+	// 			yield new Comment($author, $content, $replyed);
+	// 		}
+	// 	}
+	// }
 
 	/**
 	 * 获取该答案被收藏数
@@ -276,8 +276,11 @@ class Answer
 
 					for ($j = 0; $j < count($r); $j++) { 
 						$dom = str_get_html($r[$j]);
-						$collection_link = $dom->find('div.zm-item', 0);
-						yield parser_collection_from_answer($collection_link);
+						if ( ! empty($dom)) {
+							$collection_link = $dom->find('div.zm-item', 0);
+
+							yield parser_collection_from_answer($collection_link);
+						}	
 					}
 				}
 			}

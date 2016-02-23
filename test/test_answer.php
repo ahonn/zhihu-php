@@ -16,6 +16,7 @@ class AnswerTest extends PHPUnit_Framework_TestCase
 	public function testQuestion()
 	{
 		$question = $this->answer->question();
+		printf("%s \n", $question->title());
 
 		$this->assertInstanceOf('Question', $question);
 	}
@@ -23,6 +24,7 @@ class AnswerTest extends PHPUnit_Framework_TestCase
 	public function testAuthor()
 	{
 		$author = $this->answer->author();
+		printf("%s \n", $author->name());
 
 		$this->assertInstanceOf('User', $author);
 	}
@@ -30,6 +32,7 @@ class AnswerTest extends PHPUnit_Framework_TestCase
 	public function testContent()
 	{
 		$content = $this->answer->content();
+		printf("%s \n", $content);
 
 		$this->assertNotEmpty($content);
 	}
@@ -38,37 +41,46 @@ class AnswerTest extends PHPUnit_Framework_TestCase
 	{
 		$upvote = $this->answer->upvote();
 		$this->assertInternalType('int', $upvote);
+		printf("%d \n", $upvote);
 
 		$voters = $this->answer->voters();
 		$count = 0;
 		foreach ($voters as $voter) {
 			$count++;
+			$this->assertInstanceOf('User', $voter);
+			printf("%s \n", $voter->name());
 		}
 		$this->assertLessThanOrEqual($upvote, $count);
 	}
 
-	public function testComment()
-	{
-		$comments_num = $this->answer->comments_num();
-		$this->assertInternalType('int', $comments_num);
+	// public function testComment()
+	// {
+	// 	$comments_num = $this->answer->comments_num();
+	// 	$this->assertInternalType('int', $comments_num);
+	// 	printf("%d \n", $comments_num);
 
-		$comments = $this->answer->comments();
-		$count = 0;
-		foreach ($comments as $comment) {
-			$count++;
-		}
-		$this->assertGreaterThanOrEqual($comments_num, $count);
-	}
+	// 	$comments = $this->answer->comments();
+	// 	$count = 0;
+	// 	foreach ($comments as $comment) {
+	// 		$count++;
+	// 		$this->assertInstanceOf('Comment', $comment);
+	// 		printf("%s \n", $comment->author()->name());
+	// 	}
+	// 	$this->assertGreaterThanOrEqual($comments_num, $count);
+	// }
 
 	public function testCollection()
 	{
 		$collections_num = $this->answer->collections_num();
 		$this->assertInternalType('int', $collections_num);
+		printf("%d \n", $collections_num);
 
 		$collections = $this->answer->collections();
 		$count = 0;
 		foreach ($collections as $collection) {
 			$count++;
+			$this->assertInstanceOf('Collection', $collection);
+			printf("%s \n", $collection->title());
 		}
 		$this->assertLessThanOrEqual($collections_num, $count);	
 	}
