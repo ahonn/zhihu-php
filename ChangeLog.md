@@ -1,9 +1,18 @@
 ## Change Log
 
-### 2016.02.14 
-- Update 更新 test_user, 增加测试数据输出 
+### 2016.02.28
+- Update 更新其他类测试，增加测试数据输出
+- Remove 移除 Comment 类，待以后添加
+- Fix 修复 Collection 中获取收藏夹作者时的错误
 
-### 2016.02.11 
+### 2016.02.23
+- Update 更新 test_answer、test_question, 增加测试数据输出
+- ~~ToDO 修复 Comment~~  
+
+### 2016.02.14
+- Update 更新 test_user, 增加测试数据输出
+
+### 2016.02.11
 - Finish 完成 Post 类及测试
 
 ### 2016.02.08
@@ -11,7 +20,7 @@
 - Add 增加专栏相关测试
 
 ### 2016.02.02
-- Change 修改 test_topic.php 
+- Change 修改 test_topic.php
 - Update 精简 Topic 类冗余代码
 
 ### 2016.02.01
@@ -43,7 +52,7 @@
 - Update 去除所有类中函数名的 `get` 前缀
 - Add User 类增加获取用户微博链接
 - Fix 重写 User 类获取用户信息相关函数
-- Fix 修复 Collection 类中因为回答建议修改而产生的错误，其他类暂时还没有修复 
+- Fix 修复 Collection 类中因为回答建议修改而产生的错误，其他类暂时还没有修复
 
 ### 2016.01.13
 - Fix 根据知乎前端回答评论更新为分页显示，修复获取回答评论时的 Bug
