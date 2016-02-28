@@ -22,9 +22,9 @@ class Collection
 			if ( ! empty($author)) {
 				$this->author = $author;
 			}
-		}	
+		}
 	}
-	
+
 	/**
 	 * 解析收藏主页
 	 * @return object simple html dom 对象
@@ -82,7 +82,7 @@ class Collection
 			$author = $this->author;
 		} else {
 			$this->parser();
-			$author_link = $this->dom->find('h2.zm-list-content-title a', 0);
+			$author_link = $this->dom->find('h2.zm-list-content-title', 0);
 			$author = parser_user($author_link);
 		}
 		return $author;
@@ -98,12 +98,12 @@ class Collection
 		# TODO
 		$this->parser();
 		$max_page = (int)$this->dom->find('div.zm-invite-pager span', -2)->plaintext;
-		for ($i = 1; $i <= $max_page; $i++) { 
+		for ($i = 1; $i <= $max_page; $i++) {
 			$page_url = $this->url.GET_PAGE_SUFFIX_URL.$i;
 			$r = Request::get($page_url);
 			$dom = str_get_html($r);
 
-			for ($j = 0; ! empty($dom->find('div.zm-item', $j)); $j++) { 
+			for ($j = 0; ! empty($dom->find('div.zm-item', $j)); $j++) {
 				$collection_link = $dom->find('div.zm-item', $j);
 				if ( ! empty($question_link = $collection_link->find('h2.zm-item-title a', 0))) {
 					$question_url = ZHIHU_URL.$question_link->href;
@@ -111,7 +111,7 @@ class Collection
 
 					$question = new Question($question_url, $question_title);
 				}
-				
+
 				$answer_id = $collection_link->find('div.zm-item-answer', 0)->attr['data-atoken'];
 				$answer_url = $question_url.'/answer'.$answer_id;
 

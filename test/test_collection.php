@@ -15,6 +15,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     {
         $title = $this->collection->title();
         $title_tmp = '妙趣横生';
+        printf("%s \n", $title);
 
         $this->assertSame($title_tmp, $title);
     }
@@ -23,6 +24,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     {
         $desc = $this->collection->desc();
         $desc_tmp = '嬉笑怒骂，剑走偏锋，思路切入显大巧，文字构筑含义深。';
+        printf("%s \n", $desc);
 
         $this->assertSame($desc_tmp, $desc);
     }
@@ -30,8 +32,11 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     public function testAuthor()
     {
         $author = $this->collection->author();
-
         $this->assertInstanceOf('User', $author);
+
+        $author_name = '杨凯光';
+        printf("%s \n", $author->name());
+        $this->assertSame($author_name, $author->name());
     }
 
 
@@ -40,7 +45,9 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $answers = $this->collection->answers();
         for($i = 0; $i < 200; $i++) {
             $answer = $answers->current();
+            $answers->next();
             $this->assertInstanceOf('Answer', $answer);
+            printf("%s \n", $answer->question()->title());
         }
-    }    
+    }
 }
