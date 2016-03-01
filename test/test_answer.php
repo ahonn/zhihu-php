@@ -6,7 +6,7 @@ class AnswerTest extends PHPUnit_Framework_TestCase
 {
 	private $url;
 	private $answer;
-	
+
 	function __construct()
 	{
 		$this->url = 'https://www.zhihu.com/question/24825703/answer/30975949';
@@ -53,22 +53,6 @@ class AnswerTest extends PHPUnit_Framework_TestCase
 		$this->assertLessThanOrEqual($upvote, $count);
 	}
 
-	// public function testComment()
-	// {
-	// 	$comments_num = $this->answer->comments_num();
-	// 	$this->assertInternalType('int', $comments_num);
-	// 	printf("%d \n", $comments_num);
-
-	// 	$comments = $this->answer->comments();
-	// 	$count = 0;
-	// 	foreach ($comments as $comment) {
-	// 		$count++;
-	// 		$this->assertInstanceOf('Comment', $comment);
-	// 		printf("%s \n", $comment->author()->name());
-	// 	}
-	// 	$this->assertGreaterThanOrEqual($comments_num, $count);
-	// }
-
 	public function testCollection()
 	{
 		$collections_num = $this->answer->collections_num();
@@ -82,6 +66,6 @@ class AnswerTest extends PHPUnit_Framework_TestCase
 			$this->assertInstanceOf('Collection', $collection);
 			printf("%s \n", $collection->title());
 		}
-		$this->assertLessThanOrEqual($collections_num, $count);	
+		$this->assertLessThanOrEqual($collections_num, $count);
 	}
 }
