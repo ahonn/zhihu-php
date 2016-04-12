@@ -1,5 +1,10 @@
 ## Change Log
 
+### 2016.04.12
+- Remove 由于知乎专栏发布正式版，移除 Colunm 以及 Post 类
+- update 更新 test_zhihu，删除移除的专栏相关测试
+- ToDo Question 中存在 Bug，待修复
+
 ### 2016.02.28
 - Update 更新其他类测试，增加测试数据输出
 - Remove 移除 Comment 类，待以后添加
