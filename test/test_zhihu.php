@@ -16,11 +16,9 @@ class ZhihuTest extends PHPUnit_Framework_TestCase
     {
         $this->user = new User('https://www.zhihu.com/people/ahonn');
         $this->question = new Question('https://www.zhihu.com/question/27187478');
-		$this->answer = new Answer('https://www.zhihu.com/question/24825703/answer/30975949');
-		$this->topic = new Topic('https://www.zhihu.com/topic/19552330');
+		    $this->answer = new Answer('https://www.zhihu.com/question/24825703/answer/30975949');
+		    $this->topic = new Topic('https://www.zhihu.com/topic/19552330');
         $this->collection = new Collection('https://www.zhihu.com/collection/19650606');
-        $this->column = new Column('http://zhuanlan.zhihu.com/shaofeidu');
-        $this->post = new Post('http://zhuanlan.zhihu.com/mactalk/20278296');
     }
 
     ///////////////// User ///////////////////
@@ -429,84 +427,5 @@ class ZhihuTest extends PHPUnit_Framework_TestCase
             $this->assertInstanceOf('Answer', $answer);
             printf("%s \n", $answer->question()->title());
         }
-    }
-
-    ///////////////////// Column /////////////////////
-
-    public function testColumnName()
-    {
-        $name = $this->column->name();
-        $name_tmp = '杜少又来吹牛逼了';
-        printf("%s \n", $name);
-
-        $this->assertSame($name_tmp, $name);
-    }
-
-    public function testColumnAuthor()
-    {
-        $author = $this->column->author();
-        $this->assertInstanceOf('User', $author);
-
-        printf("%s \n", $author->name());
-        $name_tmp = '杜绍斐';
-        $this->assertSame($name_tmp, $author->name());
-    }
-
-    public function testColumnDesc()
-    {
-        $desc = $this->column->desc();
-        printf("%s \n", $desc);
-
-        $this->assertInternalType('string', $desc);
-    }
-
-    public function testColumnFollower()
-    {
-        $followers_num = $this->column->followers_num();
-        printf("%d \n", $followers_num);
-
-        $this->assertInternalType('int', $followers_num);
-    }
-
-    public function testColumnPost()
-    {
-        $posts_num = $this->column->posts_num();
-        printf("%d \n", $posts_num);
-        $this->assertInternalType('int', $posts_num);
-
-        $posts = $this->column->posts();
-        $count = 0;
-        foreach ($posts as $post) {
-            $count++;
-            printf("%s \n", $post->title());
-            $this->assertInstanceOf('Post', $post);
-        }
-        $this->assertLessThanOrEqual($posts_num, $count);
-    }
-
-    ////////////// Post //////////////////////
-
-    public function testPostTitle()
-    {
-        $title = $this->post->title();
-        printf("%s \n", $title);
-        $title_tmp = '人生苦短，我用 Mac';
-
-        $this->assertSame($title_tmp, $title);
-    }
-
-    public function testPostContent()
-    {
-        $content = $this->post->content();
-        printf("%s \n", $content);
-
-        $this->assertInternalType('string', $content);
-    }
-
-    public function testPostAuthor()
-    {
-        $author = $this->post->author();
-        printf("%s \n", $author->name());
-        $this->assertInstanceOf('User', $author);
     }
 }
